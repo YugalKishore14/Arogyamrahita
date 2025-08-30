@@ -1,0 +1,108 @@
+/* Main container */
+.mainContainer {
+  background-color: #f8f8f8;
+  margin: 37px 100px;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  width: 84vw;
+}
+
+/* Section heading */
+.sectionTitle {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: start;
+}
+
+/* Horizontal scroll container */
+.scrollContainer {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.5rem;
+  padding: 8px 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar in Chrome/Safari */
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual card */
+.categoryCard {
+  flex-shrink: 0;
+  width: 300px;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.categoryCard:hover {
+  transform: scale(1.05);
+}
+
+/* Image in the card */
+.cardImage {
+  width: 100%;
+  height: 256px;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+/* Title below image */
+.cardTitle {
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Medium screen (Tablet) */
+@media (max-width: 1024px) {
+  .mainContainer {
+    margin: 37px 64px;
+  }
+
+  .categoryCard {
+    width: 280px;
+  }
+
+  .cardImage {
+    height: 224px;
+  }
+}
+
+/* Small screen (Mobile) */
+@media (max-width: 768px) {
+  .mainContainer {
+    margin: 37px 32px;
+  }
+
+  .categoryCard {
+    width: 240px;
+  }
+
+  .cardImage {
+    height: 192px;
+  }
+}
+
+/* Extra small screen */
+@media (max-width: 640px) {
+  .mainContainer {
+    margin: 37px 16px;
+  }
+
+  .categoryCard {
+    width: 200px;
+  }
+
+  .cardImage {
+    height: 160px;
+  }
+}

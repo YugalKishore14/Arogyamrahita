@@ -1,0 +1,151 @@
+
+.mainContainer {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+
+
+.navList {
+  display: flex;
+  justify-content: flex-end;
+  list-style: none;
+  padding: 0;
+  gap: 1rem;
+}
+
+.nav_box {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 1rem;
+}
+
+.headerIcon {
+  font-size: 1.2rem;
+}
+
+
+.mainHeader {
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.mainHomeLink,
+.mainServicesLink {
+  font-weight: bold;
+}
+
+
+.mainMainTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #111;
+}
+
+.mainSectionTitle,
+.mainSubSectionTitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+
+.mainSection {
+  margin-bottom: 2.5rem;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.mainSectionDescription {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.mainWebsiteName {
+  font-weight: bold;
+  color: #0073e6;
+}
+
+.mainLastUpdated {
+  font-size: 0.9rem;
+  color: #999;
+}
+
+
+.mainList {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.mainListItem {
+  margin-bottom: 1.5rem;
+}
+
+.mainListItemTitle {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.mainListItemDescription {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .mainContainer {
+    padding: 1rem;
+  }
+
+  .mainMainTitle {
+    font-size: 1.5rem;
+  }
+
+  .mainSectionTitle,
+  .mainSubSectionTitle {
+    font-size: 1.2rem;
+  }
+
+  .mainListItemTitle {
+    font-size: 1rem;
+  }
+
+  .mainListItemDescription,
+  .mainSectionDescription {
+    font-size: 0.95rem;
+  }
+
+  .headerBox {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .navList {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .footerContent {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footerSection {
+    width: 100%;
+  }
+}

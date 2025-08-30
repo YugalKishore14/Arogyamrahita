@@ -1,0 +1,89 @@
+/* General Navbar Styles */
+.navbarContainer {
+  display: flex;
+  padding-left: 20px;
+  padding-right: 20px;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative; /* Essential for positioning the dropdown */
+}
+
+.navbarLeft {
+  display: flex;
+  align-items: center;
+}
+
+/* All Categories Button */
+.allCategoriesBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 20px;
+}
+
+.allCategoriesBtn:hover {
+  background-color: #f0f0f0;
+}
+
+.hamburgerIcon {
+  font-size: 20px;
+}
+
+/* Navbar Menu Links */
+.navbarMenu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+.navbarMenu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.navbarMenu a:hover {
+  color: #007bff;
+}
+
+/* Product Dropdown */
+.productDropdown {
+  position: absolute;
+  top: 100%; /* dropdown below navbar */
+  left: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.productDropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.productDropdown li a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #555;
+  transition: background-color 0.3s;
+}
+
+.productDropdown li a:hover {
+  background-color: #f0f0f0;
+}

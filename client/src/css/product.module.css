@@ -1,0 +1,134 @@
+/* Section Styling */
+.productsSection {
+  padding: 60px 40px;
+  background-color: #f9f9f9;
+  text-align: start;
+  width: 100vw;
+  justify-content: space-around;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+/* Title */
+.title {
+  padding-left: 100px;
+  font-size: 32px;
+  margin-bottom: 40px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Grid Layout */
+.producterGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+/* Card Styling */
+.prodCard {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 300px;
+  margin: auto;
+}
+
+.prodCard:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+/* Image */
+.productImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* Name */
+.productName {
+  font-size: 20px;
+  margin: 10px 0;
+  color: #222;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Prices */
+.productPrices {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.productPrice {
+  color: green;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.productOldPrice {
+  text-decoration: line-through;
+  color: gray;
+  font-size: 15px;
+}
+
+/* Button */
+.buyBtn {
+  background: green;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: center;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+
+.buyBtn:hover {
+  background: darkgreen;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+  .title {
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .prodCard {
+    max-width: 100%;
+  }
+
+  .productPrices {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .buyBtn {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 22px;
+  }
+
+  .productImage {
+    height: 160px;
+  }
+}

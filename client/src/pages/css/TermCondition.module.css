@@ -1,0 +1,111 @@
+.pageContainer {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.contentWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.breadcrumb {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.breadcrumbLink {
+    color: #0073e6;
+    cursor: pointer;
+}
+
+.mainTitle {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.introParagraph {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.lastUpdated {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+}
+
+.sectionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.section {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #222;
+}
+
+.sectionList {
+    padding-left: 1.25rem;
+    list-style-type: disc;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.subList {
+    padding-left: 1.25rem;
+    list-style-type: circle;
+    margin-top: 0.5rem;
+}
+
+.contactParagraph {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+
+@media screen and (max-width: 768px) {
+    .pageContainer {
+        padding: 1rem;
+    }
+
+    .mainTitle {
+        font-size: 1.5rem;
+    }
+
+    .section {
+        padding: 1rem;
+    }
+
+    .sectionTitle {
+        font-size: 1.1rem;
+    }
+
+    .sectionList,
+    .subList {
+        font-size: 0.9rem;
+    }
+
+    .breadcrumb {
+        font-size: 0.8rem;
+    }
+
+    .introParagraph {
+        font-size: 0.95rem;
+    }
+}

@@ -1,0 +1,285 @@
+.container {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.productCard {
+    display: flex;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 1500px;
+    width: 100%;
+}
+
+.imageSection {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fef8e7;
+}
+
+.mainImageContainer {
+    width: 100%;
+    max-width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.mainImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnailContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.thumbnail.active {
+    border-color: #007bff;
+}
+
+.thumbnailArrow {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+    user-select: none;
+}
+
+.detailsSection {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.description {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.ratingContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #f7a823;
+}
+
+.star {
+    font-size: 1.2rem;
+}
+
+.ratingsCount {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.priceContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.currentPrice {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.oldPrice {
+    font-size: 1.25rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.discount {
+    font-size: 1rem;
+    color: #d9534f;
+    font-weight: bold;
+}
+
+.deliveryDetails {
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+    color: #555;
+}
+
+.quantitySelector {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.quantityLabel {
+    font-weight: bold;
+    color: #333;
+}
+
+.quantityInputGroup {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.quantityButton {
+    background-color: #f7f7f7;
+    border: none;
+    font-size: 1.2rem;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.quantityButton:hover {
+    background-color: #e0e0e0;
+}
+
+.quantityInput {
+    width: 50px;
+    text-align: center;
+    border: none;
+    outline: none;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+}
+
+.buttonContainer {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.cartButton,
+.buyButton {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.cartButton {
+    background-color: #215e71;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cartButton:hover {
+    background-color: #1a4957;
+}
+
+.buyButton {
+    background-color: #fff;
+    color: #215e71;
+    border: 1px solid #215e71;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.buyButton:hover {
+    background-color: #f0f2f5;
+}
+
+.cartIcon {
+    font-size: 25px;
+}
+
+.checkmarkIcon {
+    font-size: 25px;
+    color: #215e71;
+}
+
+.thumbnailArrowIcon:hover {
+    color: red;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1px;
+    }
+
+    .productCard {
+        flex-direction: column;
+        width: 90%;
+        margin: 1rem;
+    }
+
+    .imageSection,
+    .detailsSection {
+        padding: 1rem;
+    }
+
+    .mainImageContainer {
+        height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0;
+        width: 100%;
+    }
+
+    .mainImageContainer {
+        height: 200px;
+    }
+
+    .thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .currentPrice {
+        font-size: 1.5rem;
+    }
+
+}

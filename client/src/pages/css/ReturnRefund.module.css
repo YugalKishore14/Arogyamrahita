@@ -1,0 +1,177 @@
+
+.returnPolicyContainer {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+
+.header {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 1rem;
+}
+
+.headerBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerContainer {
+  display: flex;
+  align-items: center;
+}
+
+.hamburgerIcon {
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.logoContainer {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.logoText {
+  text-decoration: none;
+  color: #000;
+}
+
+
+.headerInner {
+  margin-top: 0.5rem;
+}
+
+.navList {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+}
+
+.nav_box {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.headerIcon {
+  font-size: 1.2rem;
+}
+
+
+.headerTitleP {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 1rem 0;
+}
+
+.homeText,
+.pText,
+.icon {
+  margin-right: 0.25rem;
+}
+
+
+.policyHeader {
+  margin-bottom: 2rem;
+}
+
+.policyTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.policyIntro {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.lastUpdated {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.policyContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.policySection {
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.sectionContent {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.policyList {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.policyListItem {
+  margin-bottom: 0.5rem;
+}
+
+.policyNote {
+  font-style: italic;
+  color: #aa0000;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .returnPolicyContainer {
+    padding: 1rem;
+  }
+
+  .policyTitle {
+    font-size: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.1rem;
+  }
+
+  .policyList,
+  .policyNote,
+  .sectionContent {
+    font-size: 0.95rem;
+  }
+
+  .navList {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .footerContent {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,111 @@
+/* Container */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background-color: #ffffff; /* white bg */
+  font-family: "Poppins", "Segoe UI", sans-serif;
+}
+
+/* White Circle with check */
+.circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.check {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0bb77f; /* teal check */
+}
+
+/* Heading */
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0a0a32; /* navy blue */
+  margin-bottom: 1rem;
+}
+
+/* Paragraph text */
+.message {
+  font-size: 1rem;
+  color: #7d7d93; /* gray */
+  max-width: 600px;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* Button */
+.button {
+  background: #f5f5f5;
+  color: #000000;
+  padding: 0.9rem 2.5rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background: #e5e5e5;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .message {
+    font-size: 0.9rem;
+    padding: 0 1rem;
+  }
+
+  .circle {
+    width: 70px;
+    height: 70px;
+  }
+
+  .check {
+    font-size: 1.5rem;
+  }
+
+  .button {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .message {
+    font-size: 0.85rem;
+  }
+
+  .circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .check {
+    font-size: 1.25rem;
+  }
+}

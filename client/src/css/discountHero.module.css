@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+.heroContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F8F0FF;
+  border-radius: 20px;
+  padding: 37px 100px;
+  margin: 37px 100px;
+  font-family: 'Inter', sans-serif;
+  flex-wrap: wrap;
+  height: auto;   /* ✅ changed to auto for better responsiveness */
+  min-height: 18vw;
+}
+
+.heroImage img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 12px;
+}
+
+.heroText {
+  flex: 1;
+  padding-left: 40px;
+  text-align: left;
+}
+
+.heroText h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #211E26;
+  margin: 0;
+}
+
+.heroText p {
+  font-size: 2rem;
+  font-weight: 400;
+  color: #211E26;
+  margin-top: 10px;
+}
+
+/* ✅ Tablet */
+@media (max-width: 1024px) {
+  .heroContainer {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 60px;
+    margin: 30px 60px;
+  }
+  .heroText {
+    padding-left: 0;
+    margin-top: 20px;
+  }
+  .heroText h1 {
+    font-size: 2.5rem;
+  }
+  .heroText p {
+    font-size: 1.5rem;
+  }
+  .heroImage img {
+    max-width: 300px;
+  }
+}
+
+/* ✅ Mobile */
+@media (max-width: 600px) {
+  .heroContainer {
+    padding: 20px;
+    margin: 20px;
+  }
+  .heroText h1 {
+    font-size: 2rem;
+  }
+  .heroText p {
+    font-size: 1.2rem;
+  }
+  .heroImage img {
+    max-width: 250px;
+  }
+}

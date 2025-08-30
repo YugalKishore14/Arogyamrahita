@@ -1,0 +1,19 @@
+.auth-card {
+    border-radius: 14px;
+}
+
+.auth-card .card-body {
+    padding: 2.5rem;
+}
+
+.auth-title {
+    letter-spacing: 0.2px;
+}
+
+.auth-input::placeholder {
+    opacity: 0.7;
+}
+
+.auth-btn {
+    border-radius: 10px;
+}

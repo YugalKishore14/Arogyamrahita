@@ -1,0 +1,152 @@
+.faqContainer {
+  padding: 120px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.headerr {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.mainContent {
+  margin-bottom: 60px;
+}
+
+.mainTitle {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.introText {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.faqSection {
+  margin-bottom: 60px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #333;
+  border-left: 4px solid #222;
+  padding-left: 12px;
+}
+
+.faqItem {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+}
+
+.faqItem.active {
+  border-color: #aaa;
+}
+
+.faqQuestion {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 15px;
+  text-align: left;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.faqQuestion:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdownIcon {
+  font-size: 18px;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+.faqItem.active .dropdownIcon {
+  transform: rotate(180deg);
+}
+
+.faqAnswer {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  background-color: #fff;
+}
+
+.faqAnswerContent {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.faqAnswerContent ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.faqAnswerContent li {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  .faqContainer {
+    padding: 60px 20px;
+  }
+
+  .mainTitle {
+    font-size: 28px;
+  }
+
+  .introText {
+    font-size: 15px;
+  }
+
+  .sectionTitle {
+    font-size: 20px;
+  }
+
+  .faqQuestion {
+    font-size: 15px;
+  }
+
+  .faqAnswerContent {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .faqContainer {
+    padding: 40px 15px;
+  }
+
+  .mainTitle {
+    font-size: 24px;
+  }
+
+  .sectionTitle {
+    font-size: 18px;
+  }
+
+  .faqQuestion {
+    font-size: 14px;
+  }
+
+  .dropdownIcon {
+    font-size: 16px;
+  }
+}

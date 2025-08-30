@@ -1,0 +1,108 @@
+/* .navbar {
+  width: 100vw;
+  background-color: #f2f4f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.logo img {
+  height: 50px;
+}
+
+.searchBar {
+  flex: 1;
+  max-width: 500px;
+  margin: 10px 20px;
+  position: relative;
+}
+
+.searchBar input {
+  width: 100%;
+  padding: 10px 40px 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #333;
+}
+
+.navIcons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.navIcons button,
+.navIcons .iconBox {
+  background: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.iconBox {
+  padding: 10px;
+}
+
+.cartCount {
+  background-color: teal;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .searchBar {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .navIcons {
+    width: 100%;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+
+  .navIcons button {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo img {
+    height: 40px;
+  }
+
+  .searchBar input {
+    font-size: 14px;
+    padding: 8px 35px 8px 10px;
+  }
+
+  .navIcons button,
+  .navIcons .iconBox {
+    font-size: 12px;
+    padding: 8px;
+  }
+} */
