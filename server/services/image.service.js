@@ -34,7 +34,7 @@ const uploadImage = upload.single('image');
 
 // Function to get image URL
 const getImageUrl = (filename) => {
-    const baseUrl = process.env.BASE_URL || 'http://localhost:4000';
+    const baseUrl = process.env.BASE_URL || 'https://arogyamrahita.onrender.com';
     return `${baseUrl}/uploads/${filename}`;
 };
 

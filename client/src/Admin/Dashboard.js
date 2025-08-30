@@ -48,7 +48,7 @@ const Dashboard = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:4000/api/products/admin/all', {
+            const response = await fetch('https://arogyamrahita.onrender.com/api/products/admin/all', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -84,8 +84,8 @@ const Dashboard = () => {
 
             const token = localStorage.getItem('token');
             const url = editingProduct
-                ? `http://localhost:4000/api/products/${editingProduct._id}`
-                : 'http://localhost:4000/api/products';
+                ? `https://arogyamrahita.onrender.com/api/products/${editingProduct._id}`
+                : 'https://arogyamrahita.onrender.com/api/products';
 
             const method = editingProduct ? 'PUT' : 'POST';
 
@@ -146,7 +146,7 @@ const Dashboard = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:4000/api/products/${productId}`, {
+            const response = await fetch(`https://arogyamrahita.onrender.com/api/products/${productId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

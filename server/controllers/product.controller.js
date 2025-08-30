@@ -9,7 +9,7 @@ exports.createProduct = async (req, res) => {
         // Convert relative image path to full URL if it's a relative path
         let imageUrl = image;
         if (image && image.startsWith('/uploads/')) {
-            const baseUrl = process.env.BASE_URL || 'http://localhost:4000';
+            const baseUrl = process.env.BASE_URL || 'https://arogyamrahita.onrender.com';
             imageUrl = `${baseUrl}${image}`;
         }
 
@@ -92,7 +92,7 @@ exports.updateProduct = async (req, res) => {
         // Convert relative image path to full URL if it's a relative path
         let imageUrl = image;
         if (image && image.startsWith('/uploads/')) {
-            const baseUrl = process.env.BASE_URL || 'http://localhost:4000';
+            const baseUrl = process.env.BASE_URL || 'https://arogyamrahita.onrender.com';
             imageUrl = `${baseUrl}${image}`;
         }
 
@@ -149,8 +149,7 @@ exports.deleteProduct = async (req, res) => {
             try {
                 // Extract filename from full URL or relative path
                 // Examples:
-                // - http://localhost:4000/uploads/filename.png -> filename.png
-                // - /uploads/filename.png -> filename.png
+                // - https://arogyamrahita.onrender.com/uploads/filename.png -> filename.png
                 const uploadsIndex = product.image.indexOf("/uploads/");
                 if (uploadsIndex !== -1) {
                     const filename = product.image.substring(uploadsIndex + "/uploads/".length);

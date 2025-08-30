@@ -36,8 +36,8 @@ const ProductPage = () => {
                 setLoading(true);
                 setError('');
                 const url = selectedCategory
-                    ? `http://localhost:4000/api/products?category=${encodeURIComponent(selectedCategory)}`
-                    : 'http://localhost:4000/api/products';
+                    ? `https://arogyamrahita.onrender.com/api/products?category=${encodeURIComponent(selectedCategory)}`
+                    : 'https://arogyamrahita.onrender.com/api/products';
                 const response = await fetch(url);
                 if (response.ok) {
                     const data = await response.json();

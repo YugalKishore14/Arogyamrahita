@@ -32,7 +32,7 @@ const UserProfile = ({ isOpen, onClose }) => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:4000/api/users/profile', {
+            const response = await fetch('https://arogyamrahita.onrender.com/api/users/profile', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
