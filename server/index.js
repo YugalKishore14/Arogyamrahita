@@ -5,22 +5,13 @@ const cors = require("cors");
 
 dotenv.config();
 const app = express();
-
-// app.use(cors({
-//     origin: "https://arogyamrahita.onrender.com",
-//     credentials: true
-// }));
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
-const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/arogyamrahita';
-
+const mongoUri = process.env.MONGO_URI;
 mongoose
-    .connect(mongoUri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
+    .connect(mongoUri)
     .then(() => console.log("MongoDB Connected"))
     .catch((err) => console.error("MongoDB Error:", err));
 
