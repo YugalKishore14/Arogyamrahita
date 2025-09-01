@@ -101,25 +101,25 @@ exports.login = async (req, res) => {
                 .json({ message: "Validation failed", errors: errors.array() });
         }
 
-        const { email, password } = req.body;
-        if (!email || !password) {
-            return res.status(400).json({ message: "Email and password required" });
+        const { number, password } = req.body;
+        if (!number || !password) {
+            return res.status(400).json({ message: "Phone number and password required" });
         }
 
         // find user once and reuse the variable (avoid duplicate declarations)
         let user = await User.findOne({
-            email: email.toLowerCase().trim(),
+            number: number.trim(),
             isActive: true,
         });
 
         if (!user || !(await user.comparePassword(password))) {
-            return res.status(401).json({ message: "Invalid email or password" });
+            return res.status(401).json({ message: "Invalid phone number or password" });
         }
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
         await Otp.create({
-            email: email.toLowerCase().trim(),
+            email: user.email, // Keep email for OTP record but use phone for login
             otp,
             expiresAt: new Date(Date.now() + 5 * 60 * 1000),
             used: false,
@@ -140,7 +140,7 @@ exports.login = async (req, res) => {
         const isProd = process.env.NODE_ENV === "production";
         return res.status(200).json({
             message: "OTP sent to your phone number",
-            email,
+            number: user.number,
             otp: isProd ? undefined : otp,
         });
     } catch (error) {
@@ -150,15 +150,21 @@ exports.login = async (req, res) => {
 };
 
 exports.verifyOtp = async (req, res) => {
-    const { email, otp } = req.body;
+    const { number, otp } = req.body;
 
-    if (!email || !otp) {
-        return res.status(400).json({ message: "Email and OTP are required" });
+    if (!number || !otp) {
+        return res.status(400).json({ message: "Phone number and OTP are required" });
     }
 
     try {
+        // Find user by phone number first
+        const user = await User.findOne({ number: number.trim() });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
         const record = await Otp.findOne({
-            email: email.toLowerCase().trim(),
+            email: user.email, // OTP records still use email
             otp,
             used: false,
         }).sort({ createdAt: -1 });
@@ -166,11 +172,6 @@ exports.verifyOtp = async (req, res) => {
 
         if (record.expiresAt < new Date()) {
             return res.status(400).json({ message: "OTP expired" });
-        }
-
-        const user = await User.findOne({ email: email.toLowerCase().trim() });
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
         }
 
         record.used = true;
@@ -202,18 +203,16 @@ exports.verifyOtp = async (req, res) => {
 
 exports.resendOtp = async (req, res) => {
     try {
-        const { email } = req.body;
-        if (!email) return res.status(400).json({ message: "Email is required" });
+        const { number } = req.body;
+        if (!number) return res.status(400).json({ message: "Phone number is required" });
 
-        const normalizedEmail = email.toLowerCase().trim();
-
-        const user = await User.findOne({ email: normalizedEmail });
+        const user = await User.findOne({ number: number.trim() });
         if (!user) return res.status(404).json({ message: "User not found" });
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
         const newOtp = await Otp.create({
-            email: normalizedEmail,
+            email: user.email, // Keep email for OTP record
             otp,
             expiresAt: new Date(Date.now() + 5 * 60 * 1000),
             used: false,
@@ -234,7 +233,7 @@ exports.resendOtp = async (req, res) => {
         const isProd = process.env.NODE_ENV === "production";
         return res.status(200).json({
             message: "New OTP sent to your phone number",
-            email: normalizedEmail,
+            number: user.number,
             otpId: newOtp._id,
             otp: isProd ? undefined : otp,
         });

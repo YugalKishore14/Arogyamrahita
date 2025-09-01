@@ -10,14 +10,14 @@ import {
     Alert,
     Spinner,
 } from "react-bootstrap";
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import { FaPhone, FaLock, FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
 import { authAPI } from "../services/Api";
 import { useAuth } from "../context/AuthContext";
 import logoImage from "../images/arogyamlogo.png";
 import { toast } from "react-toastify";
 
 const Login = () => {
-    const [email, setEmail] = useState("");
+    const [number, setNumber] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -35,8 +35,8 @@ const Login = () => {
     useEffect(() => {
         if (location.state?.message) {
             toast.success(location.state.message);
-            if (location.state.email) {
-                setEmail(location.state.email);
+            if (location.state.number) {
+                setNumber(location.state.number);
             }
         }
     }, [location.state]);
@@ -64,10 +64,10 @@ const Login = () => {
         setError("");
 
         try {
-            await authAPI.login({ email, password });
+            await authAPI.login({ number, password });
             setShowOtpForm(true);
             setTimer(300); // 5 minutes
-            toast.success("OTP sent to your email!");
+            toast.success("OTP sent to your phone number!");
         } catch (err) {
             setError(err.response?.data?.message || "Failed to send OTP. Please try again.");
         } finally {
@@ -81,7 +81,7 @@ const Login = () => {
         setError("");
 
         try {
-            const response = await authAPI.verifyOtp({ email, otp });
+            const response = await authAPI.verifyOtp({ number, otp });
             login(response.token, response.user);
             toast.success("Login successful!");
             navigate("/");
@@ -94,7 +94,7 @@ const Login = () => {
 
     const handleResendOtp = async () => {
         try {
-            await authAPI.resendOtp({ email });
+            await authAPI.resendOtp({ number });
             setTimer(300);
             toast.success("New OTP sent!");
         } catch (err) {
@@ -124,7 +124,7 @@ const Login = () => {
                                 <div className="text-center mb-4">
                                     <img src={logoImage} alt="Logo" className="mb-1" style={{ width: "100px", height: "100px" }} />
                                     <h3 className="fw-bold">Verify OTP</h3>
-                                    <p className="text-muted">Enter the OTP sent to {email}</p>
+                                    <p className="text-muted">Enter the OTP sent to {number}</p>
                                 </div>
 
                                 {error && <Alert variant="danger">{error}</Alert>}
@@ -210,17 +210,17 @@ const Login = () => {
                             {error && <Alert variant="danger">{error}</Alert>}
 
                             <Form onSubmit={handleLogin}>
-                                <Form.Group className="mb-3" controlId="formBasicEmail">
-                                    <Form.Label>Email address</Form.Label>
+                                <Form.Group className="mb-3" controlId="formBasicNumber">
+                                    <Form.Label>Phone Number</Form.Label>
                                     <div className="input-group">
                                         <span className="input-group-text">
-                                            <FaEnvelope />
+                                            <FaPhone />
                                         </span>
                                         <Form.Control
-                                            type="email"
-                                            placeholder="Enter email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            type="tel"
+                                            placeholder="Enter phone number"
+                                            value={number}
+                                            onChange={(e) => setNumber(e.target.value)}
                                             required
                                         />
                                     </div>

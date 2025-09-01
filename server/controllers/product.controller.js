@@ -199,10 +199,12 @@ exports.getAdminProducts = async (req, res) => {
 // Get all unique categories
 exports.getCategories = async (req, res) => {
     try {
-        const categories = await Product.distinct('category', { isActive: true });
+        const Category = require("../models/Category");
+        const categories = await Category.find({ isActive: true }).select('name').sort({ name: 1 });
+        const categoryNames = categories.map(cat => cat.name);
         res.status(200).json({
             success: true,
-            categories
+            categories: categoryNames
         });
     } catch (error) {
         res.status(500).json({
