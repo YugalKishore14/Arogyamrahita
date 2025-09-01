@@ -1,3 +1,4 @@
+// controllers/auth.controller.js
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
@@ -57,6 +58,12 @@ exports.register = async (req, res) => {
 
         const { name, email, number, password } = req.body;
 
+        if (!email || !password || !name) {
+            return res
+                .status(400)
+                .json({ message: "Name, email and password are required" });
+        }
+
         const existingUser = await User.findOne({ email: email.toLowerCase() });
         if (existingUser) {
             return res
@@ -67,7 +74,7 @@ exports.register = async (req, res) => {
         const user = new User({
             name: name.trim(),
             email: email.toLowerCase().trim(),
-            number: String(number).trim(),
+            number: number ? String(number).trim() : "",
             password,
             isVerified: true,
             isActive: true,
@@ -95,26 +102,21 @@ exports.login = async (req, res) => {
         }
 
         const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password required" });
+        }
 
-        const user = await User.findOne({
+        // find user once and reuse the variable (avoid duplicate declarations)
+        let user = await User.findOne({
             email: email.toLowerCase().trim(),
             isActive: true,
         });
+
         if (!user || !(await user.comparePassword(password))) {
             return res.status(401).json({ message: "Invalid email or password" });
         }
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-        // Get user's phone number
-        const user = await User.findOne({
-            email: email.toLowerCase().trim(),
-            isActive: true,
-        });
-
-        if (!user) {
-            return res.status(401).json({ message: "Invalid email or password" });
-        }
 
         await Otp.create({
             email: email.toLowerCase().trim(),
@@ -124,9 +126,13 @@ exports.login = async (req, res) => {
             resend: false,
         });
 
-        // Send OTP via SMS
+        // Send OTP via SMS (best-effort)
         try {
-            await sendOTP(user.number, otp);
+            if (user.number) {
+                await sendOTP(user.number, otp);
+            } else {
+                console.warn("User has no phone number set; skipping SMS send.");
+            }
         } catch (e) {
             console.warn("SMS send failed, proceeding for dev:", e.message || e);
         }
@@ -145,6 +151,10 @@ exports.login = async (req, res) => {
 
 exports.verifyOtp = async (req, res) => {
     const { email, otp } = req.body;
+
+    if (!email || !otp) {
+        return res.status(400).json({ message: "Email and OTP are required" });
+    }
 
     try {
         const record = await Otp.findOne({
@@ -168,6 +178,9 @@ exports.verifyOtp = async (req, res) => {
 
         user.lastLogin = new Date();
         const { accessToken, refreshToken } = generateTokens(user);
+
+        // initialize refreshTokens array if missing
+        if (!Array.isArray(user.refreshTokens)) user.refreshTokens = [];
         user.refreshTokens.push({ token: refreshToken });
         if (user.refreshTokens.length > 5) {
             user.refreshTokens = user.refreshTokens.slice(-5);
@@ -209,7 +222,11 @@ exports.resendOtp = async (req, res) => {
         });
 
         try {
-            await sendOTP(user.number, otp);
+            if (user.number) {
+                await sendOTP(user.number, otp);
+            } else {
+                console.warn("User has no phone number set; skipping SMS resend.");
+            }
         } catch (e) {
             console.warn("SMS resend failed, proceeding for dev:", e.message || e);
         }
@@ -235,12 +252,18 @@ exports.refreshToken = async (req, res) => {
         if (!refreshToken)
             return res.status(401).json({ message: "Refresh token is required" });
 
-        const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET);
+        let decoded;
+        try {
+            decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET);
+        } catch (e) {
+            return res.status(401).json({ message: "Invalid refresh token" });
+        }
+
         const user = await User.findById(decoded.id);
         if (!user || !user.isActive)
             return res.status(401).json({ message: "Invalid refresh token" });
 
-        const tokenExists = user.refreshTokens.some(
+        const tokenExists = Array.isArray(user.refreshTokens) && user.refreshTokens.some(
             (t) => t.token === refreshToken
         );
         if (!tokenExists)
@@ -269,7 +292,9 @@ exports.refreshToken = async (req, res) => {
 exports.logout = async (req, res) => {
     try {
         const { refreshToken } = req.body;
-        const userId = req.user.id;
+        const userId = req.user && req.user.id;
+
+        if (!userId) return res.status(400).json({ message: "User not authenticated" });
 
         if (refreshToken) {
             await User.findByIdAndUpdate(userId, {
@@ -290,7 +315,10 @@ exports.logout = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const userId = req.user && req.user.id;
+        if (!userId) return res.status(400).json({ message: "User not authenticated" });
+
+        const user = await User.findById(userId);
         if (!user || !user.isActive) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -305,15 +333,18 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
     try {
         const { name, phone, address, city, state, pincode } = req.body;
+        const userId = req.user && req.user.id;
+        if (!userId) return res.status(400).json({ message: "User not authenticated" });
 
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(userId);
         if (!user || !user.isActive) {
             return res.status(404).json({ message: "User not found" });
         }
 
         // Update user profile
         user.name = name || user.name;
-        user.phone = phone || user.phone;
+        // keep both phone & number compatibility
+        user.phone = phone || user.phone || user.number || "";
         user.address = address || user.address;
         user.city = city || user.city;
         user.state = state || user.state;
