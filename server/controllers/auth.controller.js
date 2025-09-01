@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const Otp = require("../models/otp.model");
 const { sendEmail } = require("../services/email.service");
+const { sendOTP } = require("../services/sms.service");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -104,6 +105,17 @@ exports.login = async (req, res) => {
         }
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Get user's phone number
+        const user = await User.findOne({
+            email: email.toLowerCase().trim(),
+            isActive: true,
+        });
+
+        if (!user) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+
         await Otp.create({
             email: email.toLowerCase().trim(),
             otp,
@@ -112,19 +124,16 @@ exports.login = async (req, res) => {
             resend: false,
         });
 
+        // Send OTP via SMS
         try {
-            await sendEmail(
-                email,
-                "Your OTP Code",
-                `<h1>Your OTP is: ${otp}</h1><p>This OTP is valid for 5 minutes.</p>`
-            );
+            await sendOTP(user.number, otp);
         } catch (e) {
-            console.warn("Email send failed, proceeding for dev:", e.message || e);
+            console.warn("SMS send failed, proceeding for dev:", e.message || e);
         }
 
         const isProd = process.env.NODE_ENV === "production";
         return res.status(200).json({
-            message: "OTP sent to your email",
+            message: "OTP sent to your phone number",
             email,
             otp: isProd ? undefined : otp,
         });
@@ -200,18 +209,14 @@ exports.resendOtp = async (req, res) => {
         });
 
         try {
-            await sendEmail(
-                normalizedEmail,
-                "Your OTP Code (Resent)",
-                `<h1>Your new OTP is: ${otp}</h1><p>This OTP is valid for 5 minutes.</p>`
-            );
+            await sendOTP(user.number, otp);
         } catch (e) {
-            console.warn("Email resend failed, proceeding for dev:", e.message || e);
+            console.warn("SMS resend failed, proceeding for dev:", e.message || e);
         }
 
         const isProd = process.env.NODE_ENV === "production";
         return res.status(200).json({
-            message: "New OTP sent to your email",
+            message: "New OTP sent to your phone number",
             email: normalizedEmail,
             otpId: newOtp._id,
             otp: isProd ? undefined : otp,
@@ -294,5 +299,34 @@ exports.getProfile = async (req, res) => {
     } catch (error) {
         console.error("Get Profile Error:", error);
         res.status(500).json({ message: "Server error" });
+    }
+};
+
+exports.updateProfile = async (req, res) => {
+    try {
+        const { name, phone, address, city, state, pincode } = req.body;
+
+        const user = await User.findById(req.user.id);
+        if (!user || !user.isActive) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Update user profile
+        user.name = name || user.name;
+        user.phone = phone || user.phone;
+        user.address = address || user.address;
+        user.city = city || user.city;
+        user.state = state || user.state;
+        user.pincode = pincode || user.pincode;
+
+        await user.save();
+
+        res.json({
+            message: "Profile updated successfully",
+            user: getUserData(user)
+        });
+    } catch (error) {
+        console.error("Update Profile Error:", error);
+        res.status(500).json({ message: "Server error during profile update" });
     }
 };

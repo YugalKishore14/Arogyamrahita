@@ -1,14 +1,22 @@
 const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const path = require('path');
 
-// Configure multer for image uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Configure multer with Cloudinary storage
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'arogyamrahita/products',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+        transformation: [{ width: 800, height: 800, crop: 'limit' }]
     }
 });
 
@@ -32,22 +40,22 @@ const upload = multer({
 // Function to handle image upload
 const uploadImage = upload.single('image');
 
-// Function to get image URL
-const getImageUrl = (filename) => {
-    const baseUrl = process.env.BASE_URL || 'https://arogyamrahita.onrender.com';
-    return `${baseUrl}/uploads/${filename}`;
+// Function to get image URL (now returns Cloudinary URL directly)
+const getImageUrl = (cloudinaryUrl) => {
+    return cloudinaryUrl; // Cloudinary URL is already complete
 };
 
-// Function to delete image file
-const deleteImage = (filename) => {
-    const fs = require('fs');
-    const filepath = path.join(__dirname, '../uploads', filename);
-
-    if (fs.existsSync(filepath)) {
-        fs.unlinkSync(filepath);
-        return true;
+// Function to delete image from Cloudinary
+const deleteImage = async (cloudinaryUrl) => {
+    try {
+        // Extract public_id from Cloudinary URL
+        const publicId = cloudinaryUrl.split('/').pop().split('.')[0];
+        const result = await cloudinary.uploader.destroy(`arogyamrahita/products/${publicId}`);
+        return result.result === 'ok';
+    } catch (error) {
+        console.error('Error deleting image from Cloudinary:', error);
+        return false;
     }
-    return false;
 };
 
 module.exports = {

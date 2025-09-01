@@ -41,7 +41,7 @@
 
 .prodCard:hover {
   transform: scale(1.04);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* Image */
@@ -131,4 +131,46 @@
   .productImage {
     height: 160px;
   }
+}
+
+/* Skeleton loading and error states */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 8px;
+  height: 200px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.error {
+  color: #d32f2f;
+  text-align: center;
+  padding: 20px;
+  font-weight: 600;
+}
+
+.retryBtn {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 16px;
+}
+
+.retryBtn:hover {
+  background: #1565c0;
 }

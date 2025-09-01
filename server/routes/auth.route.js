@@ -8,6 +8,7 @@ const {
     refreshToken,
     logout,
     getProfile,
+    updateProfile,
 } = require("../controllers/auth.controller");
 const {
     validateRegister,
@@ -22,5 +23,6 @@ router.post("/resend-otp", resendOtp);
 router.post("/refresh-token", refreshToken);
 router.post("/logout", verifyToken, logout);
 router.get("/profile", verifyToken, getProfile);
+router.put("/profile", verifyToken, updateProfile);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 .header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f5f5f5;
     padding: 1rem 0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     position: sticky;
@@ -17,18 +17,15 @@
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
-    /* background-color: #ee5a24; */
 }
 
 .logoImage {
     width: 60px;
     height: auto;
-    filter: brightness(0) invert(1);
 }
 
 .logo h1 {
     margin: 0;
-    color: white;
     font-size: 1.8rem;
     font-weight: 700;
     text-decoration: none;
@@ -48,7 +45,7 @@
 }
 
 .navList a {
-    color: white;
+    color: #2f2d2d;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
@@ -66,9 +63,9 @@
     height: 100%;
 }
 
-
 .navList a:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: #667eea;
+    color: white;
 }
 
 .navIcons {
@@ -77,49 +74,54 @@
     gap: 1rem;
 }
 
-.loginBtn,
+/* Shared Button Styles */
+
 .signupBtn,
-.adminBtn {
+.adminBtn,
+.cartBtn,
+.iconBox {
     padding: 0.75rem 1.5rem;
     border-radius: 25px;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
     font-size: 0.9rem;
+    background: white;
+    color: #2f2d2d;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .loginBtn {
-    background: transparent;
-    color: white;
-    border-color: white;
-}
-
-.loginBtn:hover {
-    background: white;
-    color: #667eea;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-}
-
-.signupBtn {
-    background: white;
-    color: #667eea;
-    border-color: white;
     display: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    background: white;
+    color: #2f2d2d;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
-.signupBtn:hover {
-    background: transparent;
+/* Hover effect */
+.loginBtn:hover,
+.signupBtn:hover,
+.cartBtn:hover,
+.iconBox:hover {
+    background: #667eea;
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Special Button (Admin) */
 .adminBtn {
     background: linear-gradient(135deg, #ff6b6b, #ee5a24);
     color: white;
-    border-color: #ff6b6b;
+    border: none;
 }
 
 .adminBtn:hover {
@@ -127,6 +129,7 @@
     box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
 }
 
+/* Search Bar */
 .searchBar {
     position: relative;
     flex: 1;
@@ -139,15 +142,15 @@
     padding: 0.75rem 1rem 0.75rem 3rem;
     border: none;
     border-radius: 25px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
+    background: white;
     font-size: 0.9rem;
     transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .searchBar input:focus {
     outline: none;
-    background: white;
+    background: #fff;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
 }
@@ -161,29 +164,15 @@
     font-size: 1.1rem;
 }
 
+/* Cart */
 .cartBtn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    text-decoration: none;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-}
-
-.cartBtn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    color: white;
 }
 
 .cartCount {
-    background: #ff6b6b;
+    background: #ee5a24;
     color: white;
     padding: 0.25rem 0.5rem;
     border-radius: 50%;
@@ -193,25 +182,14 @@
     text-align: center;
 }
 
+/* Icon Button */
 .iconBox {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    color: white;
     font-size: 1.5rem;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-}
-
-.iconBox:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {

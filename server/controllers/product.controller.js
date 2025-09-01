@@ -6,12 +6,8 @@ exports.createProduct = async (req, res) => {
     try {
         const { name, description, image, oldPrice, newPrice, category, stock } = req.body;
 
-        // Convert relative image path to full URL if it's a relative path
+        // Use Cloudinary URL directly (already complete URL)
         let imageUrl = image;
-        if (image && image.startsWith('/uploads/')) {
-            const baseUrl = process.env.BASE_URL || 'https://arogyamrahita.onrender.com';
-            imageUrl = `${baseUrl}${image}`;
-        }
 
         const product = new Product({
             name,
@@ -39,14 +35,24 @@ exports.createProduct = async (req, res) => {
     }
 };
 
-// Get all products (optionally filtered by category)
+// Get all products (optionally filtered by category or search query)
 exports.getAllProducts = async (req, res) => {
     try {
-        const { category } = req.query;
+        const { category, search } = req.query;
         const filter = { isActive: true };
+
         if (category) {
             filter.category = category;
         }
+
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } },
+                { category: { $regex: search, $options: 'i' } }
+            ];
+        }
+
         const products = await Product.find(filter).sort({ createdAt: -1 });
         res.status(200).json({
             success: true,
@@ -89,12 +95,8 @@ exports.updateProduct = async (req, res) => {
     try {
         const { name, description, image, oldPrice, newPrice, category, stock, isActive } = req.body;
 
-        // Convert relative image path to full URL if it's a relative path
+        // Use Cloudinary URL directly (already complete URL)
         let imageUrl = image;
-        if (image && image.startsWith('/uploads/')) {
-            const baseUrl = process.env.BASE_URL || 'https://arogyamrahita.onrender.com';
-            imageUrl = `${baseUrl}${image}`;
-        }
 
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id,
@@ -189,6 +191,23 @@ exports.getAdminProducts = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Error fetching products",
+            error: error.message
+        });
+    }
+};
+
+// Get all unique categories
+exports.getCategories = async (req, res) => {
+    try {
+        const categories = await Product.distinct('category', { isActive: true });
+        res.status(200).json({
+            success: true,
+            categories
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error fetching categories",
             error: error.message
         });
     }

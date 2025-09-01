@@ -1,7 +1,7 @@
 import React from 'react'
 // import Navbar from '../components/Navbar'
 import Header from '../components/Header'
-// import Category from '../components/Category'
+import Category from '../components/Category'
 import Banner from '../components/Banner'
 import Handpick from '../components/Handpick'
 import Products from '../components/Product'
@@ -14,8 +14,8 @@ function Home() {
   return (
     <div>
       <Header />
-      {/* <Category /> */}
       <Banner />
+      <Category />
       <Handpick />
       <Products />
       <ProductsSection />

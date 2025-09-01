@@ -6,6 +6,7 @@ const imageService = require("../services/image.service");
 
 // Public routes
 router.get("/", productController.getAllProducts);
+router.get("/categories", productController.getCategories);
 router.get("/:id", productController.getProductById);
 
 // Protected admin routes
@@ -22,17 +23,18 @@ router.post("/upload-image", imageService.uploadImage, (req, res) => {
             });
         }
 
-        const imageUrl = imageService.getImageUrl(req.file.filename);
+        // Cloudinary returns the complete URL in req.file.path
+        const imageUrl = req.file.path;
         res.status(200).json({
             success: true,
-            message: "Image uploaded successfully",
+            message: "Image uploaded successfully to Cloudinary",
             imageUrl: imageUrl,
-            filename: req.file.filename
+            publicId: req.file.filename
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Error uploading image",
+            message: "Error uploading image to Cloudinary",
             error: error.message
         });
     }

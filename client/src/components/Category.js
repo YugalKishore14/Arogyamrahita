@@ -1,45 +1,98 @@
-import React, { useState } from 'react';
-import styles from "../css/Category.module.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from '../css/Category.module.css';
+import { productAPI } from '../services/Api';
 
-const Categorry = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const Category = () => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const response = await productAPI.getCategories();
+      if (response.success) {
+        setCategories(response.categories);
+      } else {
+        setError('Failed to fetch categories');
+      }
+    } catch (err) {
+      setError('Error loading categories');
+      console.error('Error fetching categories:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return (
-    <header className={styles.navbarContainer}>
-      <div className={styles.navbarLeft}>
-        <div className={styles.allCategoriesBtn} onClick={toggleDropdown}>
-          <span className={styles.hamburgerIcon}>&#9776;</span>
-          <span>All Categories</span>
+  const handleCategoryClick = (category) => {
+    navigate(`/products?category=${encodeURIComponent(category)}`);
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.categorySection}>
+        <div className={styles.container}>
+          <h2 className={styles.title}>Categories</h2>
+          <div className={styles.categoriesGrid}>
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className={styles.categoryCard}>
+                <div className={styles.categoryImage}>
+                  <div className={styles.skeleton}></div>
+                </div>
+                <h3 className={styles.categoryName}>Loading...</h3>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+    );
+  }
 
-      <nav className={styles.navbarMenu}>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Shop</a></li>
-          <li><a href="#">Product</a></li>
-          <li><a href="#">Pages</a></li>
-          <li><a href="#">About</a></li>
-        </ul>
-      </nav>
-
-      {isDropdownOpen && (
-        <div className={styles.productDropdown}>
-          <ul>
-            <li><a href="#">Electronics</a></li>
-            <li><a href="#">Clothing</a></li>
-            <li><a href="#">Home & Kitchen</a></li>
-            <li><a href="#">Books</a></li>
-            <li><a href="#">Sports & Outdoors</a></li>
-          </ul>
+  if (error) {
+    return (
+      <div className={styles.categorySection}>
+        <div className={styles.container}>
+          <h2 className={styles.title}>Categories</h2>
+          <p className={styles.error}>{error}</p>
+          <button onClick={fetchCategories} className={styles.retryBtn}>
+            Retry
+          </button>
         </div>
-      )}
-    </header>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.categorySection}>
+      <div className={styles.container}>
+        <h2 className={styles.title}>Shop by Category</h2>
+        <div className={styles.categoriesGrid}>
+          {categories.map((category, index) => (
+            <div
+              key={index}
+              className={styles.categoryCard}
+              onClick={() => handleCategoryClick(category)}
+            >
+              <div className={styles.categoryImage}>
+                <img
+                  src={`https://placehold.co/200x200/4CAF50/FFFFFF?text=${encodeURIComponent(category)}`}
+                  alt={category}
+                  className={styles.categoryImg}
+                />
+              </div>
+              <h3 className={styles.categoryName}>{category}</h3>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Categorry;
+export default Category;

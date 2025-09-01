@@ -110,3 +110,27 @@ export const cartAPI = {
         return response.data;
     },
 };
+
+export const productAPI = {
+    getAllProducts: async (params = {}) => {
+        const response = await api.get('/products', { params });
+        return response.data;
+    },
+
+    getProductById: async (id) => {
+        const response = await api.get(`/products/${id}`);
+        return response.data;
+    },
+
+    getCategories: async () => {
+        const response = await api.get('/products/categories');
+        return response.data;
+    },
+};
+
+export const userAPI = {
+    updateProfile: async (profileData) => {
+        const response = await api.put('/auth/profile', profileData);
+        return response.data;
+    },
+};

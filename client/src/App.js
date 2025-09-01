@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Signup from './pages/Singup';
 import Dashboard from './Admin/Dashboard';
 import ProductPage from './pages/ProductPage';
+import ProductDetail from './pages/ProductDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Home from "./pages/Home";
@@ -51,6 +52,10 @@ function App() {
           <Route
             path="/products"
             element={<ProductPage />}
+          />
+          <Route
+            path="/product/:id"
+            element={<ProductDetail />}
           />
           <Route
             path="/cart"

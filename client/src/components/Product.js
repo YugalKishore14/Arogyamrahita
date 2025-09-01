@@ -1,18 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/product.module.css";
-import image from "../images/mango.png";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-
-// Dummy Products Data
-const products = [
-  { id: 1, name: "Mango Pickle", price: "₹230", oldPrice: "₹290", image: image },
-  { id: 2, name: "Lemon Pickle", price: "₹200", oldPrice: "₹250", image: image },
-  { id: 3, name: "Chili Pickle", price: "₹180", oldPrice: "₹220", image: image },
-  { id: 4, name: "Mixed Pickle", price: "₹240", oldPrice: "₹300", image: image },
-];
+import { productAPI } from "../services/Api";
 
 // Product Card Component
 const ProductCard = ({ product, onAddToCart, onBuyNow }) => (
@@ -20,8 +12,10 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }) => (
     <img src={product.image} alt={product.name} className={styles.productImage} />
     <h3 className={styles.productName}>{product.name}</h3>
     <div className={styles.productPrices}>
-      <span className={styles.productPrice}>{product.price}</span>
-      <span className={styles.productOldPrice}>{product.oldPrice}</span>
+      <span className={styles.productPrice}>₹{product.newPrice}</span>
+      {product.oldPrice && (
+        <span className={styles.productOldPrice}>₹{product.oldPrice}</span>
+      )}
     </div>
     <div className={styles.buttonGroup}>
       <button className={styles.buyBtn} onClick={() => onBuyNow(product)}>
@@ -39,9 +33,33 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }) => (
 
 // Main Products Component
 function Products() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { addToCart } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await productAPI.getAllProducts();
+      if (response.success) {
+        setProducts(response.products);
+      } else {
+        setError('Failed to fetch products');
+      }
+    } catch (err) {
+      setError('Error loading products');
+      console.error('Error fetching products:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAddToCart = (product) => {
     if (!isAuthenticated()) {
@@ -51,12 +69,12 @@ function Products() {
     }
 
     addToCart({
-      _id: product.id,
+      _id: product._id,
       name: product.name,
-      newPrice: parseInt(product.price.replace('₹', '')),
-      oldPrice: parseInt(product.oldPrice.replace('₹', '')),
+      newPrice: product.newPrice,
+      oldPrice: product.oldPrice,
       image: product.image,
-      category: 'pickle'
+      category: product.category
     }, 1);
 
     toast.success("Added to cart!");
@@ -69,18 +87,40 @@ function Products() {
       return;
     }
 
-    // Add to cart and navigate to checkout
-    addToCart({
-      _id: product.id,
-      name: product.name,
-      newPrice: parseInt(product.price.replace('₹', '')),
-      oldPrice: parseInt(product.oldPrice.replace('₹', '')),
-      image: product.image,
-      category: 'pickle'
-    }, 1);
-
-    navigate('/cart');
+    // Navigate to product detail page
+    navigate(`/product/${product._id}`);
   };
+
+  if (loading) {
+    return (
+      <section className={styles.productsSection}>
+        <h2 className={styles.title}>Our Products</h2>
+        <div className={styles.producterGrid}>
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className={styles.prodCard}>
+              <div className={styles.skeleton}></div>
+              <h3>Loading...</h3>
+              <div className={styles.productPrices}>
+                <span>₹--</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className={styles.productsSection}>
+        <h2 className={styles.title}>Our Products</h2>
+        <p className={styles.error}>{error}</p>
+        <button onClick={fetchProducts} className={styles.retryBtn}>
+          Retry
+        </button>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.productsSection}>
@@ -88,7 +128,7 @@ function Products() {
       <div className={styles.producterGrid}>
         {products.map((p) => (
           <ProductCard
-            key={p.id}
+            key={p._id}
             product={p}
             onAddToCart={handleAddToCart}
             onBuyNow={handleBuyNow}

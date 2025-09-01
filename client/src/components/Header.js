@@ -1,10 +1,10 @@
 // Header.js
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import styles from "../css/Header.module.css";
-import logoImage from "../images/logo.png";
+import logoImage from "../images/arogyamlogo.png";
 import { GiShoppingCart } from "react-icons/gi";
 import { IoSearch } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
@@ -14,6 +14,8 @@ const Header = () => {
     const { isAdmin, user, logout } = useAuth();
     const { cartCount } = useCart();
     const [showUserProfile, setShowUserProfile] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
@@ -27,6 +29,13 @@ const Header = () => {
         } else {
             // Redirect to login if not authenticated
             window.location.href = '/login';
+        }
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
         }
     };
 
@@ -46,10 +55,17 @@ const Header = () => {
                     </div>
 
                     {/*Search Bar */}
-                    <div className={styles.searchBar}>
-                        <input type="text" placeholder="Search here..." />
-                        <span className={styles.searchIcon}><IoSearch /></span>
-                    </div>
+                    <form className={styles.searchBar} onSubmit={handleSearch}>
+                        <input
+                            type="text"
+                            placeholder="Search here..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <button type="submit" className={styles.searchIcon}>
+                            <IoSearch />
+                        </button>
+                    </form>
 
                     {/*Navigation Links */}
                     <nav className={styles.nav}>

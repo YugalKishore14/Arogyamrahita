@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import styles from '../css/UserProfile.module.css';
 import { IoClose, IoPerson, IoMail, IoCall, IoLocation } from 'react-icons/io5';
+import { userAPI } from '../services/Api';
 
 const UserProfile = ({ isOpen, onClose }) => {
     const { user, logout } = useAuth();
@@ -14,6 +15,19 @@ const UserProfile = ({ isOpen, onClose }) => {
         state: user?.state || '',
         pincode: user?.pincode || ''
     });
+
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                name: user.name || '',
+                phone: user.phone || '',
+                address: user.address || '',
+                city: user.city || '',
+                state: user.state || '',
+                pincode: user.pincode || ''
+            });
+        }
+    }, [user]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
 
@@ -31,25 +45,10 @@ const UserProfile = ({ isOpen, onClose }) => {
         setMessage('');
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('https://arogyamrahita.onrender.com/api/users/profile', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (response.ok) {
-                setMessage('Profile updated successfully!');
-                setIsEditing(false);
-                // Update local user data
-                // You might want to refresh the auth context here
-            } else {
-                const errorData = await response.json();
-                setMessage(errorData.message || 'Failed to update profile');
-            }
+            const response = await userAPI.updateProfile(formData);
+            setMessage('Profile updated successfully!');
+            setIsEditing(false);
+            // You might want to refresh the auth context here
         } catch (error) {
             setMessage('Error updating profile. Please try again.');
         } finally {
