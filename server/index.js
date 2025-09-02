@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
-const mongoUri = process.env.MONGO_URI;
+const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
 mongoose
     .connect(mongoUri)
     .then(() => console.log("MongoDB Connected"))
