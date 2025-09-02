@@ -16,9 +16,6 @@ exports.validateRegister = [
 ];
 
 exports.validateLogin = [
-    body("number")
-        .trim()
-        .isLength({ min: 7, max: 15 })
-        .withMessage("Please provide a valid phone number"),
+    body("email").isEmail().withMessage("Please provide a valid email address"),
     body("password").notEmpty().withMessage("Password cannot be empty"),
 ];

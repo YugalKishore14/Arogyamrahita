@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const Otp = require("../models/otp.model");
 const { sendEmail } = require("../services/email.service");
-const { sendOTP } = require("../services/sms.service");
+// SMS service no longer used for login OTP (email-only)
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -101,19 +101,18 @@ exports.login = async (req, res) => {
                 .json({ message: "Validation failed", errors: errors.array() });
         }
 
-        const { number, password } = req.body;
-        if (!number || !password) {
-            return res.status(400).json({ message: "Phone number and password required" });
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password required" });
         }
 
-        // find user once and reuse the variable (avoid duplicate declarations)
         let user = await User.findOne({
-            number: number.trim(),
+            email: email.toLowerCase().trim(),
             isActive: true,
         });
 
         if (!user || !(await user.comparePassword(password))) {
-            return res.status(401).json({ message: "Invalid phone number or password" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -125,17 +124,6 @@ exports.login = async (req, res) => {
             used: false,
             resend: false,
         });
-
-        // Send OTP via SMS (best-effort)
-        try {
-            if (user.number) {
-                await sendOTP(user.number, otp);
-            } else {
-                console.warn("User has no phone number set; skipping SMS send.");
-            }
-        } catch (e) {
-            console.warn("SMS send failed, proceeding for dev:", e.message || e);
-        }
 
         // Send OTP via Email (best-effort)
         try {
@@ -158,8 +146,8 @@ exports.login = async (req, res) => {
 
         const isProd = process.env.NODE_ENV === "production";
         return res.status(200).json({
-            message: "OTP sent to your phone number",
-            number: user.number,
+            message: "OTP sent to your email",
+            email: user.email,
             otp: isProd ? undefined : otp,
         });
     } catch (error) {
@@ -169,21 +157,20 @@ exports.login = async (req, res) => {
 };
 
 exports.verifyOtp = async (req, res) => {
-    const { number, otp } = req.body;
+    const { email, otp } = req.body;
 
-    if (!number || !otp) {
-        return res.status(400).json({ message: "Phone number and OTP are required" });
+    if (!email || !otp) {
+        return res.status(400).json({ message: "Email and OTP are required" });
     }
 
     try {
-        // Find user by phone number first
-        const user = await User.findOne({ number: number.trim() });
+        const user = await User.findOne({ email: email.toLowerCase().trim() });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
         const record = await Otp.findOne({
-            email: user.email, // OTP records still use email
+            email: user.email,
             otp,
             used: false,
         }).sort({ createdAt: -1 });
@@ -222,10 +209,10 @@ exports.verifyOtp = async (req, res) => {
 
 exports.resendOtp = async (req, res) => {
     try {
-        const { number } = req.body;
-        if (!number) return res.status(400).json({ message: "Phone number is required" });
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ message: "Email is required" });
 
-        const user = await User.findOne({ number: number.trim() });
+        const user = await User.findOne({ email: email.toLowerCase().trim() });
         if (!user) return res.status(404).json({ message: "User not found" });
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -238,16 +225,6 @@ exports.resendOtp = async (req, res) => {
             resend: true,
             createdAt: new Date(),
         });
-
-        try {
-            if (user.number) {
-                await sendOTP(user.number, otp);
-            } else {
-                console.warn("User has no phone number set; skipping SMS resend.");
-            }
-        } catch (e) {
-            console.warn("SMS resend failed, proceeding for dev:", e.message || e);
-        }
 
         // Resend OTP via Email (best-effort)
         try {
@@ -264,8 +241,8 @@ exports.resendOtp = async (req, res) => {
 
         const isProd = process.env.NODE_ENV === "production";
         return res.status(200).json({
-            message: "New OTP sent to your phone number",
-            number: user.number,
+            message: "New OTP sent to your email",
+            email: user.email,
             otpId: newOtp._id,
             otp: isProd ? undefined : otp,
         });
