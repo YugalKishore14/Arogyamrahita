@@ -14,7 +14,6 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Home from "./pages/Home";
 import Cart from './pages/Cart';
-// import Header from './components/Header';
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -33,7 +32,6 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        {/* <Header /> */}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

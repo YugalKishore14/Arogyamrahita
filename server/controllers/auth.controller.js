@@ -1,10 +1,8 @@
-// controllers/auth.controller.js
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const Otp = require("../models/otp.model");
 const { sendEmail } = require("../services/email.service");
-// SMS service no longer used for login OTP (email-only)
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -118,9 +116,9 @@ exports.login = async (req, res) => {
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
         await Otp.create({
-            email: user.email, // Keep email for OTP record but use phone for login
+            email: user.email,
             otp,
-            expiresAt: new Date(Date.now() + 5 * 60 * 1000),
+            expiresAt: new Date(Date.now() + 2 * 60 * 1000),
             used: false,
             resend: false,
         });
@@ -186,7 +184,6 @@ exports.verifyOtp = async (req, res) => {
         user.lastLogin = new Date();
         const { accessToken, refreshToken } = generateTokens(user);
 
-        // initialize refreshTokens array if missing
         if (!Array.isArray(user.refreshTokens)) user.refreshTokens = [];
         user.refreshTokens.push({ token: refreshToken });
         if (user.refreshTokens.length > 5) {
@@ -218,7 +215,7 @@ exports.resendOtp = async (req, res) => {
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
         const newOtp = await Otp.create({
-            email: user.email, // Keep email for OTP record
+            email: user.email,
             otp,
             expiresAt: new Date(Date.now() + 5 * 60 * 1000),
             used: false,

@@ -2,9 +2,9 @@ const axios = require("axios");
 require("dotenv").config();
 
 const MSG91_AUTHKEY = process.env.MSG91_AUTHKEY;
-const MSG91_SENDER_ID = process.env.MSG91_SENDER_ID; // Example: "AROGYA"
-const MSG91_TEMPLATE_ID = process.env.MSG91_TEMPLATE_ID; // Pre-approved template ID
-const MSG91_DLT_ENTITY_ID = process.env.MSG91_DLT_ENTITY_ID; // Optional entity id
+const MSG91_SENDER_ID = process.env.MSG91_SENDER_ID;
+const MSG91_TEMPLATE_ID = process.env.MSG91_TEMPLATE_ID;
+const MSG91_DLT_ENTITY_ID = process.env.MSG91_DLT_ENTITY_ID;
 const SMS_DEFAULT_COUNTRY_CODE = process.env.SMS_DEFAULT_COUNTRY_CODE || "+91";
 
 console.log(
@@ -67,8 +67,6 @@ const sendSMS = async (to, message) => {
 };
 
 const sendOTP = async (phoneNumber, otp) => {
-    // Assuming your MSG91 template has variable for OTP like {{otp}} or uses full message.
-    // Using full message content keeps compatibility with existing controller expectation.
     const message = `Your Arogya Rahita OTP is: ${otp}. Valid for 5 minutes.`;
     return await sendSMS(phoneNumber, message);
 };

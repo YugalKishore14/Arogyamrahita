@@ -31,7 +31,6 @@ const Login = () => {
     const location = useLocation();
     const { login } = useAuth();
 
-    // Check for success message from signup
     useEffect(() => {
         if (location.state?.message) {
             toast.success(location.state.message);
@@ -41,7 +40,6 @@ const Login = () => {
         }
     }, [location.state]);
 
-    // Timer effect for OTP
     useEffect(() => {
         let interval;
         if (timer > 0) {
@@ -66,7 +64,7 @@ const Login = () => {
         try {
             await authAPI.login({ email, password });
             setShowOtpForm(true);
-            setTimer(300); // 5 minutes
+            setTimer(120);
             toast.success("OTP sent to your email!");
         } catch (err) {
             setError(err.response?.data?.message || "Failed to send OTP. Please try again.");
@@ -103,7 +101,6 @@ const Login = () => {
     };
 
     const handleForgotPassword = () => {
-        // Navigate to forgot password page (to be implemented)
         toast.info("Forgot password functionality coming soon!");
     };
 

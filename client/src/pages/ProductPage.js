@@ -29,7 +29,6 @@ const ProductPage = () => {
     const [sortBy, setSortBy] = useState("popular");
     const { addToCart } = useCart();
 
-    // Fetch products from API (with optional category)
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -55,10 +54,8 @@ const ProductPage = () => {
         fetchProducts();
     }, [selectedCategory]);
 
-    // Get unique categories from products
     const categories = [...new Set(products.map(product => product.category))];
 
-    // Filter and sort products
     const filteredAndSortedProducts = useMemo(() => {
         let filtered = products.filter(product => {
             const priceMatch = product.newPrice <= priceValue;
@@ -66,7 +63,6 @@ const ProductPage = () => {
             return priceMatch && categoryMatch;
         });
 
-        // Sort products
         switch (sortBy) {
             case 'price-low':
                 filtered.sort((a, b) => a.newPrice - b.newPrice);
@@ -76,7 +72,6 @@ const ProductPage = () => {
                 break;
             case 'popular':
             default:
-                // Keep original order for popular
                 break;
         }
 
@@ -117,7 +112,6 @@ const ProductPage = () => {
         <>
             <Header />
             <div className={styles.container}>
-                {/* Hamburger Button (Mobile) */}
                 <button
                     className={styles.hamburgerBtn}
                     onClick={() => setIsSidebarOpen(true)}
@@ -125,7 +119,6 @@ const ProductPage = () => {
                     <Menu size={24} />
                 </button>
 
-                {/* Sidebar */}
                 <aside
                     className={`${styles.sidebar} ${isSidebarOpen ? styles.showSidebar : ""
                         }`}
@@ -134,7 +127,6 @@ const ProductPage = () => {
                         <h2 className={styles.sidebarTitle}>Filters</h2>
                         <div className={styles.sidebarIcons}>
                             <ListFilter size={20} />
-                            {/* Close button */}
                             <Menu
                                 size={20}
                                 className={styles.closeBtn}
@@ -143,7 +135,6 @@ const ProductPage = () => {
                         </div>
                     </div>
 
-                    {/* Category */}
                     <FilterSection title="Category" sectionKey="category">
                         <ul className={styles.list}>
                             <li
@@ -169,7 +160,6 @@ const ProductPage = () => {
                         </ul>
                     </FilterSection>
 
-                    {/* Price */}
                     <FilterSection title="Price" sectionKey="price">
                         <div className={styles.priceRange}>
                             <input
@@ -193,15 +183,13 @@ const ProductPage = () => {
                     <button
                         className={styles.applyButton}
                         onClick={() => {
-                            // Filters are applied automatically via useMemo
-                            // This button can be used for additional filter logic if needed
+                            // Apply filters logic
                         }}
                     >
                         Apply Filters
                     </button>
                 </aside>
 
-                {/* Product Grid */}
                 <main className={styles.main}>
                     <div className={styles.topBar}>
                         <h1 className={styles.pageTitle}>Organic Products</h1>

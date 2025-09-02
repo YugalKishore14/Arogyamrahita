@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../css/handpick.module.css';   // Import module css
+import styles from '../css/handpick.module.css';
 import image from "../images/bottel.png";
 import watch from "../images/bottel.png";
 import light from "../images/bottel.png";

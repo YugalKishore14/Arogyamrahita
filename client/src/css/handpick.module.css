@@ -1,4 +1,3 @@
-/* Main container */
 .mainContainer {
   background-color: #f8f8f8;
   margin: 37px 100px;
@@ -7,7 +6,6 @@
   width: 84vw;
 }
 
-/* Section heading */
 .sectionTitle {
   font-size: 2.25rem;
   font-weight: bold;
@@ -15,7 +13,6 @@
   text-align: start;
 }
 
-/* Horizontal scroll container */
 .scrollContainer {
   display: flex;
   overflow-x: auto;
@@ -25,12 +22,10 @@
   scrollbar-width: none;
 }
 
-/* Hide scrollbar in Chrome/Safari */
 .scrollContainer::-webkit-scrollbar {
   display: none;
 }
 
-/* Individual card */
 .categoryCard {
   flex-shrink: 0;
   width: 300px;
@@ -46,7 +41,6 @@
   transform: scale(1.05);
 }
 
-/* Image in the card */
 .cardImage {
   width: 100%;
   height: 256px;
@@ -54,7 +48,6 @@
   border-radius: 0.75rem;
 }
 
-/* Title below image */
 .cardTitle {
   text-align: center;
   font-size: 1.125rem;
@@ -62,7 +55,6 @@
   margin-top: 0.5rem;
 }
 
-/* Medium screen (Tablet) */
 @media (max-width: 1024px) {
   .mainContainer {
     margin: 37px 64px;
@@ -77,7 +69,6 @@
   }
 }
 
-/* Small screen (Mobile) */
 @media (max-width: 768px) {
   .mainContainer {
     margin: 37px 32px;
@@ -92,7 +83,6 @@
   }
 }
 
-/* Extra small screen */
 @media (max-width: 640px) {
   .mainContainer {
     margin: 37px 16px;

@@ -50,14 +50,12 @@ export const CartProvider = ({ children }) => {
             }
         } catch (error) {
             console.error('Error loading cart from database:', error);
-            // Fallback to localStorage if DB fails
             loadCartFromLocalStorage();
         } finally {
             setLoading(false);
         }
     }, [loadCartFromLocalStorage]);
 
-    // Load cart from database if authenticated, otherwise from localStorage
     useEffect(() => {
         if (isAuthenticated()) {
             loadCartFromDB();
@@ -66,7 +64,6 @@ export const CartProvider = ({ children }) => {
         }
     }, [isAuthenticated, loadCartFromDB, loadCartFromLocalStorage]);
 
-    // Save cart to localStorage whenever it changes (for non-authenticated users)
     useEffect(() => {
         if (!isAuthenticated()) {
             localStorage.setItem('cart', JSON.stringify(cartItems));
@@ -77,7 +74,6 @@ export const CartProvider = ({ children }) => {
     const addToCart = async (product, quantity = 1) => {
         if (isAuthenticated()) {
             try {
-                // Add to database
                 const response = await cartAPI.addToCart(product._id, quantity);
                 if (response.cart && response.cart.items) {
                     const items = response.cart.items.map(item => ({
@@ -94,11 +90,9 @@ export const CartProvider = ({ children }) => {
                 }
             } catch (error) {
                 console.error('Error adding to cart in database:', error);
-                // Fallback to local state update
                 updateLocalCart(product, quantity);
             }
         } else {
-            // For non-authenticated users, update local state
             updateLocalCart(product, quantity);
         }
     };
@@ -130,7 +124,6 @@ export const CartProvider = ({ children }) => {
                 });
             } catch (error) {
                 console.error('Error removing from cart in database:', error);
-                // Fallback to local state update
                 setCartItems(prevItems => prevItems.filter(item => item._id !== productId));
             }
         } else {
@@ -152,11 +145,9 @@ export const CartProvider = ({ children }) => {
                         item._id === productId ? { ...item, quantity } : item
                     )
                 );
-                // Recalculate cart count
                 setCartCount(cartItems.reduce((total, item) => total + item.quantity, 0));
             } catch (error) {
                 console.error('Error updating cart in database:', error);
-                // Fallback to local state update
                 setCartItems(prevItems =>
                     prevItems.map(item =>
                         item._id === productId ? { ...item, quantity } : item
@@ -180,7 +171,6 @@ export const CartProvider = ({ children }) => {
                 setCartCount(0);
             } catch (error) {
                 console.error('Error clearing cart in database:', error);
-                // Fallback to local state update
                 setCartItems([]);
                 setCartCount(0);
             }

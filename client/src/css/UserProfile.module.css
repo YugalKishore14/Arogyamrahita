@@ -261,7 +261,6 @@
     background-color: #dc2626;
 }
 
-/* Responsive Design */
 @media (max-width: 640px) {
     .overlay {
         padding: 16px;

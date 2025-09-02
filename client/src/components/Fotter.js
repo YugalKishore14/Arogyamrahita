@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../css/Fotter.module.css";   // ✅ Import as CSS Module
+import styles from "../css/Fotter.module.css";
 import image from "../images/arogyamlogo.png";
 
 const Fotter = () => {

@@ -48,7 +48,6 @@ const UserProfile = ({ isOpen, onClose }) => {
             const response = await userAPI.updateProfile(formData);
             setMessage('Profile updated successfully!');
             setIsEditing(false);
-            // You might want to refresh the auth context here
         } catch (error) {
             setMessage('Error updating profile. Please try again.');
         } finally {

@@ -114,7 +114,6 @@ const Signup = () => {
                 password: formData.password,
             });
 
-            // Always redirect to login after successful signup
             showNotification("Account created successfully! Please login.", "success");
             setTimeout(() => {
                 navigate("/login", {

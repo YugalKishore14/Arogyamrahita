@@ -5,7 +5,6 @@ export default function Contact() {
   return (<>
     <Header />
     <div className={styles.page}>
-      {/* Contact Form Section */}
       <div className={styles.card}>
         <h2 className={styles.heading}>READY TO WORK WITH US</h2>
         <p className={styles.subheading}>
@@ -67,7 +66,6 @@ export default function Contact() {
         </form>
       </div>
 
-      {/* Map Section */}
       <div className={styles.card}>
         <h2 className={styles.heading}>FIND US ON GOOGLE MAP</h2>
         <div className={styles.mapWrapper}>

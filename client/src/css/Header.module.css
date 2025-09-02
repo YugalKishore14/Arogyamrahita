@@ -74,18 +74,33 @@
     gap: 1rem;
 }
 
-/* Shared Button Styles */
 
 .signupBtn,
 .adminBtn,
-.cartBtn,
-.iconBox {
+.cartBtn {
     padding: 0.75rem 1.5rem;
     border-radius: 25px;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
     font-size: 0.9rem;
+    background: white;
+    color: #2f2d2d;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.iconBox {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    transition: all 0.3s ease;
     background: white;
     color: #2f2d2d;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -93,7 +108,7 @@
 }
 
 .loginBtn {
-    display: inline-flex;
+    display: none;
     padding: 0.75rem 1.5rem;
     border-radius: 25px;
     text-decoration: none;
@@ -106,7 +121,6 @@
     cursor: pointer;
 }
 
-/* Hover effect */
 .loginBtn:hover,
 .signupBtn:hover,
 .cartBtn:hover,
@@ -117,7 +131,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Special Button (Admin) */
 .adminBtn {
     background: linear-gradient(135deg, #ff6b6b, #ee5a24);
     color: white;
@@ -129,7 +142,6 @@
     box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
 }
 
-/* Search Bar */
 .searchBar {
     position: relative;
     flex: 1;
@@ -156,15 +168,16 @@
 }
 
 .searchIcon {
+    border: none;
     position: absolute;
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
     color: #6c757d;
     font-size: 1.1rem;
+    background: none;
 }
 
-/* Cart */
 .cartBtn {
     display: flex;
     align-items: center;
@@ -180,16 +193,6 @@
     font-weight: 600;
     min-width: 20px;
     text-align: center;
-}
-
-/* Icon Button */
-.iconBox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    font-size: 1.5rem;
 }
 
 @media (max-width: 768px) {

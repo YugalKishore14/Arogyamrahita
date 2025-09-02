@@ -1,14 +1,16 @@
-.wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #f0f0f0;
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f0f0f0;
 }
-.title{
-    font-size: 54px;
+
+.title {
+  font-size: 54px;
 }
+
 .createBtn {
   background-color: #ff6a00;
   color: white;
@@ -18,15 +20,6 @@
   font-weight: 600;
   cursor: pointer;
 }
-
-
-
-
-
-
-
-
-
 
 @media (max-width: 768px) {
   .wrapper {

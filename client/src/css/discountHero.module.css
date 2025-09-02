@@ -10,7 +10,7 @@
   margin: 37px 100px;
   font-family: 'Inter', sans-serif;
   flex-wrap: wrap;
-  height: auto;   /* ✅ changed to auto for better responsiveness */
+  height: auto;
   min-height: 18vw;
 }
 
@@ -41,7 +41,6 @@
   margin-top: 10px;
 }
 
-/* ✅ Tablet */
 @media (max-width: 1024px) {
   .heroContainer {
     flex-direction: column;
@@ -49,33 +48,39 @@
     padding: 30px 60px;
     margin: 30px 60px;
   }
+
   .heroText {
     padding-left: 0;
     margin-top: 20px;
   }
+
   .heroText h1 {
     font-size: 2.5rem;
   }
+
   .heroText p {
     font-size: 1.5rem;
   }
+
   .heroImage img {
     max-width: 300px;
   }
 }
 
-/* ✅ Mobile */
 @media (max-width: 600px) {
   .heroContainer {
     padding: 20px;
     margin: 20px;
   }
+
   .heroText h1 {
     font-size: 2rem;
   }
+
   .heroText p {
     font-size: 1.2rem;
   }
+
   .heroImage img {
     max-width: 250px;
   }

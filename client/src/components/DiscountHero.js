@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "../css/discountHero.module.css";  // ✅ import module css
-import heroImage from "../images/bag.png"; 
+import styles from "../css/discountHero.module.css";
+import heroImage from "../images/bag.png";
 
 const DiscountHero = () => {
   return (

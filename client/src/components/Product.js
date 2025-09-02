@@ -6,7 +6,6 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import { productAPI } from "../services/Api";
 
-// Product Card Component
 const ProductCard = ({ product, onAddToCart, onBuyNow }) => (
   <div className={styles.prodCard}>
     <img src={product.image} alt={product.name} className={styles.productImage} />
@@ -31,7 +30,6 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }) => (
   </div>
 );
 
-// Main Products Component
 function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,7 +85,6 @@ function Products() {
       return;
     }
 
-    // Navigate to product detail page
     navigate(`/product/${product._id}`);
   };
 

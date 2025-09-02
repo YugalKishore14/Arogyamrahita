@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import styles from "../css/review.module.css"; // ✅ import CSS module
+import styles from "../css/review.module.css";
 
 const product1 = "https://placehold.co/400x400/D0D8CF/000000?text=Product+1";
 const product2 = "https://placehold.co/400x400/D0D8CF/000000?text=Product+2";

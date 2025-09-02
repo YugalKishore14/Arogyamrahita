@@ -13,7 +13,7 @@ exports.sendEmail = async (to, subject, html) => {
 
     sendSmtpEmail.subject = subject;
     sendSmtpEmail.htmlContent = html;
-    sendSmtpEmail.sender = { name: "rahit", email: "rahitaarogyam@gmail.com" };
+    sendSmtpEmail.sender = { name: "Arogyamrahita", email: "rahitaarogyam@gmail.com" };
     sendSmtpEmail.to = [{ email: to }];
 
     try {

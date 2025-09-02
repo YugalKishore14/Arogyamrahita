@@ -1,4 +1,3 @@
-
 .returnPolicyContainer {
   padding: 2rem;
   max-width: 1200px;
@@ -6,7 +5,6 @@
   font-family: Arial, sans-serif;
   color: #333;
 }
-
 
 .header {
   background-color: #fff;
@@ -142,8 +140,6 @@
   margin-top: 1rem;
   font-size: 0.95rem;
 }
-
-
 
 @media screen and (max-width: 768px) {
   .returnPolicyContainer {

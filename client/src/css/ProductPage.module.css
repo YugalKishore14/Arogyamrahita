@@ -37,7 +37,6 @@
     color: #4b5563;
 }
 
-/* Filter Sections */
 .filterSection {
     border-bottom: 1px solid #e5e7eb;
     margin-bottom: 1rem;
@@ -84,7 +83,6 @@
     color: #4b5563;
 }
 
-/* Price Range Slider */
 .priceRange {
     padding-top: 0.5rem;
 }
@@ -118,7 +116,6 @@
     margin-top: 0.5rem;
 }
 
-/* Size Grid */
 .sizeGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -148,7 +145,6 @@
     border-color: #1f2937;
 }
 
-/* Apply Button */
 .applyButton {
     width: 100%;
     padding: 0.75rem;
@@ -167,7 +163,6 @@
     background-color: #374151;
 }
 
-/* Main Content Area */
 .main {
     width: 100%;
     padding: 1rem;
@@ -214,7 +209,6 @@
     outline: none;
 }
 
-/* Product Grid */
 .productsGrid {
     display: grid;
     gap: 1.5rem;
@@ -222,8 +216,6 @@
 }
 
 .card {
-    /* width: auto; */
-    /* height: 62vh; */
     position: relative;
     background-color: #ffffff;
     border-radius: 0.75rem;
@@ -333,7 +325,6 @@
     line-height: 1.4;
     margin-bottom: 1rem;
     display: -webkit-box;
-    /* -webkit-line-clamp: 3; */
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -360,7 +351,6 @@
     display: none;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .sidebar {
         position: fixed;

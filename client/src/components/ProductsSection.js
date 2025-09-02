@@ -36,7 +36,7 @@ export default function FeaturedProductsSection() {
 
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
-      const scrollAmount = 320; // matches card width
+      const scrollAmount = 320;
       scrollContainerRef.current.scrollLeft +=
         direction === "left" ? -scrollAmount : scrollAmount;
     }
@@ -83,7 +83,6 @@ export default function FeaturedProductsSection() {
 
   return (
     <div className={styles.featuredProductsContainer}>
-      {/* Header & Nav */}
       <div className={styles.headerNavigation}>
         <h2 className={styles.sectionTitle}>Featured Products</h2>
         <div className={styles.navigationButtons}>
@@ -99,7 +98,6 @@ export default function FeaturedProductsSection() {
         </div>
       </div>
 
-      {/* Product Scroll Row */}
       <div ref={scrollContainerRef} className={styles.productCarousel}>
         {products.map((product) => (
           <div key={product._id} className={styles.productCard}>

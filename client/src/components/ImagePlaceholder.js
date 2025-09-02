@@ -1,7 +1,6 @@
 import React from 'react';
 
 const ImagePlaceholder = ({ width = 300, height = 200, text = "No Image" }) => {
-    // Ensure width/height are valid for <svg> and <rect>
     const safeWidth = typeof width === "number" || String(width).includes("%") ? width : 300;
     const safeHeight = typeof height === "number" || String(height).includes("%") ? height : 200;
 

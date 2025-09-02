@@ -51,7 +51,6 @@ const Cart = () => {
             navigate('/login');
             return;
         }
-        // Navigate to checkout page (to be implemented)
         toast.info('Checkout functionality coming soon!');
     };
 

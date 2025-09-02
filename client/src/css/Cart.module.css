@@ -312,7 +312,6 @@
     }
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .cartContent {
         grid-template-columns: 1fr;

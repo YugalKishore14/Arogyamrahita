@@ -1,7 +1,7 @@
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 50px 20px;
     min-height: 80vh;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .mainImage {
-    width: 100%;
+    width: 80%;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -277,7 +277,6 @@
     background: #1565c0;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .productDetail {
         grid-template-columns: 1fr;

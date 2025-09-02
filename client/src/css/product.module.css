@@ -1,4 +1,3 @@
-/* Section Styling */
 .productsSection {
   padding: 60px 40px;
   background-color: #f9f9f9;
@@ -9,7 +8,6 @@
   padding-right: 100px;
 }
 
-/* Title */
 .title {
   padding-left: 100px;
   font-size: 32px;
@@ -18,14 +16,12 @@
   font-weight: bold;
 }
 
-/* Grid Layout */
 .producterGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 25px;
 }
 
-/* Card Styling */
 .prodCard {
   background: #fff;
   border: 1px solid #ddd;
@@ -44,7 +40,6 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Image */
 .productImage {
   width: 100%;
   height: 200px;
@@ -53,7 +48,6 @@
   margin-bottom: 15px;
 }
 
-/* Name */
 .productName {
   font-size: 20px;
   margin: 10px 0;
@@ -62,7 +56,6 @@
   text-align: center;
 }
 
-/* Prices */
 .productPrices {
   display: flex;
   justify-content: center;
@@ -82,7 +75,6 @@
   font-size: 15px;
 }
 
-/* Button */
 .buyBtn {
   background: green;
   color: white;
@@ -100,7 +92,6 @@
   background: darkgreen;
 }
 
-/* Responsive Tweaks */
 @media (max-width: 768px) {
   .title {
     font-size: 26px;
@@ -133,7 +124,6 @@
   }
 }
 
-/* Skeleton loading and error states */
 .skeleton {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;

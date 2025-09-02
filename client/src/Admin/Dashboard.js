@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import ImageUpload from '../components/ImageUpload';
 import ImagePlaceholder from '../components/ImagePlaceholder';
+import { productAPI } from '../services/Api';
 
 const Dashboard = () => {
     const { logout, user, isAdmin, loading: authLoading } = useAuth();
@@ -34,7 +35,6 @@ const Dashboard = () => {
     ];
 
     useEffect(() => {
-        // Check if user is authenticated and is admin
         if (!authLoading) {
             if (!user || !isAdmin()) {
                 navigate('/login');
@@ -47,19 +47,8 @@ const Dashboard = () => {
     const fetchProducts = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem('token');
-            const response = await fetch('https://arogyamrahita.onrender.com/api/products/admin/all', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setProducts(data.products);
-            } else {
-                throw new Error('Failed to fetch products');
-            }
+            const data = await productAPI.getAdminProducts();
+            setProducts(data.products || data);
         } catch (err) {
             setError('Error fetching products: ' + err.message);
         } finally {
@@ -82,41 +71,24 @@ const Dashboard = () => {
             setError('');
             setSuccess('');
 
-            const token = localStorage.getItem('token');
-            const url = editingProduct
-                ? `https://arogyamrahita.onrender.com/api/products/${editingProduct._id}`
-                : 'https://arogyamrahita.onrender.com/api/products';
-
-            const method = editingProduct ? 'PUT' : 'POST';
-
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setSuccess(editingProduct ? 'Product updated successfully!' : 'Product created successfully!');
-                setFormData({
-                    name: '',
-                    description: '',
-                    image: '',
-                    oldPrice: '',
-                    newPrice: '',
-                    category: 'general',
-                    stock: ''
-                });
-                setEditingProduct(null);
-                setShowModal(false);
-                fetchProducts();
+            if (editingProduct) {
+                await productAPI.updateProduct(editingProduct._id, formData);
             } else {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Operation failed');
+                await productAPI.createProduct(formData);
             }
+            setSuccess(editingProduct ? 'Product updated successfully!' : 'Product created successfully!');
+            setFormData({
+                name: '',
+                description: '',
+                image: '',
+                oldPrice: '',
+                newPrice: '',
+                category: 'general',
+                stock: ''
+            });
+            setEditingProduct(null);
+            setShowModal(false);
+            fetchProducts();
         } catch (err) {
             setError('Error: ' + err.message);
         } finally {
@@ -145,20 +117,9 @@ const Dashboard = () => {
 
         try {
             setLoading(true);
-            const token = localStorage.getItem('token');
-            const response = await fetch(`https://arogyamrahita.onrender.com/api/products/${productId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (response.ok) {
-                setSuccess('Product deleted successfully!');
-                fetchProducts();
-            } else {
-                throw new Error('Failed to delete product');
-            }
+            await productAPI.deleteProduct(productId);
+            setSuccess('Product deleted successfully!');
+            fetchProducts();
         } catch (err) {
             setError('Error deleting product: ' + err.message);
         } finally {
@@ -194,7 +155,6 @@ const Dashboard = () => {
         setSuccess('');
     };
 
-    // Show loading while checking authentication
     if (authLoading) {
         return (
             <div className={styles.adminContainer}>
@@ -203,7 +163,6 @@ const Dashboard = () => {
         );
     }
 
-    // Redirect if not admin
     if (!user || !isAdmin()) {
         navigate('/login');
         return null;

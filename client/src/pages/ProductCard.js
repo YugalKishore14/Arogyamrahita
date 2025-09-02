@@ -29,7 +29,6 @@ const ProductCard = () => {
     return (
         <div className={styles.container}>
             <div className={styles.productCard}>
-                {/* Product Image and Thumbnails Section */}
                 <div className={styles.imageSection}>
                     <div className={styles.mainImageContainer}>
                         <img
@@ -72,7 +71,6 @@ const ProductCard = () => {
                     </div>
                 </div>
 
-                {/* Product Details Section */}
                 <div className={styles.detailsSection}>
                     <h1 className={styles.title}>Lemon Pickel</h1>
                     <p className={styles.description}>

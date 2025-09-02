@@ -19,7 +19,6 @@ const Header = () => {
 
     const handleLogout = () => {
         logout();
-        // Redirect to home page after logout
         window.location.href = '/';
     };
 
@@ -27,7 +26,6 @@ const Header = () => {
         if (user) {
             setShowUserProfile(true);
         } else {
-            // Redirect to login if not authenticated
             window.location.href = '/login';
         }
     };
@@ -43,7 +41,6 @@ const Header = () => {
         <>
             <header className={styles.header}>
                 <div className={styles.container}>
-                    {/*Logo */}
                     <div className={styles.logo}>
                         <Link to="/">
                             <img
@@ -54,7 +51,6 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    {/*Search Bar */}
                     <form className={styles.searchBar} onSubmit={handleSearch}>
                         <input
                             type="text"
@@ -67,7 +63,6 @@ const Header = () => {
                         </button>
                     </form>
 
-                    {/*Navigation Links */}
                     <nav className={styles.nav}>
                         <ul className={styles.navList}>
                             <li><Link to="/">Home</Link></li>
@@ -77,7 +72,6 @@ const Header = () => {
                         </ul>
                     </nav>
 
-                    {/*Right Side Buttons (Login/Signup/Cart/Profile etc.) */}
                     <div className={styles.navIcons}>
                         {user ? (
                             <>
@@ -97,12 +91,10 @@ const Header = () => {
                             </>
                         )}
 
-                        {/* Cart */}
                         <Link to="/cart" className={styles.cartBtn}>
                             <GiShoppingCart /> Cart <span className={styles.cartCount}>{cartCount}</span>
                         </Link>
 
-                        {/* Account Icon */}
                         <div
                             className={styles.iconBox}
                             onClick={handleAccountClick}
@@ -114,8 +106,9 @@ const Header = () => {
                 </div>
             </header>
 
-            {/* User Profile Modal */}
+
             <UserProfile
+                className={styles.userProfile}
                 isOpen={showUserProfile}
                 onClose={() => setShowUserProfile(false)}
             />
