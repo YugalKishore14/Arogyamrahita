@@ -137,6 +137,25 @@ exports.login = async (req, res) => {
             console.warn("SMS send failed, proceeding for dev:", e.message || e);
         }
 
+        // Send OTP via Email (best-effort)
+        try {
+            if (user.email) {
+                await sendEmail(
+                    user.email,
+                    "Your OTP Code",
+                    `<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;">
+                        <p>Dear ${user.name || "User"},</p>
+                        <p>Your One-Time Password (OTP) is:</p>
+                        <h2 style="margin:8px 0 16px;">${otp}</h2>
+                        <p>This code is valid for 5 minutes. Do not share it with anyone.</p>
+                        <p>— Arogya Rahita</p>
+                    </div>`
+                );
+            }
+        } catch (e) {
+            console.warn("Email send failed, proceeding:", e.message || e);
+        }
+
         const isProd = process.env.NODE_ENV === "production";
         return res.status(200).json({
             message: "OTP sent to your phone number",
@@ -228,6 +247,19 @@ exports.resendOtp = async (req, res) => {
             }
         } catch (e) {
             console.warn("SMS resend failed, proceeding for dev:", e.message || e);
+        }
+
+        // Resend OTP via Email (best-effort)
+        try {
+            if (user.email) {
+                await sendEmail(
+                    user.email,
+                    "Your OTP Code",
+                    `<div style=\"font-family:Arial,sans-serif;font-size:14px;line-height:1.6;\">\n                        <p>Dear ${user.name || "User"},</p>\n                        <p>Your new One-Time Password (OTP) is:</p>\n                        <h2 style=\"margin:8px 0 16px;\">${otp}</h2>\n                        <p>This code is valid for 5 minutes. Do not share it with anyone.</p>\n                        <p>— Arogya Rahita</p>\n                    </div>`
+                );
+            }
+        } catch (e) {
+            console.warn("Email resend failed, proceeding:", e.message || e);
         }
 
         const isProd = process.env.NODE_ENV === "production";
