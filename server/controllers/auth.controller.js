@@ -328,7 +328,21 @@ exports.getProfile = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        res.json({ user: getUserData(user) });
+        res.json({
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                number: user.number,
+                phone: user.phone || user.number || "",
+                address: user.address || "",
+                city: user.city || "",
+                state: user.state || "",
+                pincode: user.pincode || "",
+                role: user.role,
+                lastLogin: user.lastLogin,
+            },
+        });
     } catch (error) {
         console.error("Get Profile Error:", error);
         res.status(500).json({ message: "Server error" });
@@ -359,7 +373,19 @@ exports.updateProfile = async (req, res) => {
 
         res.json({
             message: "Profile updated successfully",
-            user: getUserData(user)
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                number: user.number,
+                phone: user.phone || user.number || "",
+                address: user.address || "",
+                city: user.city || "",
+                state: user.state || "",
+                pincode: user.pincode || "",
+                role: user.role,
+                lastLogin: user.lastLogin,
+            },
         });
     } catch (error) {
         console.error("Update Profile Error:", error);

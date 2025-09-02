@@ -25,6 +25,8 @@ import { authAPI } from "../services/Api";
 import "../css/AuthForms.css";
 import { useAuth } from "../context/AuthContext";
 import logoImage from "../images/arogyamlogo.png";
+import Header from "../components/Header";
+import Fotter from "../components/Fotter";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -135,6 +137,7 @@ const Signup = () => {
 
     return (
         <>
+            <Header />
             {notification && (
                 <div
                     className={`custom-notification custom-notification-${notification.type}`}
@@ -328,6 +331,7 @@ const Signup = () => {
                     </Col>
                 </Row>
             </Container>
+            <Fotter />
         </>
     );
 };

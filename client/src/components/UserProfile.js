@@ -17,17 +17,34 @@ const UserProfile = ({ isOpen, onClose }) => {
     });
 
     useEffect(() => {
-        if (user) {
-            setFormData({
-                name: user.name || '',
-                phone: user.phone || '',
-                address: user.address || '',
-                city: user.city || '',
-                state: user.state || '',
-                pincode: user.pincode || ''
-            });
-        }
-    }, [user]);
+        const loadProfile = async () => {
+            try {
+                const res = await userAPI.getProfile();
+                const u = res.user || {};
+                setFormData({
+                    name: u.name || '',
+                    phone: u.phone || '',
+                    address: u.address || '',
+                    city: u.city || '',
+                    state: u.state || '',
+                    pincode: u.pincode || ''
+                });
+            } catch (e) {
+                // fallback to auth user if api fails
+                if (user) {
+                    setFormData({
+                        name: user.name || '',
+                        phone: user.phone || '',
+                        address: user.address || '',
+                        city: user.city || '',
+                        state: user.state || '',
+                        pincode: user.pincode || ''
+                    });
+                }
+            }
+        };
+        if (isOpen) loadProfile();
+    }, [isOpen, user]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
 
@@ -84,7 +101,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                             <IoPerson size={40} />
                         </div>
                         <div className={styles.userDetails}>
-                            <h3>{user?.name || 'User'}</h3>
+                            <h3>{formData.name || user?.name || 'User'}</h3>
                             <p className={styles.email}>{user?.email}</p>
                         </div>
                     </div>

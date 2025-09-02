@@ -10,11 +10,19 @@ import {
     Alert,
     Spinner,
 } from "react-bootstrap";
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import {
+    FaEnvelope,
+    FaLock,
+    FaEye,
+    FaEyeSlash,
+    FaArrowLeft,
+} from "react-icons/fa";
 import { authAPI } from "../services/Api";
 import { useAuth } from "../context/AuthContext";
 import logoImage from "../images/arogyamlogo.png";
 import { toast } from "react-toastify";
+import Header from "../components/Header";
+import Fotter from "../components/Fotter";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -44,7 +52,7 @@ const Login = () => {
         let interval;
         if (timer > 0) {
             interval = setInterval(() => {
-                setTimer(prev => prev - 1);
+                setTimer((prev) => prev - 1);
             }, 1000);
         }
         return () => clearInterval(interval);
@@ -53,7 +61,9 @@ const Login = () => {
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        return `${mins.toString().padStart(2, "0")}:${secs
+            .toString()
+            .padStart(2, "0")}`;
     };
 
     const handleLogin = async (e) => {
@@ -67,7 +77,9 @@ const Login = () => {
             setTimer(120);
             toast.success("OTP sent to your email!");
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to send OTP. Please try again.");
+            setError(
+                err.response?.data?.message || "Failed to send OTP. Please try again."
+            );
         } finally {
             setLoading(false);
         }
@@ -113,93 +125,117 @@ const Login = () => {
 
     if (showOtpForm) {
         return (
-            <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-light">
-                <Row className="w-100 justify-content-center">
-                    <Col xs={12} sm={8} md={6} lg={4}>
-                        <Card className="shadow-lg border-0 rounded-4 p-3">
-                            <Card.Body>
-                                <div className="text-center mb-4">
-                                    <img src={logoImage} alt="Logo" className="mb-1" style={{ width: "100px", height: "100px" }} />
-                                    <h3 className="fw-bold">Verify OTP</h3>
-                                    <p className="text-muted">Enter the OTP sent to {email}</p>
-                                </div>
-
-                                {error && <Alert variant="danger">{error}</Alert>}
-
-                                <Form onSubmit={handleOtpVerification}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>OTP Code</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            placeholder="Enter 6-digit OTP"
-                                            value={otp}
-                                            onChange={(e) => setOtp(e.target.value)}
-                                            maxLength={6}
-                                            required
-                                            className="text-center"
-                                            style={{ fontSize: "1.2rem", letterSpacing: "0.5rem" }}
+            <>
+                <Header />
+                <Container
+                    fluid
+                    className="d-flex justify-content-center align-items-center vh-100 bg-light"
+                >
+                    <Row className="w-100 justify-content-center">
+                        <Col xs={12} sm={8} md={6} lg={4}>
+                            <Card className="shadow-lg border-0 rounded-4 p-3">
+                                <Card.Body>
+                                    <div className="text-center mb-4">
+                                        <img
+                                            src={logoImage}
+                                            alt="Logo"
+                                            className="mb-1"
+                                            style={{ width: "100px", height: "100px" }}
                                         />
-                                    </Form.Group>
-
-                                    {timer > 0 && (
-                                        <div className="text-center mb-3">
-                                            <p className="text-muted">
-                                                OTP expires in: <strong>{formatTime(timer)}</strong>
-                                            </p>
-                                        </div>
-                                    )}
-
-                                    <Button
-                                        variant="primary"
-                                        type="submit"
-                                        className="w-100 py-2 fw-bold mb-3"
-                                        disabled={verifyingOtp || timer === 0}
-                                    >
-                                        {verifyingOtp ? (
-                                            <>
-                                                <Spinner animation="border" size="sm" className="me-2" />
-                                                Verifying...
-                                            </>
-                                        ) : (
-                                            "Verify OTP"
-                                        )}
-                                    </Button>
-
-                                    <div className="d-flex gap-2">
-                                        <Button
-                                            variant="outline-secondary"
-                                            onClick={goBackToLogin}
-                                            className="flex-fill"
-                                        >
-                                            <FaArrowLeft className="me-2" />
-                                            Back
-                                        </Button>
-                                        <Button
-                                            variant="outline-primary"
-                                            onClick={handleResendOtp}
-                                            disabled={timer > 0}
-                                            className="flex-fill"
-                                        >
-                                            Resend OTP
-                                        </Button>
+                                        <h3 className="fw-bold">Verify OTP</h3>
+                                        <p className="text-muted">Enter the OTP sent to {email}</p>
                                     </div>
-                                </Form>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-            </Container>
+
+                                    {error && <Alert variant="danger">{error}</Alert>}
+
+                                    <Form onSubmit={handleOtpVerification}>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>OTP Code</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter 6-digit OTP"
+                                                value={otp}
+                                                onChange={(e) => setOtp(e.target.value)}
+                                                maxLength={6}
+                                                required
+                                                className="text-center"
+                                                style={{ fontSize: "1.2rem", letterSpacing: "0.5rem" }}
+                                            />
+                                        </Form.Group>
+
+                                        {timer > 0 && (
+                                            <div className="text-center mb-3">
+                                                <p className="text-muted">
+                                                    OTP expires in: <strong>{formatTime(timer)}</strong>
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        <Button
+                                            variant="primary"
+                                            type="submit"
+                                            className="w-100 py-2 fw-bold mb-3"
+                                            disabled={verifyingOtp || timer === 0}
+                                        >
+                                            {verifyingOtp ? (
+                                                <>
+                                                    <Spinner
+                                                        animation="border"
+                                                        size="sm"
+                                                        className="me-2"
+                                                    />
+                                                    Verifying...
+                                                </>
+                                            ) : (
+                                                "Verify OTP"
+                                            )}
+                                        </Button>
+
+                                        <div className="d-flex gap-2">
+                                            <Button
+                                                variant="outline-secondary"
+                                                onClick={goBackToLogin}
+                                                className="flex-fill"
+                                            >
+                                                <FaArrowLeft className="me-2" />
+                                                Back
+                                            </Button>
+                                            <Button
+                                                variant="outline-primary"
+                                                onClick={handleResendOtp}
+                                                disabled={timer > 0}
+                                                className="flex-fill"
+                                            >
+                                                Resend OTP
+                                            </Button>
+                                        </div>
+                                    </Form>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container>
+            </>
         );
     }
 
-    return (
-        <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-light">
+    return (<>
+        <Header />
+        <Container
+            fluid
+            className="d-flex justify-content-center align-items-center vh-100 bg-light"
+        >
             <Row className="w-100 justify-content-center">
                 <Col xs={12} sm={8} md={6} lg={4}>
                     <Card className="shadow-lg border-0 rounded-4 p-3">
                         <Card.Body>
                             <div className="text-center mb-4">
-                                <img src={logoImage} alt="Logo" className="mb-1" style={{ width: "100px", height: "100px" }} />
+                                <img
+                                    src={logoImage}
+                                    alt="Logo"
+                                    className="mb-1"
+                                    style={{ width: "100px", height: "100px" }}
+                                />
                                 <h3 className="fw-bold">Welcome Back</h3>
                                 <p className="text-muted">Login to continue</p>
                             </div>
@@ -286,6 +322,8 @@ const Login = () => {
                 </Col>
             </Row>
         </Container>
+        <Fotter />
+    </>
     );
 };
 
