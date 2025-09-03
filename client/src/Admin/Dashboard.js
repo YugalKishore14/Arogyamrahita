@@ -31,7 +31,18 @@ const Dashboard = () => {
         'wellness',
         'supplements',
         'herbs',
-        'other'
+        'other',
+        'oils',
+        'seeds',
+        'aata',
+        'pickle',
+        'dry fruits',
+        'millets',
+        'sabut masala',
+        'crush masala',
+        'rice',
+        'tea',
+        'fast(varat)'
     ];
 
     useEffect(() => {
