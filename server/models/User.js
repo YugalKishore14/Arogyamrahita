@@ -61,6 +61,10 @@ const userSchema = new mongoose.Schema(
         lastLogin: {
             type: Date,
         },
+        lastSeen: {
+            type: Date,
+            default: null,
+        },
         refreshTokens: [
             {
                 token: {

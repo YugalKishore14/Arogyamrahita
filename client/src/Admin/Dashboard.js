@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import ImageUpload from '../components/ImageUpload';
 import ImagePlaceholder from '../components/ImagePlaceholder';
-import { productAPI } from '../services/Api';
+import { productAPI, adminAPI, ordersAPI } from '../services/Api';
 
 const Dashboard = () => {
     const { logout, user, isAdmin, loading: authLoading } = useAuth();
@@ -24,6 +24,9 @@ const Dashboard = () => {
         category: 'general',
         stock: ''
     });
+    const [users, setUsers] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [orderUpdating, setOrderUpdating] = useState(null);
 
     const categories = [
         'general',
@@ -52,6 +55,8 @@ const Dashboard = () => {
                 return;
             }
             fetchProducts();
+            fetchUsers();
+            fetchOrders();
         }
     }, [user, isAdmin, authLoading, navigate]);
 
@@ -64,6 +69,37 @@ const Dashboard = () => {
             setError('Error fetching products: ' + err.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchUsers = async () => {
+        try {
+            const data = await adminAPI.listUsers();
+            setUsers(data);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const fetchOrders = async () => {
+        try {
+            const data = await adminAPI.listOrders();
+            setOrders(Array.isArray(data) ? data : (data.orders || []));
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const updateOrderStatus = async (orderId, status) => {
+        try {
+            setOrderUpdating(orderId);
+            await ordersAPI.updateStatus(orderId, status);
+            await fetchOrders();
+            setSuccess('Order updated');
+        } catch (e) {
+            setError('Failed to update order');
+        } finally {
+            setOrderUpdating(null);
         }
     };
 
@@ -197,6 +233,52 @@ const Dashboard = () => {
             {success && <div className={styles.success}>{success}</div>}
 
             <div className={styles.mainContent}>
+                <div className={styles.usersSection}>
+                    <h2 className={styles.sectionTitle}>Users Presence</h2>
+                    <div className={styles.usersList}>
+                        {users.map(u => (
+                            <div key={u.id} className={styles.userRow}>
+                                <span className={styles.userName}>{u.name} ({u.email})</span>
+                                <span className={u.online ? styles.online : styles.offline}>
+                                    {u.online ? '● Online' : '● Offline'}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className={styles.ordersSection}>
+                    <h2 className={styles.sectionTitle}>Orders</h2>
+                    <div className={styles.ordersList}>
+                        {orders.map(o => (
+                            <div key={o._id} className={styles.orderCard}>
+                                <div className={styles.orderHeader}>
+                                    <div>
+                                        <strong>Order:</strong> {o._id}
+                                    </div>
+                                    <div>
+                                        <strong>User:</strong> {o.user?.name} ({o.user?.email})
+                                    </div>
+                                </div>
+                                <div className={styles.orderItems}>
+                                    {(o.items || []).map((it, idx) => (
+                                        <div key={idx} className={styles.orderItem}>x{it.quantity} {it.name} — ₹{it.price}</div>
+                                    ))}
+                                </div>
+                                <div className={styles.orderFooter}>
+                                    <div><strong>Total:</strong> ₹{o.totalAmount}</div>
+                                    <div className={styles.statusControls}>
+                                        <select value={o.status} onChange={(e) => updateOrderStatus(o._id, e.target.value)} disabled={orderUpdating === o._id}>
+                                            {['PLACED', 'PAID', 'READY_FOR_DELIVERY', 'SHIPPED', 'DELIVERED', 'CANCELLED'].map(s => (
+                                                <option key={s} value={s}>{s}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
                 <div className={styles.addProductSection}>
                     <h2 className={styles.sectionTitle}>Add New Product</h2>
                     <button

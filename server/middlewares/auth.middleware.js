@@ -25,6 +25,10 @@ const verifyToken = async (req, res, next) => {
             });
         }
 
+        // Update presence on each authenticated request
+        user.lastSeen = new Date();
+        await user.save();
+
         req.user = {
             id: user._id,
             email: user.email,

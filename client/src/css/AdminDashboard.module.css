@@ -208,6 +208,77 @@
     overflow-y: auto;
 }
 
+.usersSection,
+.ordersSection {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.usersList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.userRow {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 12px 16px;
+    border: 1px solid #e1e5e9;
+    border-radius: 10px;
+}
+
+.online {
+    color: #2ecc71;
+    font-weight: 700;
+}
+
+.offline {
+    color: #e74c3c;
+    font-weight: 700;
+}
+
+.ordersList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.orderCard {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.orderItems {
+    font-size: 0.95rem;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.orderFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.statusControls select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
 .productsList {
     display: flex;
     flex-direction: column;

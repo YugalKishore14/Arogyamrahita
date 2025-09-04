@@ -155,6 +155,37 @@ export const userAPI = {
     },
 };
 
+export const ordersAPI = {
+    create: async (orderData) => {
+        const response = await api.post('/orders', orderData);
+        return response.data;
+    },
+    myOrders: async () => {
+        const response = await api.get('/orders/my');
+        return response.data;
+    },
+    // admin
+    listAll: async () => {
+        const response = await api.get('/orders');
+        return response.data;
+    },
+    updateStatus: async (orderId, status) => {
+        const response = await api.put(`/orders/${orderId}/status`, { status });
+        return response.data;
+    },
+};
+
+export const adminAPI = {
+    listUsers: async () => {
+        const response = await api.get('/admin/users');
+        return response.data;
+    },
+    listOrders: async () => {
+        const response = await api.get('/admin/orders');
+        return response.data;
+    },
+};
+
 export const categoryAPI = {
     getAllCategories: async () => {
         const response = await api.get('/categories');
