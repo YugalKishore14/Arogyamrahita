@@ -231,6 +231,7 @@ const ProductPage = () => {
                                         <img
                                             src={product.image}
                                             alt={product.name}
+                                            loading="lazy"
                                             className={styles.productImage}
                                             onError={(e) => {
                                                 e.target.style.display = 'none';
