@@ -39,6 +39,7 @@ const Dashboard = () => {
         'seeds',
         'aata',
         'pickle',
+        'dal',
         'dry fruits',
         'millets',
         'sabut masala',

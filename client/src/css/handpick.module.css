@@ -1,9 +1,8 @@
 .mainContainer {
   background-color: #f8f8f8;
-  margin: 37px 100px;
-  padding: 0;
+  padding: 20px 64px;
   font-family: 'Arial', sans-serif;
-  width: 84vw;
+  width: 100%;
 }
 
 .sectionTitle {
