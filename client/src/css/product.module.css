@@ -23,9 +23,10 @@
 }
 
 .prodCard {
+  width: 100%;
   background: #fff;
   border: 1px solid #ddd;
-  padding: 20px;
+  padding: 15px;
   border-radius: 10px;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   display: flex;
@@ -50,17 +51,16 @@
 
 .productName {
   font-size: 20px;
-  margin: 10px 0;
+  margin: 7px 0;
   color: #222;
   font-weight: 600;
-  text-align: center;
 }
 
 .productPrices {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   gap: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 7px;
 }
 
 .productPrice {
@@ -78,19 +78,38 @@
 .buyBtn {
   background: green;
   color: white;
-  padding: 10px 15px;
+  padding: 7px 10px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   align-self: center;
   font-weight: bold;
-  font-size: 16px;
-  transition: background 0.2s;
+  font-size: 15px;
+  width: 50%;
 }
 
 .buyBtn:hover {
   background: darkgreen;
 }
+
+.buttonGroup {
+  display: flex;
+  justify-content: start;
+  gap: 25%;
+}
+
+/* .cartBtn {
+  width: 50%;
+  background: green;
+  color: white;
+  padding: 7px 5px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: center;
+  font-weight: bold;
+  font-size: 15px;
+} */
 
 @media (max-width: 768px) {
   .title {
