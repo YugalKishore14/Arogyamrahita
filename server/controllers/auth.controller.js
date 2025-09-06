@@ -18,9 +18,9 @@ const generateTokens = (user) => {
         role: user.role,
     };
 
-    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "12h" });
+    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
     const refreshToken = jwt.sign({ id: user._id }, JWT_REFRESH_SECRET, {
-        expiresIn: "7d",
+        expiresIn: "30d",
     });
 
     return { accessToken, refreshToken };
@@ -133,7 +133,7 @@ exports.login = async (req, res) => {
                         <p>Dear ${user.name || "User"},</p>
                         <p>Your One-Time Password (OTP) is:</p>
                         <h2 style="margin:8px 0 16px;">${otp}</h2>
-                        <p>This code is valid for 5 minutes. Do not share it with anyone.</p>
+                        <p>This code is valid for 2 minutes. Do not share it with anyone.</p>
                         <p>— Arogya Rahita</p>
                     </div>`
                 );
@@ -217,7 +217,7 @@ exports.resendOtp = async (req, res) => {
         const newOtp = await Otp.create({
             email: user.email,
             otp,
-            expiresAt: new Date(Date.now() + 5 * 60 * 1000),
+            expiresAt: new Date(Date.now() + 2 * 60 * 1000),
             used: false,
             resend: true,
             createdAt: new Date(),
