@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100vh;
+  height: 90vh;
   width: 100%;
   padding: 200px;
   box-sizing: border-box;
@@ -29,10 +29,15 @@
 }
 
 .highlightText {
-  color: #e91e63;
   font-weight: 600;
   margin-bottom: 10px;
+  background: linear-gradient(135deg, red, gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
+
 
 .mainHeading {
   font-size: 2.5rem;
@@ -42,7 +47,7 @@
 }
 
 .subtext {
-  color: #8a8fad;
+  color: #414455;
   font-weight: 500;
   margin-bottom: 30px;
 }
