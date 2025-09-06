@@ -1,34 +1,158 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../css/handpick.module.css';
-import image from "../images/bottel.png";
-import watch from "../images/bottel.png";
-import light from "../images/bottel.png";
+import { categoryAPI } from '../services/Api';
+import defaultImage from "../images/bottel.png";
 
-const CategoryCard = ({ title, imageUrl }) => {
+const getDefaultImageForCategory = (categoryName) => {
+  const categoryImages = {
+    'oils': defaultImage,
+    'seeds': defaultImage,
+    'aata': defaultImage,
+    'pickle': defaultImage,
+    'dry fruits': defaultImage,
+    'millets': defaultImage,
+    'sabut masala': defaultImage,
+    'crush masala': defaultImage,
+    'rice': defaultImage,
+    'tea': defaultImage,
+    'fast(varat)': defaultImage,
+    'self life': defaultImage
+  };
+
+  return categoryImages[categoryName?.toLowerCase()] || defaultImage;
+};
+
+const CategoryCard = ({ title, imageUrl, onClick }) => {
+  const [imageSrc, setImageSrc] = useState(imageUrl || getDefaultImageForCategory(title));
+
+  const handleImageError = () => {
+    setImageSrc(getDefaultImageForCategory(title));
+  };
+
   return (
-    <div className={styles.categoryCard}>
-      <img src={imageUrl} alt={title} className={styles.cardImage} />
+    <div className={styles.categoryCard} onClick={onClick}>
+      <img
+        src={imageSrc}
+        alt={title}
+        className={styles.cardImage}
+        onError={handleImageError}
+        loading="lazy"
+      />
       <div className={styles.cardTitle}>{title}</div>
     </div>
   );
 };
 
 const Handpick = () => {
-  const categories = [
-    { title: 'Personal Care', imageUrl: image },
-    { title: 'Handbags', imageUrl: image },
-    { title: 'Wrist Watches', imageUrl: watch },
-    { title: 'Sun Glasses', imageUrl: light },
-    { title: 'Electronics', imageUrl: image },
-    { title: 'Books', imageUrl: watch },
-  ];
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const scrollContainerRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      const cleanup = startAutoScroll();
+      return cleanup;
+    }
+  }, [categories]);
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const response = await categoryAPI.getAllCategories();
+      if (response.success) {
+        const seen = new Set();
+        const uniqueCategories = response.categories.filter(cat => {
+          const name = cat.name?.trim().toLowerCase();
+          if (!seen.has(name)) {
+            seen.add(name);
+            return true;
+          }
+          return false;
+        });
+
+        setCategories([...uniqueCategories, ...uniqueCategories]);
+      } else {
+        setError('Failed to fetch categories');
+      }
+    } catch (err) {
+      setError('Error loading categories');
+      console.error('Error fetching categories:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const startAutoScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    let scrollSpeed = 1;
+    let animationId;
+
+    const scroll = () => {
+      container.scrollLeft += scrollSpeed;
+
+      if (container.scrollLeft >= container.scrollWidth / 2) {
+        container.scrollLeft = 0;
+      }
+
+      animationId = requestAnimationFrame(scroll);
+    };
+
+    animationId = requestAnimationFrame(scroll);
+
+    return () => cancelAnimationFrame(animationId);
+  };
+
+  const handleCategoryClick = (category) => {
+    navigate(`/products?category=${encodeURIComponent(category.name)}`);
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.mainContainer}>
+        <h2 className={styles.sectionTitle}>Shop By Category</h2>
+        <div className={styles.scrollContainer} ref={scrollContainerRef}>
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className={styles.categoryCard}>
+              <div className={styles.skeleton}></div>
+              <div className={styles.cardTitle}>Loading...</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.mainContainer}>
+        <h2 className={styles.sectionTitle}>Shop By Category</h2>
+        <div className={styles.errorMessage}>
+          <p>Unable to load categories. Please try again later.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.mainContainer}>
       <h2 className={styles.sectionTitle}>Shop By Category</h2>
-      <div className={styles.scrollContainer}>
-        {categories.map((cat, index) => (
-          <CategoryCard key={index} title={cat.title} imageUrl={cat.imageUrl} />
+      <div className={styles.scrollContainer} ref={scrollContainerRef}>
+        {categories.map((category, index) => (
+          <CategoryCard
+            key={category._id || index}
+            title={category.name}
+            imageUrl={category.image}
+            onClick={() => handleCategoryClick(category)}
+          />
         ))}
       </div>
     </div>
