@@ -19,14 +19,14 @@ const Header = () => {
 
     const handleLogout = () => {
         logout();
-        window.location.href = '/';
+        window.location.href = "/";
     };
 
     const handleAccountClick = () => {
         if (user) {
             setShowUserProfile(true);
         } else {
-            window.location.href = '/login';
+            window.location.href = "/login";
         }
     };
 
@@ -65,10 +65,26 @@ const Header = () => {
 
                     <nav className={styles.nav}>
                         <ul className={styles.navList}>
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/products">Products</Link></li>
-                            <li><Link to="/about">About</Link></li>
-                            <li><Link to="/contact">Contact</Link></li>
+                            <li>
+                                <Link to="/">
+                                    <span>Home</span>{" "}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/products">
+                                    <span>Products</span>{" "}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/about">
+                                    <span>About</span>{" "}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/contact">
+                                    <span>Contact</span>{" "}
+                                </Link>
+                            </li>
                         </ul>
                     </nav>
 
@@ -86,26 +102,30 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                                <Link to="/signup" className={styles.signupBtn}>Sign Up</Link>
-                                <Link to="/login" className={styles.loginBtn}>Login</Link>
+                                <Link to="/signup" className={styles.signupBtn}>
+                                    Sign Up
+                                </Link>
+                                <Link to="/login" className={styles.loginBtn}>
+                                    Login
+                                </Link>
                             </>
                         )}
 
                         <Link to="/cart" className={styles.cartBtn}>
-                            <GiShoppingCart /> Cart <span className={styles.cartCount}>{cartCount}</span>
+                            <GiShoppingCart /> Cart{" "}
+                            <span className={styles.cartCount}>{cartCount}</span>
                         </Link>
 
                         <div
                             className={styles.iconBox}
                             onClick={handleAccountClick}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: "pointer" }}
                         >
                             <MdAccountCircle />
                         </div>
                     </div>
                 </div>
             </header>
-
 
             <UserProfile
                 className={styles.userProfile}
