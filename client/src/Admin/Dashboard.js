@@ -43,7 +43,8 @@ const Dashboard = () => {
         'dry fruits',
         'millets',
         'sabut masala',
-        'crush masala',
+        'masala',
+        'Special Churan',
         'rice',
         'tea',
         'fast(varat)'
