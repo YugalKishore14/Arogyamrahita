@@ -1,6 +1,6 @@
 .mainContainer {
   background-color: #f8f8f8;
-  padding: 20px 20px;
+  padding: 80px 20px;
   font-family: 'Arial', sans-serif;
   width: 100%;
   position: relative;
@@ -8,10 +8,13 @@
 }
 
 .sectionTitle {
-  font-size: 2.25rem;
+  font-size: 2.30rem;
   font-weight: bold;
   margin-bottom: 1rem;
   text-align: start;
+  margin-bottom: 2%;
+  padding-left: 10%;
+  /* font-weight: 800; */
 }
 
 .scrollContainer {
@@ -89,7 +92,7 @@
   pointer-events: none;
 }
 
-.mainContainer::before {
+/* .mainContainer::before {
   left: 0;
   background: linear-gradient(to right, #f8f8f8, transparent);
 }
@@ -97,7 +100,7 @@
 .mainContainer::after {
   right: 0;
   background: linear-gradient(to left, #f8f8f8, transparent);
-}
+} */
 
 @media (max-width: 1024px) {
   .mainContainer {

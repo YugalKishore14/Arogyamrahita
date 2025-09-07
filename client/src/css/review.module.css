@@ -1,9 +1,8 @@
 .featuredContainer {
-  padding: 40px 60px;
+  padding: 60px 40px;
   background-color: #f9f9f9;
+  /* background-color: #006D77; */
   font-family: Arial, sans-serif;
-  margin-left: 100px;
-  margin-right: 100px;
 }
 
 .featuredHeader {
@@ -14,8 +13,13 @@
 }
 
 .featuredHeader h2 {
-  font-size: 26px;
-  color: #211E26;
+  /* font-size: 26px;
+  color: #211E26; */
+  font-size: 2.30rem;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 2%;
+  padding-left: 8%;
 }
 
 .arrows {

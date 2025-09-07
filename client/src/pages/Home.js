@@ -10,7 +10,7 @@ import ProductsSection from "../components/ProductsSection"
 
 function Home() {
   return (
-    <div>
+    <div style={{ backgroundColor: "#f8fafc" }}>
       <Header />
       <Banner />
       <Handpick />

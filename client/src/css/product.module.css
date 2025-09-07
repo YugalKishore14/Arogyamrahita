@@ -9,24 +9,24 @@
 }
 
 .title {
-  padding-left: 100px;
-  font-size: 32px;
-  margin-bottom: 40px;
+  font-size: 2.30rem;
   color: #333;
   font-weight: bold;
+  margin-bottom: 2%;
+  padding-left: 6%;
 }
 
 .producterGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 25px;
+  gap: 30px;
 }
 
 .prodCard {
   width: 100%;
   background: #fff;
   border: 1px solid #ddd;
-  padding: 15px;
+  padding: 12px;
   border-radius: 10px;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   display: flex;
@@ -50,7 +50,7 @@
 }
 
 .productName {
-  font-size: 20px;
+  font-size: 18px;
   margin: 7px 0;
   color: #222;
   font-weight: 600;

@@ -1,8 +1,7 @@
 .featuredProductsContainer {
+  width: 100%;
   padding: 2rem;
-  background: #f8fafc;
-  margin-left: 100px;
-  margin-right: 100px;
+  background-color: #f8fafc;
 }
 
 .headerNavigation {
@@ -13,8 +12,11 @@
 }
 
 .sectionTitle {
-  font-size: 1.5rem;
+  font-size: 2.30rem;
+  color: #333;
   font-weight: bold;
+  margin-bottom: 2%;
+  padding-left: 9%;
 }
 
 .navigationButtons {
