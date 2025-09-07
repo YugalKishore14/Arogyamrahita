@@ -168,7 +168,7 @@ const About = () => {
                 <header className={style.header}>
                     <h1 className={style.headingPrimary}>
                         <span style={{ color: "#f07b0dff" }}>About Us</span> <GoDash />{" "}
-                        Arogyam Rahita <GiTreeBranch style={{ color: "#2e8b57" }} />
+                        Aarogyam Rahita <GiTreeBranch style={{ color: "#2e8b57" }} />
                     </h1>
                 </header>
 
