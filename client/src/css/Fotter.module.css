@@ -10,7 +10,6 @@
   overflow: hidden;
 }
 
-/* Neon Gradient Glow */
 .footer::before {
   content: "";
   position: absolute;
@@ -19,7 +18,7 @@
   width: 160%;
   height: 160%;
   background: radial-gradient(circle at top left, rgba(0, 255, 150, 0.2), transparent 70%),
-              radial-gradient(circle at bottom right, rgba(0, 200, 255, 0.25), transparent 70%);
+    radial-gradient(circle at bottom right, rgba(0, 200, 255, 0.25), transparent 70%);
   z-index: 0;
 }
 
@@ -57,12 +56,12 @@
   margin-bottom: 12px;
   font-size: 20px;
   font-weight: bold;
-  color: #00ffb7; /* Neon green heading */
+  color: #00ffb7;
 }
 
 .supportSection p {
   margin: 8px 0;
-  color: #f0f0f0; /* White text visible */
+  color: #f0f0f0;
 }
 
 .linksSection ul {

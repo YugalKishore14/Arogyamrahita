@@ -1,11 +1,11 @@
 import React from 'react';
-import Header from '../components/Header';
+// import Header from '../components/Header';
 import styles from '../css/About.module.css';
 
 const About = () => {
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <div className={styles.container}>
                 <div className={styles.content}>
                     <h1>About Arogya Rahita</h1>
