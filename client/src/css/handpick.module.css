@@ -71,6 +71,7 @@
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
@@ -87,6 +88,7 @@
   .categoryCard {
     width: 220px;
   }
+
   .cardImage {
     height: 190px;
   }
@@ -96,6 +98,7 @@
   .categoryCard {
     width: 180px;
   }
+
   .cardImage {
     height: 160px;
   }
@@ -105,9 +108,11 @@
   .categoryCard {
     width: 150px;
   }
+
   .cardImage {
     height: 130px;
   }
+
   .sectionTitle {
     font-size: 1.8rem;
   }

@@ -51,7 +51,7 @@ const Header = () => {
   });
 
   return (
-    <>
+    <div className={styles.headerContainer}>
       <motion.header
         className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}
         initial={{ y: -80, opacity: 0 }}
@@ -198,7 +198,7 @@ const Header = () => {
         isOpen={showUserProfile}
         onClose={() => setShowUserProfile(false)}
       />
-    </>
+    </div>
   );
 };
 
