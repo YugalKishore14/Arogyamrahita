@@ -6,6 +6,7 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import { productAPI } from "../services/Api";
+import { GrCart } from "react-icons/gr";
 
 function ProductCard({ product, onAddToCart, onBuyNow }) {
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
           onClick={() => onAddToCart(product)}
           className={styles.cartBtn}
         >
-          🛒
+          <GrCart className={styles.cartIcon} />
         </motion.button>
       </div>
     </motion.div>

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import styles from '../css/handpick.module.css';
 import { categoryAPI } from '../services/Api';
 import defaultImage from "../images/bottel.png";
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
 const getDefaultImageForCategory = (categoryName) => {
   const categoryImages = {
@@ -125,6 +126,19 @@ const Handpick = () => {
     return () => cancelAnimationFrame(animationId);
   };
 
+  const scrollManually = (direction) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const amount = 320;
+    container.scrollLeft += direction === 'left' ? -amount : amount;
+    if (container.scrollLeft >= container.scrollWidth / 2) {
+      container.scrollLeft = 0;
+    }
+    if (container.scrollLeft < 0) {
+      container.scrollLeft = container.scrollWidth / 2;
+    }
+  };
+
   const handleCategoryClick = (category) => {
     navigate(`/products?category=${encodeURIComponent(category.name)}`);
   };
@@ -154,15 +168,61 @@ const Handpick = () => {
           <p>Unable to load categories. Please try again later.</p>
         </div>
       ) : (
-        <div className={styles.scrollContainer} ref={scrollContainerRef}>
-          {categories.map((category, index) => (
-            <CategoryCard
-              key={category._id || index}
-              title={category.name}
-              imageUrl={category.image}
-              onClick={() => handleCategoryClick(category)}
-            />
-          ))}
+        <div style={{ position: 'relative' }}>
+          <div className={styles.scrollContainer} ref={scrollContainerRef}>
+            {categories.map((category, index) => (
+              <CategoryCard
+                key={category._id || index}
+                title={category.name}
+                imageUrl={category.image}
+                onClick={() => handleCategoryClick(category)}
+              />
+            ))}
+          </div>
+          <button
+            aria-label="Scroll left"
+            onClick={() => scrollManually('left')}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: 8,
+              transform: 'translateY(-50%)',
+              zIndex: 5,
+              border: 'none',
+              background: 'rgba(255,255,255,0.8)',
+              borderRadius: 9999,
+              width: 36,
+              height: 36,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer'
+            }}
+          >
+            <HiChevronLeft size={22} />
+          </button>
+          <button
+            aria-label="Scroll right"
+            onClick={() => scrollManually('right')}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              right: 8,
+              transform: 'translateY(-50%)',
+              zIndex: 5,
+              border: 'none',
+              background: 'rgba(255,255,255,0.8)',
+              borderRadius: 9999,
+              width: 36,
+              height: 36,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer'
+            }}
+          >
+            <HiChevronRight size={22} />
+          </button>
         </div>
       )}
     </div>

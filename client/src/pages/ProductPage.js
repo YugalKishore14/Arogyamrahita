@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
     ChevronRight,
     ChevronDown,
@@ -30,17 +30,31 @@ const ProductPage = () => {
     const { addToCart } = useCart();
     const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Read query params for category/search
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const category = params.get("category") || "";
+        setSelectedCategory(category);
+    }, [location.search]);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
                 setError("");
-                const url = selectedCategory
-                    ? `https://arogyamrahita.onrender.com/api/products?category=${encodeURIComponent(
-                        selectedCategory
-                    )}`
-                    : "https://arogyamrahita.onrender.com/api/products";
+                const params = new URLSearchParams(location.search);
+                const categoryParam = params.get("category");
+                const searchParam = params.get("search");
+
+                let url = "https://arogyamrahita.onrender.com/api/products";
+                const queryParts = [];
+                if (categoryParam) queryParts.push(`category=${encodeURIComponent(categoryParam)}`);
+                if (searchParam) queryParts.push(`search=${encodeURIComponent(searchParam)}`);
+                if (queryParts.length > 0) {
+                    url += `?${queryParts.join("&")}`;
+                }
 
                 const response = await fetch(url);
                 if (response.ok) {
@@ -57,15 +71,20 @@ const ProductPage = () => {
         };
 
         fetchProducts();
-    }, [selectedCategory]);
+    }, [location.search, selectedCategory]);
 
     const categories = [...new Set(products.map((product) => product.category))];
 
     const filteredAndSortedProducts = useMemo(() => {
+        const params = new URLSearchParams(location.search);
+        const searchParam = (params.get("search") || "").toLowerCase();
+
         let filtered = products.filter((product) => {
             const priceMatch = product.newPrice <= priceValue;
             const categoryMatch = !selectedCategory || product.category === selectedCategory;
-            return priceMatch && categoryMatch;
+            const nameMatches = !searchParam || product.name?.toLowerCase().includes(searchParam);
+            const categoryMatchesSearch = !searchParam || product.category?.toLowerCase().includes(searchParam);
+            return priceMatch && categoryMatch && (nameMatches || categoryMatchesSearch);
         });
 
         switch (sortBy) {
@@ -81,7 +100,7 @@ const ProductPage = () => {
         }
 
         return filtered;
-    }, [products, priceValue, selectedCategory, sortBy]);
+    }, [products, priceValue, selectedCategory, sortBy, location.search]);
 
     const handleAddToCart = (product) => {
         if (!isAuthenticated()) {
@@ -159,7 +178,12 @@ const ProductPage = () => {
                         <li
                             key="all"
                             className={styles.listItem}
-                            onClick={() => setSelectedCategory("")}
+                            onClick={() => {
+                                setSelectedCategory("");
+                                const params = new URLSearchParams(location.search);
+                                params.delete("category");
+                                navigate(`/products${params.toString() ? `?${params.toString()}` : ""}`);
+                            }}
                             style={{
                                 cursor: "pointer",
                                 fontWeight: selectedCategory === "" ? "600" : "400",
@@ -172,7 +196,12 @@ const ProductPage = () => {
                             <li
                                 key={index}
                                 className={styles.listItem}
-                                onClick={() => setSelectedCategory(item)}
+                                onClick={() => {
+                                    setSelectedCategory(item);
+                                    const params = new URLSearchParams(location.search);
+                                    params.set("category", item);
+                                    navigate(`/products?${params.toString()}`);
+                                }}
                                 style={{
                                     cursor: "pointer",
                                     fontWeight: selectedCategory === item ? "600" : "400",

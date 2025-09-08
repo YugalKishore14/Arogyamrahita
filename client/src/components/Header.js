@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
@@ -10,15 +10,20 @@ import { MdAccountCircle } from "react-icons/md";
 import { HiMenu, HiX } from "react-icons/hi";
 import UserProfile from "./UserProfile";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { productAPI, categoryAPI } from "../services/Api";
 
 const Header = () => {
   const { isAdmin, user, logout } = useAuth();
   const { cartCount } = useCart();
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [allCategories, setAllCategories] = useState([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const searchRef = useRef(null);
 
   const handleLogout = () => {
     logout();
@@ -37,6 +42,92 @@ const Header = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+      setShowSuggestions(false);
+    }
+  };
+
+  // Fetch categories once for category suggestions
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await categoryAPI.getAllCategories();
+        if (mounted && res?.success) {
+          setAllCategories(res.categories || []);
+        }
+      } catch (_) { }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // Debounced search suggestions
+  useEffect(() => {
+    if (!searchQuery || searchQuery.trim().length === 0) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    const query = searchQuery.trim();
+    let mounted = true;
+    const timer = setTimeout(async () => {
+      try {
+        const [productsRes] = await Promise.all([
+          productAPI.getAllProducts({ search: query, limit: 8 }),
+        ]);
+
+        const productSuggestions = (productsRes?.products || []).map((p) => ({
+          id: p._id,
+          label: p.name,
+          type: "product",
+        }));
+
+        const categorySuggestions = (allCategories || [])
+          .filter((c) => c?.name?.toLowerCase().includes(query.toLowerCase()))
+          .slice(0, 5)
+          .map((c) => ({ id: c._id, label: c.name, type: "category" }));
+
+        const combined = [...categorySuggestions, ...productSuggestions];
+        if (mounted) {
+          setSuggestions(combined);
+          setShowSuggestions(true);
+        }
+      } catch (_) {
+        if (mounted) {
+          setSuggestions([]);
+          setShowSuggestions(false);
+        }
+      }
+    }, 250);
+
+    return () => {
+      mounted = false;
+      clearTimeout(timer);
+    };
+  }, [searchQuery, allCategories]);
+
+  // Hide suggestions on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSuggestionClick = (s) => {
+    setShowSuggestions(false);
+    if (s.type === "category") {
+      navigate(`/products?category=${encodeURIComponent(s.label)}`);
+      setSearchQuery("");
+    } else if (s.type === "product") {
+      navigate(`/products?search=${encodeURIComponent(s.label)}`);
+      setSearchQuery("");
     }
   };
 
@@ -67,16 +158,71 @@ const Header = () => {
           </motion.div>
 
           {/* Search */}
-          <form className={styles.searchBar} onSubmit={handleSearch}>
+          <form className={styles.searchBar} onSubmit={handleSearch} ref={searchRef}>
             <input
               type="text"
               placeholder="Search here..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSuggestions(true);
+              }}
+              onFocus={() => {
+                if (suggestions.length > 0) setShowSuggestions(true);
+              }}
             />
             <motion.button type="submit" className={styles.searchIcon} whileTap={{ scale: 0.9 }}>
               <IoSearch />
             </motion.button>
+            {showSuggestions && suggestions.length > 0 && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "110%",
+                  left: 0,
+                  right: 0,
+                  background: "#fff",
+                  borderRadius: 8,
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                  zIndex: 20,
+                  padding: 8,
+                  maxHeight: 280,
+                  overflowY: "auto",
+                }}
+              >
+                {suggestions.map((s) => (
+                  <div
+                    key={`${s.type}-${s.id}`}
+                    onClick={() => handleSuggestionClick(s)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "8px 10px",
+                      cursor: "pointer",
+                      borderRadius: 6,
+                    }}
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    <span
+                      style={{
+                        fontSize: 12,
+                        color: "#666",
+                        background: s.type === "category" ? "#e6f7f0" : "#f0f0f0",
+                        padding: "2px 6px",
+                        borderRadius: 4,
+                        textTransform: "capitalize",
+                        minWidth: 70,
+                        textAlign: "center",
+                      }}
+                    >
+                      {s.type}
+                    </span>
+                    <span style={{ fontSize: 14, color: "#111" }}>{s.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </form>
 
           {/* Desktop Nav */}
