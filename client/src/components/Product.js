@@ -8,6 +8,12 @@ import { toast } from "react-toastify";
 import { productAPI } from "../services/Api";
 
 function ProductCard({ product, onAddToCart, onBuyNow }) {
+  const navigate = useNavigate();
+
+  const handleImageClick = () => {
+    navigate(`/product/${product._id}`);
+  };
+
   return (
     <motion.div
       className={styles.prodCard}
@@ -16,13 +22,16 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
+      style={{ cursor: "default" }}
     >
-      <motion.img
+      <img
         src={product.image}
         alt={product.name}
         className={styles.productImage}
         whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
+        onClick={handleImageClick}
+        style={{ cursor: "pointer" }}
       />
 
       <h3 className={styles.productName}>{product.name}</h3>
@@ -34,7 +43,10 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
         )}
       </div>
 
-      <div className={styles.buttonGroup}>
+      <div
+        className={styles.buttonGroup}
+        onClick={(e) => e.stopPropagation()}
+      >
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
