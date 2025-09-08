@@ -1,46 +1,64 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import styles from '../css/handpick.module.css';
 import { categoryAPI } from '../services/Api';
 import defaultImage from "../images/bottel.png";
 
 const getDefaultImageForCategory = (categoryName) => {
   const categoryImages = {
-    'oils': defaultImage,
-    'seeds': defaultImage,
-    'aata': defaultImage,
-    'pickle': defaultImage,
-    'dry fruits': defaultImage,
-    'millets': defaultImage,
-    'sabut masala': defaultImage,
-    'crush masala': defaultImage,
-    'rice': defaultImage,
-    'tea': defaultImage,
-    'fast(varat)': defaultImage,
-    'self life': defaultImage
+    oils: defaultImage,
+    seeds: defaultImage,
+    aata: defaultImage,
+    pickle: defaultImage,
+    "dry fruits": defaultImage,
+    millets: defaultImage,
+    "sabut masala": defaultImage,
+    "crush masala": defaultImage,
+    rice: defaultImage,
+    tea: defaultImage,
+    "fast(varat)": defaultImage,
+    "self life": defaultImage,
   };
-
   return categoryImages[categoryName?.toLowerCase()] || defaultImage;
 };
 
 const CategoryCard = ({ title, imageUrl, onClick }) => {
-  const [imageSrc, setImageSrc] = useState(imageUrl || getDefaultImageForCategory(title));
+  const [imageSrc, setImageSrc] = useState(
+    imageUrl || getDefaultImageForCategory(title)
+  );
 
   const handleImageError = () => {
     setImageSrc(getDefaultImageForCategory(title));
   };
 
   return (
-    <div className={styles.categoryCard} onClick={onClick}>
-      <img
+    <motion.div
+      className={styles.categoryCard}
+      onClick={onClick}
+      whileHover={{ scale: 1.1, rotate: 1 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 200 }}
+    >
+      <motion.img
         src={imageSrc}
         alt={title}
         className={styles.cardImage}
         onError={handleImageError}
         loading="lazy"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
       />
-      <div className={styles.cardTitle}>{title}</div>
-    </div>
+      <motion.div
+        className={styles.cardTitle}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
+        {title}
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -68,7 +86,7 @@ const Handpick = () => {
       const response = await categoryAPI.getAllCategories();
       if (response.success) {
         const seen = new Set();
-        const uniqueCategories = response.categories.filter(cat => {
+        const uniqueCategories = response.categories.filter((cat) => {
           const name = cat.name?.trim().toLowerCase();
           if (!seen.has(name)) {
             seen.add(name);
@@ -76,14 +94,13 @@ const Handpick = () => {
           }
           return false;
         });
-
         setCategories([...uniqueCategories, ...uniqueCategories]);
       } else {
-        setError('Failed to fetch categories');
+        setError("Failed to fetch categories");
       }
     } catch (err) {
-      setError('Error loading categories');
-      console.error('Error fetching categories:', err);
+      setError("Error loading categories");
+      console.error("Error fetching categories:", err);
     } finally {
       setLoading(false);
     }
@@ -93,21 +110,18 @@ const Handpick = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    let scrollSpeed = 1;
+    let scrollSpeed = 0.7;
     let animationId;
 
     const scroll = () => {
       container.scrollLeft += scrollSpeed;
-
       if (container.scrollLeft >= container.scrollWidth / 2) {
         container.scrollLeft = 0;
       }
-
       animationId = requestAnimationFrame(scroll);
     };
 
     animationId = requestAnimationFrame(scroll);
-
     return () => cancelAnimationFrame(animationId);
   };
 
@@ -115,10 +129,18 @@ const Handpick = () => {
     navigate(`/products?category=${encodeURIComponent(category.name)}`);
   };
 
-  if (loading) {
-    return (
-      <div className={styles.mainContainer}>
-        <h2 className={styles.sectionTitle}>Shop By Category</h2>
+  return (
+    <div className={styles.mainContainer}>
+      <motion.h2
+        className={styles.sectionTitle}
+        initial={{ y: -20, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        Shop By Category
+      </motion.h2>
+
+      {loading ? (
         <div className={styles.scrollContainer} ref={scrollContainerRef}>
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className={styles.categoryCard}>
@@ -127,34 +149,22 @@ const Handpick = () => {
             </div>
           ))}
         </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles.mainContainer}>
-        <h2 className={styles.sectionTitle}>Shop By Category</h2>
+      ) : error ? (
         <div className={styles.errorMessage}>
           <p>Unable to load categories. Please try again later.</p>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.mainContainer}>
-      <h2 className={styles.sectionTitle}>Shop By Category</h2>
-      <div className={styles.scrollContainer} ref={scrollContainerRef}>
-        {categories.map((category, index) => (
-          <CategoryCard
-            key={category._id || index}
-            title={category.name}
-            imageUrl={category.image}
-            onClick={() => handleCategoryClick(category)}
-          />
-        ))}
-      </div>
+      ) : (
+        <div className={styles.scrollContainer} ref={scrollContainerRef}>
+          {categories.map((category, index) => (
+            <CategoryCard
+              key={category._id || index}
+              title={category.name}
+              imageUrl={category.image}
+              onClick={() => handleCategoryClick(category)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

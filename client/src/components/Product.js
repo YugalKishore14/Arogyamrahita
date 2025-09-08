@@ -1,22 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import styles from "../css/product.module.css";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import { productAPI } from "../services/Api";
 
-// Single Product Card Component
 function ProductCard({ product, onAddToCart, onBuyNow }) {
   return (
-    <div className={styles.prodCard}>
-      <img
+    <motion.div
+      className={styles.prodCard}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <motion.img
         src={product.image}
         alt={product.name}
         className={styles.productImage}
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.3 }}
       />
+
       <h3 className={styles.productName}>{product.name}</h3>
-      {/* <p className={styles.productDescription}>{product.description}</p> */}
+
       <div className={styles.productPrices}>
         <span className={styles.productPrice}>₹{product.newPrice}</span>
         {product.oldPrice && (
@@ -25,14 +35,25 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
       </div>
 
       <div className={styles.buttonGroup}>
-        <button onClick={() => onBuyNow(product)} className={styles.buyBtn}>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => onBuyNow(product)}
+          className={styles.buyBtn}
+        >
           Buy Now
-        </button>
-        {/* <button onClick={() => onAddToCart(product)} className={styles.cartBtn}>
-          Add to Cart
-        </button> */}
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => onAddToCart(product)}
+          className={styles.cartBtn}
+        >
+          🛒
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -45,7 +66,6 @@ function Products() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Fetch products from API
   useEffect(() => {
     loadProducts();
   }, []);
@@ -68,7 +88,6 @@ function Products() {
     }
   };
 
-  // Add to Cart Handler
   const handleAddToCart = (product) => {
     if (!isAuthenticated()) {
       toast.info("Please sign up to add items to cart!");
@@ -91,7 +110,6 @@ function Products() {
     toast.success("Added to cart!");
   };
 
-  // Buy Now Handler
   const handleBuyNow = (product) => {
     if (!isAuthenticated()) {
       toast.info("Please sign up to purchase products!");
@@ -101,50 +119,67 @@ function Products() {
     navigate(`/product/${product._id}`);
   };
 
-  // Loading UI
   if (loading) {
     return (
       <section className={styles.productsSection}>
         <h2 className={styles.title}>Our Products</h2>
         <div className={styles.producterGrid}>
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className={styles.prodCard}>
+            <motion.div
+              key={i}
+              className={styles.prodCard}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: i * 0.15 }}
+            >
               <div className={styles.skeleton}></div>
               <h3>Loading...</h3>
               <div className={styles.productPrices}>
                 <span>₹--</span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
     );
   }
 
-  // Error UI
   if (error) {
     return (
       <section className={styles.productsSection}>
         <h2 className={styles.title}>Our Products</h2>
         <p className={styles.error}>{error}</p>
-        <button onClick={loadProducts} className={styles.retryBtn}>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={loadProducts}
+          className={styles.retryBtn}
+        >
           Retry
-        </button>
+        </motion.button>
       </section>
     );
   }
 
-  // Final Products UI
   return (
     <section className={styles.productsSection}>
-      <h2 className={styles.title}>Our Products</h2>
+      <motion.h2
+        className={styles.title}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        Our Products
+      </motion.h2>
+
       <div className={styles.producterGrid}>
-        {products.map((product) => (
+        {products.map((product, index) => (
           <ProductCard
             key={product._id}
             product={product}
             onAddToCart={handleAddToCart}
             onBuyNow={handleBuyNow}
+            index={index}
           />
         ))}
       </div>

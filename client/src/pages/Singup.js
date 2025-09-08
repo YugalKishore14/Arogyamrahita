@@ -7,9 +7,7 @@ import {
     Card,
     Form,
     Button,
-    InputGroup,
     Spinner,
-    Alert,
 } from "react-bootstrap";
 import {
     FaUser,
@@ -17,7 +15,6 @@ import {
     FaLock,
     FaEye,
     FaEyeSlash,
-    FaRobot,
     FaCheckCircle,
     FaExclamationTriangle,
 } from "react-icons/fa";
@@ -25,8 +22,7 @@ import { authAPI } from "../services/Api";
 import "../css/AuthForms.css";
 import { useAuth } from "../context/AuthContext";
 import logoImage from "../images/arogyamlogo.png";
-import Header from "../components/Header";
-import Fotter from "../components/Fotter";
+import { motion } from "framer-motion";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -137,10 +133,14 @@ const Signup = () => {
 
     return (
         <>
-            <Header />
+
             {notification && (
-                <div
+                <motion.div
                     className={`custom-notification custom-notification-${notification.type}`}
+                    initial={{ opacity: 0, y: -30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    transition={{ duration: 0.3 }}
                 >
                     <div className="d-flex align-items-center">
                         {notification.type === "success" ? (
@@ -156,7 +156,7 @@ const Signup = () => {
                     >
                         ×
                     </button>
-                </div>
+                </motion.div>
             )}
 
             <Container
@@ -165,173 +165,188 @@ const Signup = () => {
             >
                 <Row className="w-100 justify-content-center">
                     <Col md={6} lg={5} xl={4}>
-                        <Card className="shadow-lg border-0">
-                            <Card.Body className="p-5">
-                                <div className="text-center mb-4">
-                                    <img src={logoImage} style={{ width: "100px", height: "100px" }} alt="Logo" className="mb-1" />
-                                    <h2 className="fw-bold text-dark">Create Account</h2>
-                                    <p className="text-muted">Join our Arogyam Community</p>
-                                </div>
-
-                                <Form onSubmit={handleSubmit}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label className="fw-semibold">
-                                            <FaUser className="me-2" />
-                                            Full Name
-                                        </Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="name"
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            placeholder="Enter your full name"
-                                            isInvalid={!!errors.name}
-                                            className="py-2"
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.name}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-3">
-                                        <Form.Label className="fw-semibold">
-                                            <FaEnvelope className="me-2" />
-                                            Email Address
-                                        </Form.Label>
-                                        <Form.Control
-                                            type="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            placeholder="Enter your email"
-                                            isInvalid={!!errors.email}
-                                            className="py-2"
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.email}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-3">
-                                        <Form.Label className="fw-semibold">
-                                            <FaUser className="me-2" />
-                                            Phone Number
-                                        </Form.Label>
-                                        <Form.Control
-                                            type="tel"
-                                            name="number"
-                                            value={formData.number}
-                                            onChange={handleChange}
-                                            placeholder="Enter your phone number"
-                                            isInvalid={!!errors.number}
-                                            className="py-2"
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.number}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-3">
-                                        <Form.Label className="fw-semibold">
-                                            <FaLock className="me-2" />
-                                            Password
-                                        </Form.Label>
-                                        <div className="position-relative">
-                                            <Form.Control
-                                                type={showPassword ? "text" : "password"}
-                                                name="password"
-                                                value={formData.password}
-                                                onChange={handleChange}
-                                                placeholder="Enter your password"
-                                                isInvalid={!!errors.password}
-                                                className="py-2 pe-5"
-                                            />
-                                            <Button
-                                                variant="link"
-                                                className="position-absolute top-50 end-0 translate-middle-y border-0 text-muted"
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                tabIndex={-1}
-                                            >
-                                                {showPassword ? <FaEyeSlash /> : <FaEye />}
-                                            </Button>
-                                        </div>
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.password}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-4">
-                                        <Form.Label className="fw-semibold">
-                                            <FaLock className="me-2" />
-                                            Confirm Password
-                                        </Form.Label>
-                                        <div className="position-relative">
-                                            <Form.Control
-                                                type={showConfirmPassword ? "text" : "password"}
-                                                name="confirmPassword"
-                                                value={formData.confirmPassword}
-                                                onChange={handleChange}
-                                                placeholder="Confirm your password"
-                                                isInvalid={!!errors.confirmPassword}
-                                                className="py-2 pe-5"
-                                            />
-                                            <Button
-                                                variant="link"
-                                                className="position-absolute top-50 end-0 translate-middle-y border-0 text-muted"
-                                                onClick={() =>
-                                                    setShowConfirmPassword(!showConfirmPassword)
-                                                }
-                                                tabIndex={-1}
-                                            >
-                                                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                                            </Button>
-                                        </div>
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.confirmPassword}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-
-                                    <Button
-                                        type="submit"
-                                        variant="primary"
-                                        size="lg"
-                                        className="w-100 fw-semibold py-2"
-                                        disabled={loading}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <Card className="shadow-lg border-0">
+                                <Card.Body className="p-5">
+                                    <motion.div
+                                        className="text-center mb-4"
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.5, delay: 0.2 }}
                                     >
-                                        {loading ? (
-                                            <>
-                                                <Spinner
-                                                    animation="border"
-                                                    size="sm"
-                                                    className="me-2"
+                                        <img
+                                            src={logoImage}
+                                            style={{ width: "100px", height: "100px" }}
+                                            alt="Logo"
+                                            className="mb-1"
+                                        />
+                                        <h2 className="fw-bold text-dark">Create Account</h2>
+                                        <p className="text-muted">Join our Arogyam Community</p>
+                                    </motion.div>
+
+                                    <Form onSubmit={handleSubmit}>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label className="fw-semibold">
+                                                <FaUser className="me-2" />
+                                                Full Name
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                placeholder="Enter your full name"
+                                                isInvalid={!!errors.name}
+                                                className="py-2"
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.name}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3">
+                                            <Form.Label className="fw-semibold">
+                                                <FaEnvelope className="me-2" />
+                                                Email Address
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                placeholder="Enter your email"
+                                                isInvalid={!!errors.email}
+                                                className="py-2"
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.email}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3">
+                                            <Form.Label className="fw-semibold">
+                                                <FaUser className="me-2" />
+                                                Phone Number
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="tel"
+                                                name="number"
+                                                value={formData.number}
+                                                onChange={handleChange}
+                                                placeholder="Enter your phone number"
+                                                isInvalid={!!errors.number}
+                                                className="py-2"
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.number}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3">
+                                            <Form.Label className="fw-semibold">
+                                                <FaLock className="me-2" />
+                                                Password
+                                            </Form.Label>
+                                            <div className="position-relative">
+                                                <Form.Control
+                                                    type={showPassword ? "text" : "password"}
+                                                    name="password"
+                                                    value={formData.password}
+                                                    onChange={handleChange}
+                                                    placeholder="Enter your password"
+                                                    isInvalid={!!errors.password}
+                                                    className="py-2 pe-5"
                                                 />
-                                                Creating Account...
-                                            </>
-                                        ) : (
-                                            "Create Account"
-                                        )}
-                                    </Button>
-                                </Form>
+                                                <Button
+                                                    variant="link"
+                                                    className="position-absolute top-50 end-0 translate-middle-y border-0 text-muted"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    tabIndex={-1}
+                                                >
+                                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                                </Button>
+                                            </div>
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.password}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
 
-                                <hr className="my-4" />
+                                        <Form.Group className="mb-4">
+                                            <Form.Label className="fw-semibold">
+                                                <FaLock className="me-2" />
+                                                Confirm Password
+                                            </Form.Label>
+                                            <div className="position-relative">
+                                                <Form.Control
+                                                    type={showConfirmPassword ? "text" : "password"}
+                                                    name="confirmPassword"
+                                                    value={formData.confirmPassword}
+                                                    onChange={handleChange}
+                                                    placeholder="Confirm your password"
+                                                    isInvalid={!!errors.confirmPassword}
+                                                    className="py-2 pe-5"
+                                                />
+                                                <Button
+                                                    variant="link"
+                                                    className="position-absolute top-50 end-0 translate-middle-y border-0 text-muted"
+                                                    onClick={() =>
+                                                        setShowConfirmPassword(!showConfirmPassword)
+                                                    }
+                                                    tabIndex={-1}
+                                                >
+                                                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                                </Button>
+                                            </div>
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.confirmPassword}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
 
-                                <div className="text-center">
-                                    <p className="mb-0 text-muted">
-                                        Already have an account?{" "}
-                                        <Link
-                                            to="/login"
-                                            className="text-primary fw-semibold text-decoration-none"
+                                        <Button
+                                            type="submit"
+                                            variant="primary"
+                                            size="lg"
+                                            className="w-100 fw-semibold py-2"
+                                            disabled={loading}
                                         >
-                                            Sign In
-                                        </Link>
-                                    </p>
-                                </div>
-                            </Card.Body>
-                        </Card>
+                                            {loading ? (
+                                                <>
+                                                    <Spinner
+                                                        animation="border"
+                                                        size="sm"
+                                                        className="me-2"
+                                                    />
+                                                    Creating Account...
+                                                </>
+                                            ) : (
+                                                "Create Account"
+                                            )}
+                                        </Button>
+                                    </Form>
+
+                                    <hr className="my-4" />
+
+                                    <div className="text-center">
+                                        <p className="mb-0 text-muted">
+                                            Already have an account?{" "}
+                                            <Link
+                                                to="/login"
+                                                className="text-primary fw-semibold text-decoration-none"
+                                            >
+                                                Sign In
+                                            </Link>
+                                        </p>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </motion.div>
                     </Col>
                 </Row>
             </Container>
-            <Fotter />
         </>
     );
 };

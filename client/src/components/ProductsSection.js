@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import styles from "../css/ProductsSection.js.module.css";
 import { useCart } from "../context/CartContext";
 import { productAPI } from "../services/Api";
@@ -24,11 +25,11 @@ export default function FeaturedProductsSection() {
       if (response.success) {
         setProducts(response.products);
       } else {
-        setError('Failed to fetch products');
+        setError("Failed to fetch products");
       }
     } catch (err) {
-      setError('Error loading products');
-      console.error('Error fetching products:', err);
+      setError("Error loading products");
+      console.error("Error fetching products:", err);
     } finally {
       setLoading(false);
     }
@@ -45,12 +46,23 @@ export default function FeaturedProductsSection() {
   if (loading) {
     return (
       <div className={styles.featuredProductsContainer}>
-        <div className={styles.headerNavigation}>
+        <motion.div
+          className={styles.headerNavigation}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <h2 className={styles.sectionTitle}>Featured Products</h2>
-        </div>
+        </motion.div>
         <div className={styles.productCarousel}>
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className={styles.productCard}>
+            <motion.div
+              key={i}
+              className={styles.productCard}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: i * 0.15 }}
+            >
               <div className={styles.productImageContainer}>
                 <div className={styles.skeleton}></div>
               </div>
@@ -60,7 +72,7 @@ export default function FeaturedProductsSection() {
                   <span>₹--</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -70,9 +82,13 @@ export default function FeaturedProductsSection() {
   if (error) {
     return (
       <div className={styles.featuredProductsContainer}>
-        <div className={styles.headerNavigation}>
+        <motion.div
+          className={styles.headerNavigation}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
           <h2 className={styles.sectionTitle}>Featured Products</h2>
-        </div>
+        </motion.div>
         <p className={styles.error}>{error}</p>
         <button onClick={fetchProducts} className={styles.retryBtn}>
           Retry
@@ -83,7 +99,12 @@ export default function FeaturedProductsSection() {
 
   return (
     <div className={styles.featuredProductsContainer}>
-      <div className={styles.headerNavigation}>
+      <motion.div
+        className={styles.headerNavigation}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <h2 className={styles.sectionTitle}>Featured Products</h2>
         <div className={styles.navigationButtons}>
           <button onClick={() => scroll("left")} className={styles.scrollButton}>
@@ -96,16 +117,31 @@ export default function FeaturedProductsSection() {
             ▶
           </button>
         </div>
-      </div>
+      </motion.div>
 
-      <div ref={scrollContainerRef} className={styles.productCarousel}>
-        {products.map((product) => (
-          <div key={product._id} className={styles.productCard}>
+      <motion.div
+        ref={scrollContainerRef}
+        className={styles.productCarousel}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7 }}
+      >
+        {products.map((product, index) => (
+          <motion.div
+            key={product._id}
+            className={styles.productCard}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            whileHover={{ scale: 1.05 }}
+          >
             <div className={styles.productImageContainer}>
-              <img
+              <motion.img
                 src={product.image}
                 alt={product.name}
                 className={styles.productImagese}
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.3 }}
               />
               {product.oldPrice && product.oldPrice > product.newPrice && (
                 <span className={`${styles.productBadge} ${styles.sale}`}>
@@ -122,30 +158,34 @@ export default function FeaturedProductsSection() {
                 <span className={styles.currentPrice}>₹{product.newPrice}</span>
               </div>
               <div className={styles.productActions}>
-                <button
+                <motion.button
                   className={styles.buyButton}
+                  whileTap={{ scale: 0.9 }}
                   onClick={() => navigate(`/product/${product._id}`)}
                 >
                   Buy Now
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   className={styles.cartButton}
-                  onClick={() => addToCart({
-                    _id: product._id,
-                    name: product.name,
-                    newPrice: product.newPrice,
-                    oldPrice: product.oldPrice,
-                    image: product.image,
-                    category: product.category
-                  })}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() =>
+                    addToCart({
+                      _id: product._id,
+                      name: product.name,
+                      newPrice: product.newPrice,
+                      oldPrice: product.oldPrice,
+                      image: product.image,
+                      category: product.category,
+                    })
+                  }
                 >
                   🛒
-                </button>
+                </motion.button>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

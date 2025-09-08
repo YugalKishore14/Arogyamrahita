@@ -12,8 +12,6 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import ImagePlaceholder from "../components/ImagePlaceholder";
 import styles from "../css/ProductPage.module.css";
-import Header from "../components/Header";
-import Footer from "../components/Fotter";
 
 const ProductPage = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -131,7 +129,6 @@ const ProductPage = () => {
     };
 
     return (<>
-        <Header />
         <div className={styles.container}>
             <button
                 className={styles.hamburgerBtn}
@@ -286,7 +283,6 @@ const ProductPage = () => {
                 </div>
             </main>
         </div>
-        <Footer />
     </>
     );
 };
