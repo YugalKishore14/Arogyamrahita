@@ -64,8 +64,9 @@ const Signup = () => {
 
         if (!formData.name.trim()) {
             newErrors.name = "Name is required";
-        } else if (formData.name.trim().length < 2) {
-            newErrors.name = "Name must be at least 2 characters";
+        } else if (!/^[A-Za-z\s]{3,15}$/.test(formData.name.trim())) {
+            newErrors.name =
+                "Name must be 3–15 letters only (no numbers, symbols, or emojis)";
         }
 
         if (!formData.email.trim()) {
@@ -82,8 +83,13 @@ const Signup = () => {
 
         if (!formData.password) {
             newErrors.password = "Password is required";
-        } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(formData.password)) {
-            newErrors.password = "Min 8 chars with upper, lower, number, special";
+        } else if (
+            !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(
+                formData.password
+            )
+        ) {
+            newErrors.password =
+                "Min 8 chars with upper, lower, number, special";
         }
 
         if (!formData.confirmPassword) {
@@ -95,6 +101,7 @@ const Signup = () => {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();

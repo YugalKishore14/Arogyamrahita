@@ -1,13 +1,14 @@
 const { body } = require("express-validator");
 
-// Email regex to disallow emojis and limit to common ASCII email format
 const strictEmailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+const strictNameRegex = /^[A-Za-z\s]{3,15}$/;
 
 exports.validateRegister = [
     body("name")
         .trim()
-        .isLength({ min: 2 })
-        .withMessage("Name must be at least 2 characters long"),
+        .matches(strictNameRegex)
+        .withMessage("Name must be 3–15 letters (no numbers, symbols, or emojis)"),
     body("email")
         .trim()
         .matches(strictEmailRegex)
