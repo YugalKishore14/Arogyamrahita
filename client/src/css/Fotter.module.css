@@ -39,6 +39,7 @@
   padding: 15px;
 }
 
+
 .logoSection {
   display: flex;
   align-items: center;
@@ -62,6 +63,12 @@
 .supportSection p {
   margin: 8px 0;
   color: #f0f0f0;
+}
+
+.supportSection p a {
+  margin: 8px 0;
+  color: #f0f0f0;
+  text-decoration: none;
 }
 
 .linksSection ul {

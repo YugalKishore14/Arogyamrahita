@@ -274,7 +274,10 @@ const ProductPage = () => {
                                         onError={(e) => {
                                             e.target.style.display = "none";
                                         }}
+                                        onClick={() => navigate(`/product/${product._id}`)}
+                                        style={{ cursor: "pointer" }}
                                     />
+
                                 ) : (
                                     <ImagePlaceholder width="100%" height="auto" text="No Image" />
                                 )}

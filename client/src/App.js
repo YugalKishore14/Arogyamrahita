@@ -40,7 +40,7 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0); // jab bhi path change ho → top pe scroll
+    window.scrollTo(0, 0);
   }, [pathname]);
 
   return null;
@@ -50,11 +50,9 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <div className="app-layout">
-          {/* Fixed Header */}
           <ScrollToTop />
           <Header />
 
-          {/* Main content (always below header) */}
           <main className="app-main">
             <Routes>
               <Route path="/login" element={<Login />} />
@@ -74,15 +72,14 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<Navigate to="/" replace />} />
-              <Route path="/privacy" element={<Services/>} />
-              <Route path="/termCondition" element={<TermCondition/>} />
-              <Route path="/faq" element={<Faq/>} />
-              <Route path="/returnRefund" element={<ReturnRefund/>} />
+              <Route path="/privacy" element={<Services />} />
+              <Route path="/termCondition" element={<TermCondition />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/returnRefund" element={<ReturnRefund />} />
 
             </Routes>
           </main>
 
-          {/* Fixed Footer */}
           <Fotter />
         </div>
       </CartProvider>

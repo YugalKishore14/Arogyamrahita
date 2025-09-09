@@ -7,6 +7,6 @@
 .app-main {
   flex: 1;
   background: #f8fafc;
-  padding-top: 80px;   /* 👈 yahan space add */
-  padding-bottom: 70px; /* footer ke liye */
+  padding-top: 80px;
+  padding-bottom: 70px;
 }

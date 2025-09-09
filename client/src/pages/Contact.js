@@ -70,8 +70,8 @@ export default function Contact() {
             <div className={styles.checkboxRow}>
               <input type="checkbox" id="updates" />
               <label htmlFor="updates">
-                I want to receive news and updates. By submitting, I agree to the{" "}
-                <a href="#">Terms & Conditions</a>.
+                I want to receive news and updates. By submitting, I agree to
+                the <a href="#">Terms & Conditions</a>.
               </label>
             </div>
 
@@ -97,7 +97,7 @@ export default function Contact() {
           <div className={styles.mapWrapper}>
             <iframe
               title="map"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2880.515503568654!2d10.497936615497486!3d43.84251387911539!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12d58500bcae5d5b%3A0x62f04730a73b55b!2sChiesa%20di%20San%20Francesco!5e0!3m2!1sen!2sit!4v1683123123456!5m2!1sen!2sit"
+              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3488.323342087102!2d77.66556017551575!3d29.037016075446274!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjnCsDAyJzEzLjMiTiA3N8KwNDAnMDUuMyJF!5e0!3m2!1sen!2sin!4v1757412801036!5m2!1sen!2sin"
               width="100%"
               height="300"
               style={{ border: 0 }}

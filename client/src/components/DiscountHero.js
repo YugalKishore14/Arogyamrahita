@@ -11,7 +11,6 @@ const DiscountHero = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      {/* Hero Image */}
       <motion.div
         className={styles.heroImage}
         initial={{ scale: 0.9, opacity: 0 }}
@@ -30,7 +29,6 @@ const DiscountHero = () => {
         />
       </motion.div>
 
-      {/* Hero Text */}
       <motion.div
         className={styles.heroText}
         initial={{ x: 60, opacity: 0 }}

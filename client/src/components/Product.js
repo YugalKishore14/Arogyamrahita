@@ -35,13 +35,15 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
         style={{ cursor: "pointer" }}
       />
 
-      <h3 className={styles.productName}>{product.name}</h3>
-
-      <div className={styles.productPrices}>
-        <span className={styles.productPrice}>₹{product.newPrice}</span>
-        {product.oldPrice && (
-          <span className={styles.productOldPrice}>₹{product.oldPrice}</span>
-        )}
+      <div className={styles.productInfo}>
+        <h3 className={styles.productName}>{product.name}</h3>
+        <div className={styles.productPrices}>
+          <span className={styles.productPrice}>₹{product.newPrice}</span>
+          {product.oldPrice && (
+            <span className={styles.productOldPrice}>₹{product.oldPrice}</span>
+          )}
+        </div>
+        <p className={styles.productDescription}>{product.description}</p>
       </div>
 
       <div

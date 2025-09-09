@@ -25,6 +25,12 @@
   padding: 12px 0;
   position: relative;
   white-space: nowrap;
+  cursor: grab;
+}
+
+.scrollContainer.active {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
 }
 
 .categoryCard {
@@ -82,6 +88,30 @@
   padding: 2rem;
   color: #6b7280;
   font-size: 1.1rem;
+}
+
+.scrollBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 9999px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.leftBtn {
+  left: 8px;
+}
+
+.rightBtn {
+  right: 8px;
 }
 
 @media (max-width: 1024px) {

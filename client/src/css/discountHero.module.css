@@ -7,7 +7,7 @@
   background: linear-gradient(135deg, #1e293b, #0f172a, #1e3a8a);
   border-radius: 24px;
   padding: 3rem 6rem;
-  margin: 3rem auto;
+  margin: 3rem 50px;
   font-family: 'Inter', sans-serif;
   flex-wrap: wrap;
   color: white;
@@ -16,7 +16,6 @@
   position: relative;
 }
 
-/* Futuristic Glow Border */
 .heroContainer::before {
   content: "";
   position: absolute;
@@ -32,9 +31,17 @@
 }
 
 @keyframes glow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .heroImage img {

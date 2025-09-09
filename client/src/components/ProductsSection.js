@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import styles from "../css/ProductsSection.js.module.css";
 import { useCart } from "../context/CartContext";
 import { productAPI } from "../services/Api";
+import { GrCart } from "react-icons/gr";
+import { FaAnglesRight, FaAnglesLeft } from "react-icons/fa6";
+
 
 export default function FeaturedProductsSection() {
   const scrollContainerRef = useRef(null);
@@ -108,13 +111,13 @@ export default function FeaturedProductsSection() {
         <h2 className={styles.sectionTitle}>Featured Products</h2>
         <div className={styles.navigationButtons}>
           <button onClick={() => scroll("left")} className={styles.scrollButton}>
-            ◀
+            <FaAnglesLeft />
           </button>
           <button
             onClick={() => scroll("right")}
             className={styles.scrollButton}
           >
-            ▶
+            <FaAnglesRight />
           </button>
         </div>
       </motion.div>
@@ -142,7 +145,10 @@ export default function FeaturedProductsSection() {
                 className={styles.productImagese}
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.3 }}
+                onClick={() => navigate(`/product/${product._id}`)}
+                style={{ cursor: "pointer" }}
               />
+
               {product.oldPrice && product.oldPrice > product.newPrice && (
                 <span className={`${styles.productBadge} ${styles.sale}`}>
                   Sale
@@ -157,6 +163,7 @@ export default function FeaturedProductsSection() {
                 )}
                 <span className={styles.currentPrice}>₹{product.newPrice}</span>
               </div>
+              <p>{product.description}</p>
               <div className={styles.productActions}>
                 <motion.button
                   className={styles.buyButton}
@@ -179,7 +186,7 @@ export default function FeaturedProductsSection() {
                     })
                   }
                 >
-                  🛒
+                  <GrCart />
                 </motion.button>
               </div>
             </div>

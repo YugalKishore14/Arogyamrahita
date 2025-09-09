@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import styles from '../css/handpick.module.css';
-import { categoryAPI } from '../services/Api';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import styles from "../css/handpick.module.css";
+import { categoryAPI } from "../services/Api";
 import defaultImage from "../images/bottel.png";
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 const getDefaultImageForCategory = (categoryName) => {
   const categoryImages = {
@@ -70,14 +70,68 @@ const Handpick = () => {
   const scrollContainerRef = useRef(null);
   const navigate = useNavigate();
 
+  const autoScrollRef = useRef(null);
+  const resumeTimeout = useRef(null);
+
   useEffect(() => {
     fetchCategories();
   }, []);
 
   useEffect(() => {
     if (categories.length > 0) {
-      const cleanup = startAutoScroll();
-      return cleanup;
+      startAutoScroll();
+      const container = scrollContainerRef.current;
+
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      const handleMouseDown = (e) => {
+        isDown = true;
+        container.classList.add(styles.active);
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+        stopAutoScroll();
+      };
+
+      const handleMouseLeave = () => {
+        isDown = false;
+      };
+
+      const handleMouseUp = () => {
+        isDown = false;
+        container.classList.remove(styles.active);
+        restartAutoScroll();
+      };
+
+      const handleMouseMove = (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        container.scrollLeft = scrollLeft - walk;
+      };
+
+      const handleTouchStart = () => stopAutoScroll();
+      const handleTouchEnd = () => restartAutoScroll();
+
+      container.addEventListener("mousedown", handleMouseDown);
+      container.addEventListener("mouseleave", handleMouseLeave);
+      container.addEventListener("mouseup", handleMouseUp);
+      container.addEventListener("mousemove", handleMouseMove);
+
+      container.addEventListener("touchstart", handleTouchStart);
+      container.addEventListener("touchend", handleTouchEnd);
+
+      return () => {
+        stopAutoScroll();
+        container.removeEventListener("mousedown", handleMouseDown);
+        container.removeEventListener("mouseleave", handleMouseLeave);
+        container.removeEventListener("mouseup", handleMouseUp);
+        container.removeEventListener("mousemove", handleMouseMove);
+        container.removeEventListener("touchstart", handleTouchStart);
+        container.removeEventListener("touchend", handleTouchEnd);
+      };
     }
   }, [categories]);
 
@@ -111,32 +165,49 @@ const Handpick = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    let scrollSpeed = 0.7;
-    let animationId;
+    const scrollSpeed = 0.7;
 
     const scroll = () => {
       container.scrollLeft += scrollSpeed;
       if (container.scrollLeft >= container.scrollWidth / 2) {
         container.scrollLeft = 0;
       }
-      animationId = requestAnimationFrame(scroll);
+      autoScrollRef.current = requestAnimationFrame(scroll);
     };
 
-    animationId = requestAnimationFrame(scroll);
-    return () => cancelAnimationFrame(animationId);
+    autoScrollRef.current = requestAnimationFrame(scroll);
+  };
+
+  const stopAutoScroll = () => {
+    if (autoScrollRef.current) {
+      cancelAnimationFrame(autoScrollRef.current);
+      autoScrollRef.current = null;
+    }
+    if (resumeTimeout.current) {
+      clearTimeout(resumeTimeout.current);
+    }
+  };
+
+  const restartAutoScroll = () => {
+    resumeTimeout.current = setTimeout(() => {
+      startAutoScroll();
+    }, 2000);
   };
 
   const scrollManually = (direction) => {
     const container = scrollContainerRef.current;
     if (!container) return;
     const amount = 320;
-    container.scrollLeft += direction === 'left' ? -amount : amount;
+    stopAutoScroll();
+    container.scrollLeft += direction === "left" ? -amount : amount;
+
     if (container.scrollLeft >= container.scrollWidth / 2) {
       container.scrollLeft = 0;
     }
     if (container.scrollLeft < 0) {
       container.scrollLeft = container.scrollWidth / 2;
     }
+    restartAutoScroll();
   };
 
   const handleCategoryClick = (category) => {
@@ -168,7 +239,7 @@ const Handpick = () => {
           <p>Unable to load categories. Please try again later.</p>
         </div>
       ) : (
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: "relative" }}>
           <div className={styles.scrollContainer} ref={scrollContainerRef}>
             {categories.map((category, index) => (
               <CategoryCard
@@ -181,45 +252,15 @@ const Handpick = () => {
           </div>
           <button
             aria-label="Scroll left"
-            onClick={() => scrollManually('left')}
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: 8,
-              transform: 'translateY(-50%)',
-              zIndex: 5,
-              border: 'none',
-              background: 'rgba(255,255,255,0.8)',
-              borderRadius: 9999,
-              width: 36,
-              height: 36,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer'
-            }}
+            onClick={() => scrollManually("left")}
+            className={`${styles.scrollBtn} ${styles.leftBtn}`}
           >
             <HiChevronLeft size={22} />
           </button>
           <button
             aria-label="Scroll right"
-            onClick={() => scrollManually('right')}
-            style={{
-              position: 'absolute',
-              top: '50%',
-              right: 8,
-              transform: 'translateY(-50%)',
-              zIndex: 5,
-              border: 'none',
-              background: 'rgba(255,255,255,0.8)',
-              borderRadius: 9999,
-              width: 36,
-              height: 36,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer'
-            }}
+            onClick={() => scrollManually("right")}
+            className={`${styles.scrollBtn} ${styles.rightBtn}`}
           >
             <HiChevronRight size={22} />
           </button>
