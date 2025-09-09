@@ -1,9 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "../css/discountHero.module.css";
-import heroImage from "../images/bag.png";
+import { discountHeroAPI } from "../services/Api";
 
 const DiscountHero = () => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await discountHeroAPI.getActive();
+        setData(res?.data || null);
+      } catch (e) {
+        setError("Failed to load discounts");
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={styles.heroContainer}>
+        <div className={styles.heroText}><h1>Loading...</h1></div>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return null;
+  }
+
   return (
     <motion.div
       className={styles.heroContainer}
@@ -18,8 +47,8 @@ const DiscountHero = () => {
         transition={{ duration: 1 }}
       >
         <motion.img
-          src={heroImage}
-          alt="Discount Bag"
+          src={data.image}
+          alt={data.productName}
           animate={{ y: [0, -12, 0] }}
           transition={{
             duration: 3,
@@ -39,14 +68,14 @@ const DiscountHero = () => {
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 200 }}
         >
-          UPTO <span className={styles.highlight}>70% OFF</span>
+          UPTO <span className={styles.highlight}>{data.discountValue}% OFF</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          On Natural Product
+          {data.productName}
         </motion.p>
       </motion.div>
     </motion.div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../css/AdminDashboard.module.css';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import ImageUpload from '../components/ImageUpload';
 import ImagePlaceholder from '../components/ImagePlaceholder';
 import { productAPI, adminAPI, ordersAPI } from '../services/Api';
@@ -222,6 +222,8 @@ const Dashboard = () => {
             <div className={styles.header}>
                 <h1>Admin Dashboard</h1>
                 <div className={styles.headerButtons}>
+                    <Link to="/admin/categories" className={styles.mainSiteBtn}>Manage Categories</Link>
+                    <Link to="/admin/discount-hero" className={styles.mainSiteBtn}>Manage Discount Hero</Link>
                     <button className={styles.mainSiteBtn} onClick={() => navigate('/')}>
                         🌐 Go to Main Site
                     </button>

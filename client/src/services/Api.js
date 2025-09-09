@@ -223,3 +223,35 @@ export const categoryAPI = {
         return response.data;
     },
 };
+
+export const discountHeroAPI = {
+    getActive: async () => {
+        const response = await api.get('/discount-hero/active');
+        return response.data;
+    },
+    // Admin-only helpers
+    listAll: async () => {
+        const response = await api.get('/discount-hero/admin/all');
+        return response.data;
+    },
+    create: async (data) => {
+        const response = await api.post('/discount-hero', data);
+        return response.data;
+    },
+    update: async (id, data) => {
+        const response = await api.put(`/discount-hero/${id}`, data);
+        return response.data;
+    },
+    remove: async (id) => {
+        const response = await api.delete(`/discount-hero/${id}`);
+        return response.data;
+    },
+    uploadImage: async (imageFile) => {
+        const formData = new FormData();
+        formData.append('image', imageFile);
+        const response = await api.post('/discount-hero/upload-image', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        return response.data;
+    },
+};

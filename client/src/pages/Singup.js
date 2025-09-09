@@ -70,20 +70,20 @@ const Signup = () => {
 
         if (!formData.email.trim()) {
             newErrors.email = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
             newErrors.email = "Email is invalid";
         }
 
         if (!formData.number.trim()) {
             newErrors.number = "Phone number is required";
-        } else if (!/^\+?[0-9]{7,15}$/.test(formData.number.trim())) {
-            newErrors.number = "Enter valid phone number";
+        } else if (!/^\d{10}$/.test(formData.number.trim())) {
+            newErrors.number = "Phone number must be exactly 10 digits";
         }
 
         if (!formData.password) {
             newErrors.password = "Password is required";
-        } else if (formData.password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters";
+        } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(formData.password)) {
+            newErrors.password = "Min 8 chars with upper, lower, number, special";
         }
 
         if (!formData.confirmPassword) {

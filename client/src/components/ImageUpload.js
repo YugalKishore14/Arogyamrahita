@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../css/AdminDashboard.module.css';
 
-const ImageUpload = ({ onImageUpload, currentImageUrl = '' }) => {
+const ImageUpload = ({ onImageUpload, currentImageUrl = '', label = 'Image', uploadPath = 'https://arogyamrahita.onrender.com/api/products/upload-image' }) => {
     const [uploading, setUploading] = useState(false);
     const [uploadError, setUploadError] = useState('');
 
@@ -26,7 +26,7 @@ const ImageUpload = ({ onImageUpload, currentImageUrl = '' }) => {
             formData.append('image', file);
 
             const token = localStorage.getItem('token');
-            const response = await fetch('https://arogyamrahita.onrender.com/api/products/upload-image', {
+            const response = await fetch(uploadPath, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -50,7 +50,7 @@ const ImageUpload = ({ onImageUpload, currentImageUrl = '' }) => {
 
     return (
         <div className={styles.formGroup}>
-            <label>Product Image:</label>
+            <label>{label}:</label>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {currentImageUrl && (
                     <img

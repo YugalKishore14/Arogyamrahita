@@ -18,6 +18,7 @@ mongoose
 app.use("/api/auth", require("./routes/auth.route"));
 app.use("/api/products", require("./routes/product.route"));
 app.use("/api/categories", require("./routes/category.route"));
+app.use("/api/discount-hero", require("./routes/discountHero.route"));
 app.use("/api/cart", require("./routes/cart.route"));
 app.use("/api/orders", require("./routes/order.route"));
 app.use("/api/admin", require("./routes/admin"));
