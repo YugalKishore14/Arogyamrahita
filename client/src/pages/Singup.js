@@ -59,20 +59,24 @@ const Signup = () => {
         }
     };
 
+    // strict regex for email validation
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
     const validateForm = () => {
         const newErrors = {};
 
         if (!formData.name.trim()) {
             newErrors.name = "Name is required";
-        } else if (!/^[A-Za-z\s]{3,15}$/.test(formData.name.trim())) {
-            newErrors.name =
-                "Name must be 3–15 letters only (no numbers, symbols, or emojis)";
+        } else if (formData.name.trim().length < 2 || formData.name.trim().length > 15) {
+            newErrors.name = "Name must be between 2–15 characters";
+        } else if (!/^[A-Za-z\s]+$/.test(formData.name.trim())) {
+            newErrors.name = "Name can only contain letters and spaces";
         }
 
         if (!formData.email.trim()) {
             newErrors.email = "Email is required";
-        } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
-            newErrors.email = "Email is invalid";
+        } else if (!emailRegex.test(formData.email.trim())) {
+            newErrors.email = "Invalid email format (e.g. name@example.com)";
         }
 
         if (!formData.number.trim()) {
@@ -89,7 +93,7 @@ const Signup = () => {
             )
         ) {
             newErrors.password =
-                "Min 8 chars with upper, lower, number, special";
+                "Password must be at least 8 chars with uppercase, lowercase, number, and special character";
         }
 
         if (!formData.confirmPassword) {
@@ -101,7 +105,6 @@ const Signup = () => {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -140,7 +143,6 @@ const Signup = () => {
 
     return (
         <>
-
             {notification && (
                 <motion.div
                     className={`custom-notification custom-notification-${notification.type}`}
@@ -196,10 +198,10 @@ const Signup = () => {
                                     </motion.div>
 
                                     <Form onSubmit={handleSubmit}>
+                                        {/* Name */}
                                         <Form.Group className="mb-3">
                                             <Form.Label className="fw-semibold">
-                                                <FaUser className="me-2" />
-                                                Full Name
+                                                <FaUser className="me-2" /> Full Name
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
@@ -215,10 +217,10 @@ const Signup = () => {
                                             </Form.Control.Feedback>
                                         </Form.Group>
 
+                                        {/* Email */}
                                         <Form.Group className="mb-3">
                                             <Form.Label className="fw-semibold">
-                                                <FaEnvelope className="me-2" />
-                                                Email Address
+                                                <FaEnvelope className="me-2" /> Email Address
                                             </Form.Label>
                                             <Form.Control
                                                 type="email"
@@ -234,10 +236,10 @@ const Signup = () => {
                                             </Form.Control.Feedback>
                                         </Form.Group>
 
+                                        {/* Phone */}
                                         <Form.Group className="mb-3">
                                             <Form.Label className="fw-semibold">
-                                                <FaUser className="me-2" />
-                                                Phone Number
+                                                <FaUser className="me-2" /> Phone Number
                                             </Form.Label>
                                             <Form.Control
                                                 type="tel"
@@ -253,10 +255,10 @@ const Signup = () => {
                                             </Form.Control.Feedback>
                                         </Form.Group>
 
+                                        {/* Password */}
                                         <Form.Group className="mb-3">
                                             <Form.Label className="fw-semibold">
-                                                <FaLock className="me-2" />
-                                                Password
+                                                <FaLock className="me-2" /> Password
                                             </Form.Label>
                                             <div className="position-relative">
                                                 <Form.Control
@@ -282,10 +284,10 @@ const Signup = () => {
                                             </Form.Control.Feedback>
                                         </Form.Group>
 
+                                        {/* Confirm Password */}
                                         <Form.Group className="mb-4">
                                             <Form.Label className="fw-semibold">
-                                                <FaLock className="me-2" />
-                                                Confirm Password
+                                                <FaLock className="me-2" /> Confirm Password
                                             </Form.Label>
                                             <div className="position-relative">
                                                 <Form.Control
@@ -313,6 +315,7 @@ const Signup = () => {
                                             </Form.Control.Feedback>
                                         </Form.Group>
 
+                                        {/* Submit */}
                                         <Button
                                             type="submit"
                                             variant="primary"
