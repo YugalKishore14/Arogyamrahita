@@ -96,8 +96,8 @@ const DiscountHeroAdmin = () => {
                         <label>Discount Value (%)</label>
                         <input type="number" min="0" max="100" name="discountValue" value={formData.discountValue} onChange={handleChange} required />
                     </div>
-                    <div className={styles.formGroup}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div className={`${styles.formGroup} ${styles.checkboxGroup}`}>
+                        <label className={styles.checkboxLabel} style={{ display: 'flex', alignItems: 'center' }}>
                             <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleChange} /> Active
                         </label>
                     </div>

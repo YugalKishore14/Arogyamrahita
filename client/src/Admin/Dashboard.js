@@ -1,59 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import styles from '../css/AdminDashboard.module.css';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
-import ImageUpload from '../components/ImageUpload';
-import ImagePlaceholder from '../components/ImagePlaceholder';
-import { productAPI, adminAPI, ordersAPI } from '../services/Api';
+import React, { useState, useEffect } from "react";
+import styles from "../css/AdminDashboard.module.css";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
+import ImageUpload from "../components/ImageUpload";
+import ImagePlaceholder from "../components/ImagePlaceholder";
+import { productAPI, adminAPI, ordersAPI } from "../services/Api";
+import { BsGlobeCentralSouthAsia } from "react-icons/bs";
 
 const Dashboard = () => {
     const { logout, user, isAdmin, loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
     const [formData, setFormData] = useState({
-        name: '',
-        description: '',
-        image: '',
-        oldPrice: '',
-        newPrice: '',
-        category: 'general',
-        stock: ''
+        name: "",
+        description: "",
+        image: "",
+        oldPrice: "",
+        newPrice: "",
+        category: "general",
+        stock: "",
     });
     const [users, setUsers] = useState([]);
     const [orders, setOrders] = useState([]);
     const [orderUpdating, setOrderUpdating] = useState(null);
 
     const categories = [
-        'general',
-        'health',
-        'wellness',
-        'supplements',
-        'herbs',
-        'other',
-        'oils',
-        'seeds',
-        'aata',
-        'pickle',
-        'dal',
-        'dry fruits',
-        'millets',
-        'sabut masala',
-        'masala',
-        'Special Churan',
-        'rice',
-        'tea',
-        'fast(varat)'
+        "general",
+        "health",
+        "wellness",
+        "supplements",
+        "herbs",
+        "other",
+        "oils",
+        "seeds",
+        "aata",
+        "pickle",
+        "dal",
+        "dry fruits",
+        "millets",
+        "sabut masala",
+        "masala",
+        "Special Churan",
+        "rice",
+        "tea",
+        "fast(varat)",
     ];
 
     useEffect(() => {
         if (!authLoading) {
             if (!user || !isAdmin()) {
-                navigate('/login');
+                navigate("/login");
                 return;
             }
             fetchProducts();
@@ -68,7 +69,7 @@ const Dashboard = () => {
             const data = await productAPI.getAdminProducts();
             setProducts(data.products || data);
         } catch (err) {
-            setError('Error fetching products: ' + err.message);
+            setError("Error fetching products: " + err.message);
         } finally {
             setLoading(false);
         }
@@ -86,7 +87,7 @@ const Dashboard = () => {
     const fetchOrders = async () => {
         try {
             const data = await adminAPI.listOrders();
-            setOrders(Array.isArray(data) ? data : (data.orders || []));
+            setOrders(Array.isArray(data) ? data : data.orders || []);
         } catch (e) {
             console.error(e);
         }
@@ -97,9 +98,9 @@ const Dashboard = () => {
             setOrderUpdating(orderId);
             await ordersAPI.updateStatus(orderId, status);
             await fetchOrders();
-            setSuccess('Order updated');
+            setSuccess("Order updated");
         } catch (e) {
-            setError('Failed to update order');
+            setError("Failed to update order");
         } finally {
             setOrderUpdating(null);
         }
@@ -107,9 +108,9 @@ const Dashboard = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
     };
 
@@ -117,29 +118,33 @@ const Dashboard = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            setError('');
-            setSuccess('');
+            setError("");
+            setSuccess("");
 
             if (editingProduct) {
                 await productAPI.updateProduct(editingProduct._id, formData);
             } else {
                 await productAPI.createProduct(formData);
             }
-            setSuccess(editingProduct ? 'Product updated successfully!' : 'Product created successfully!');
+            setSuccess(
+                editingProduct
+                    ? "Product updated successfully!"
+                    : "Product created successfully!"
+            );
             setFormData({
-                name: '',
-                description: '',
-                image: '',
-                oldPrice: '',
-                newPrice: '',
-                category: 'general',
-                stock: ''
+                name: "",
+                description: "",
+                image: "",
+                oldPrice: "",
+                newPrice: "",
+                category: "general",
+                stock: "",
             });
             setEditingProduct(null);
             setShowModal(false);
             fetchProducts();
         } catch (err) {
-            setError('Error: ' + err.message);
+            setError("Error: " + err.message);
         } finally {
             setLoading(false);
         }
@@ -154,23 +159,23 @@ const Dashboard = () => {
             oldPrice: product.oldPrice,
             newPrice: product.newPrice,
             category: product.category,
-            stock: product.stock
+            stock: product.stock,
         });
         setShowModal(true);
     };
 
     const handleDelete = async (productId) => {
-        if (!window.confirm('Are you sure you want to delete this product?')) {
+        if (!window.confirm("Are you sure you want to delete this product?")) {
             return;
         }
 
         try {
             setLoading(true);
             await productAPI.deleteProduct(productId);
-            setSuccess('Product deleted successfully!');
+            setSuccess("Product deleted successfully!");
             fetchProducts();
         } catch (err) {
-            setError('Error deleting product: ' + err.message);
+            setError("Error deleting product: " + err.message);
         } finally {
             setLoading(false);
         }
@@ -178,30 +183,30 @@ const Dashboard = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate("/login");
     };
 
     const openAddModal = () => {
         setEditingProduct(null);
         setFormData({
-            name: '',
-            description: '',
-            image: '',
-            oldPrice: '',
-            newPrice: '',
-            category: 'general',
-            stock: ''
+            name: "",
+            description: "",
+            image: "",
+            oldPrice: "",
+            newPrice: "",
+            category: "general",
+            stock: "",
         });
         setShowModal(true);
-        setError('');
-        setSuccess('');
+        setError("");
+        setSuccess("");
     };
 
     const closeModal = () => {
         setShowModal(false);
         setEditingProduct(null);
-        setError('');
-        setSuccess('');
+        setError("");
+        setSuccess("");
     };
 
     if (authLoading) {
@@ -213,7 +218,7 @@ const Dashboard = () => {
     }
 
     if (!user || !isAdmin()) {
-        navigate('/login');
+        navigate("/login");
         return null;
     }
 
@@ -222,10 +227,14 @@ const Dashboard = () => {
             <div className={styles.header}>
                 <h1>Admin Dashboard</h1>
                 <div className={styles.headerButtons}>
-                    <Link to="/admin/categories" className={styles.mainSiteBtn}>Manage Categories</Link>
-                    <Link to="/admin/discount-hero" className={styles.mainSiteBtn}>Manage Discount Hero</Link>
-                    <button className={styles.mainSiteBtn} onClick={() => navigate('/')}>
-                        🌐 Go to Main Site
+                    <Link to="/admin/categories" className={styles.mainSiteBtn}>
+                        Manage Categories
+                    </Link>
+                    <Link to="/admin/discount-hero" className={styles.mainSiteBtn}>
+                        Manage Discount
+                    </Link>
+                    <button className={styles.mainSiteBtn} onClick={() => navigate("/")}>
+                        <BsGlobeCentralSouthAsia /> Go to Main Site
                     </button>
                     <button className={styles.logoutBtn} onClick={handleLogout}>
                         Logout
@@ -240,11 +249,13 @@ const Dashboard = () => {
                 <div className={styles.usersSection}>
                     <h2 className={styles.sectionTitle}>Users Presence</h2>
                     <div className={styles.usersList}>
-                        {users.map(u => (
+                        {users.map((u) => (
                             <div key={u.id} className={styles.userRow}>
-                                <span className={styles.userName}>{u.name} ({u.email})</span>
+                                <span className={styles.userName}>
+                                    {u.name} ({u.email})
+                                </span>
                                 <span className={u.online ? styles.online : styles.offline}>
-                                    {u.online ? '● Online' : '● Offline'}
+                                    {u.online ? "● Online" : "● Offline"}
                                 </span>
                             </div>
                         ))}
@@ -254,7 +265,7 @@ const Dashboard = () => {
                 <div className={styles.ordersSection}>
                     <h2 className={styles.sectionTitle}>Orders</h2>
                     <div className={styles.ordersList}>
-                        {orders.map(o => (
+                        {orders.map((o) => (
                             <div key={o._id} className={styles.orderCard}>
                                 <div className={styles.orderHeader}>
                                     <div>
@@ -266,15 +277,32 @@ const Dashboard = () => {
                                 </div>
                                 <div className={styles.orderItems}>
                                     {(o.items || []).map((it, idx) => (
-                                        <div key={idx} className={styles.orderItem}>x{it.quantity} {it.name} — ₹{it.price}</div>
+                                        <div key={idx} className={styles.orderItem}>
+                                            x{it.quantity} {it.name} — ₹{it.price}
+                                        </div>
                                     ))}
                                 </div>
                                 <div className={styles.orderFooter}>
-                                    <div><strong>Total:</strong> ₹{o.totalAmount}</div>
+                                    <div>
+                                        <strong>Total:</strong> ₹{o.totalAmount}
+                                    </div>
                                     <div className={styles.statusControls}>
-                                        <select value={o.status} onChange={(e) => updateOrderStatus(o._id, e.target.value)} disabled={orderUpdating === o._id}>
-                                            {['PLACED', 'PAID', 'READY_FOR_DELIVERY', 'SHIPPED', 'DELIVERED', 'CANCELLED'].map(s => (
-                                                <option key={s} value={s}>{s}</option>
+                                        <select
+                                            value={o.status}
+                                            onChange={(e) => updateOrderStatus(o._id, e.target.value)}
+                                            disabled={orderUpdating === o._id}
+                                        >
+                                            {[
+                                                "PLACED",
+                                                "PAID",
+                                                "READY_FOR_DELIVERY",
+                                                "SHIPPED",
+                                                "DELIVERED",
+                                                "CANCELLED",
+                                            ].map((s) => (
+                                                <option key={s} value={s}>
+                                                    {s}
+                                                </option>
                                             ))}
                                         </select>
                                     </div>
@@ -288,7 +316,7 @@ const Dashboard = () => {
                     <button
                         className={styles.submitBtn}
                         onClick={openAddModal}
-                        style={{ marginBottom: '20px' }}
+                        style={{ marginBottom: "20px" }}
                     >
                         + Add Product
                     </button>
@@ -300,7 +328,7 @@ const Dashboard = () => {
                         </div>
                         <div className={styles.statCard}>
                             <h3>Active Products</h3>
-                            <p>{products.filter(p => p.isActive).length}</p>
+                            <p>{products.filter((p) => p.isActive).length}</p>
                         </div>
                         <div className={styles.statCard}>
                             <h3>Categories</h3>
@@ -318,7 +346,7 @@ const Dashboard = () => {
                             {products.length === 0 ? (
                                 <div className={styles.loading}>No products found</div>
                             ) : (
-                                products.map(product => (
+                                products.map((product) => (
                                     <div key={product._id} className={styles.productCard}>
                                         {product.image ? (
                                             <img
@@ -326,8 +354,8 @@ const Dashboard = () => {
                                                 alt={product.name}
                                                 className={styles.productImage}
                                                 onError={(e) => {
-                                                    e.target.style.display = 'none';
-                                                    e.target.nextSibling.style.display = 'block';
+                                                    e.target.style.display = "none";
+                                                    e.target.nextSibling.style.display = "block";
                                                 }}
                                             />
                                         ) : null}
@@ -348,17 +376,27 @@ const Dashboard = () => {
                                             <h3 className={styles.productName}>{product.name}</h3>
                                             <p className={styles.productDescription}>
                                                 {product.description.length > 100
-                                                    ? product.description.substring(0, 100) + '...'
-                                                    : product.description
-                                                }
+                                                    ? product.description.substring(0, 100) + "..."
+                                                    : product.description}
                                             </p>
                                             <div className={styles.productPrices}>
-                                                <span className={styles.oldPrice}>₹{product.oldPrice}</span>
-                                                <span className={styles.newPrice}>₹{product.newPrice}</span>
+                                                <span className={styles.oldPrice}>
+                                                    ₹{product.oldPrice}
+                                                </span>
+                                                <span className={styles.newPrice}>
+                                                    ₹{product.newPrice}
+                                                </span>
                                             </div>
-                                            <p><strong>Category:</strong> {product.category}</p>
-                                            <p><strong>Stock:</strong> {product.stock}</p>
-                                            <p><strong>Status:</strong> {product.isActive ? 'Active' : 'Inactive'}</p>
+                                            <p>
+                                                <strong>Category:</strong> {product.category}
+                                            </p>
+                                            <p>
+                                                <strong>Stock:</strong> {product.stock}
+                                            </p>
+                                            <p>
+                                                <strong>Status:</strong>{" "}
+                                                {product.isActive ? "Active" : "Inactive"}
+                                            </p>
                                         </div>
                                         <div className={styles.productActions}>
                                             <button
@@ -385,9 +423,11 @@ const Dashboard = () => {
             {showModal && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
-                        <button className={styles.closeBtn} onClick={closeModal}>×</button>
+                        <button className={styles.closeBtn} onClick={closeModal}>
+                            ×
+                        </button>
                         <h2 className={styles.sectionTitle}>
-                            {editingProduct ? 'Edit Product' : 'Add New Product'}
+                            {editingProduct ? "Edit Product" : "Add New Product"}
                         </h2>
 
                         <form onSubmit={handleSubmit} className={styles.form}>
@@ -415,7 +455,9 @@ const Dashboard = () => {
                             </div>
 
                             <ImageUpload
-                                onImageUpload={(imageUrl) => setFormData(prev => ({ ...prev, image: imageUrl }))}
+                                onImageUpload={(imageUrl) =>
+                                    setFormData((prev) => ({ ...prev, image: imageUrl }))
+                                }
                                 currentImageUrl={formData.image}
                             />
 
@@ -456,7 +498,7 @@ const Dashboard = () => {
                                     value={formData.category}
                                     onChange={handleInputChange}
                                 >
-                                    {categories.map(cat => (
+                                    {categories.map((cat) => (
                                         <option key={cat} value={cat}>
                                             {cat.charAt(0).toUpperCase() + cat.slice(1)}
                                         </option>
@@ -482,7 +524,11 @@ const Dashboard = () => {
                                 className={styles.submitBtn}
                                 disabled={loading}
                             >
-                                {loading ? 'Processing...' : (editingProduct ? 'Update Product' : 'Add Product')}
+                                {loading
+                                    ? "Processing..."
+                                    : editingProduct
+                                        ? "Update Product"
+                                        : "Add Product"}
                             </button>
 
                             {loading && (

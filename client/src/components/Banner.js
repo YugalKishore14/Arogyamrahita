@@ -23,6 +23,13 @@ const Banner = () => {
             animate={{ y: [0, -10, 0] }}
             transition={{ repeat: Infinity, duration: 3 }}
           />
+          {/* <img
+            src={logo}
+            alt="Arogyam Logo"
+            className={styles.lamp}
+            animate={{ y: [0, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 3 }}
+          /> */}
 
           <p className={styles.highlightText}>
             Specialized, natural health products for a balanced and healthier life.

@@ -1,58 +1,148 @@
-.container {
+/* DiscountHeroAdmin.module.css */
+
+.dashboardContainer {
     padding: 20px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #6a5acd, #836fff, #9370db);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #333;
+    font-family: "Poppins", sans-serif;
 }
 
+/* Header */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
-}
-
-.card {
     background: #fff;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    margin-bottom: 16px;
+    padding: 15px 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-.formGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 12px;
+.header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #5a2fc2, #8a64eb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
 }
 
-.formGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.formActions {
-    display: flex;
-    gap: 10px;
-    margin-top: 8px;
-}
-
+/* Buttons */
 .addButton {
-    background: #667eea;
+    background: linear-gradient(135deg, #6a5acd, #836fff);
     color: #fff;
-    padding: 10px 14px;
     border: none;
-    border-radius: 8px;
+    padding: 8px 16px;
+    border-radius: 10px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.addButton:hover {
+    background: linear-gradient(135deg, #836fff, #6a5acd);
+    transform: translateY(-1px);
 }
 
 .cancelButton {
-    background: #e2e8f0;
-    color: #111827;
-    padding: 10px 14px;
+    background: #ddd;
     border: none;
-    border-radius: 8px;
+    padding: 8px 16px;
+    border-radius: 10px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 10px;
+    transition: background 0.3s ease;
 }
 
+.cancelButton:hover {
+    background: #ccc;
+}
+
+.deleteButton {
+    background: #ff4b4b;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-left: 6px;
+    transition: background 0.3s ease;
+}
+
+.deleteButton:hover {
+    background: #e23d3d;
+}
+
+.smallButton {
+    background: #5a67d8;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.3s ease;
+}
+
+.smallButton:hover {
+    background: #434bb7;
+}
+
+/* Cards */
+.card {
+    background: #fdfdff;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Form */
+.formGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.formGroup label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.formGroup input {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 14px;
+}
+
+.checkboxGroup {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.formActions {
+    margin-top: 10px;
+}
+
+/* Table */
 .tableWrapper {
     overflow-x: auto;
 }
@@ -64,30 +154,37 @@
 
 .table th,
 .table td {
+    padding: 12px 10px;
     text-align: left;
-    padding: 10px;
-    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
 }
 
-.smallButton {
-    margin-right: 8px;
+.table th {
+    background: #f3f3ff;
+    font-weight: 600;
 }
 
-.deleteButton {
-    color: #fff;
-    background: #ef4444;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 10px;
-    cursor: pointer;
+.table tr {
+    border-bottom: 1px solid #eaeaea;
 }
 
+.table tr:hover {
+    background: #fafaff;
+}
+
+/* Alerts */
 .error {
-    color: #ef4444;
+    background: #ffe5e5;
+    color: #d93025;
+    padding: 10px;
+    border-radius: 8px;
     margin-bottom: 10px;
 }
 
 .success {
-    color: #10b981;
+    background: #e6ffed;
+    color: #16a34a;
+    padding: 10px;
+    border-radius: 8px;
     margin-bottom: 10px;
 }

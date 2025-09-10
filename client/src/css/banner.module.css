@@ -12,7 +12,7 @@
   justify-content: space-between;
   height: 83vh;
   width: 100%;
-  max-width: 1600px;
+  max-width: 1500px;
   padding: 40px;
   box-sizing: border-box;
   gap: 100px;
@@ -24,7 +24,7 @@
 }
 
 .lamp {
-  width: 260px;
+  width: 250px;
   height: auto;
   margin-bottom: 20px;
   filter: drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.2));
