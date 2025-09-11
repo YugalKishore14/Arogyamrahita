@@ -458,6 +458,8 @@ exports.forgotPassword = async (req, res) => {
         if (typeof user.generatePasswordResetToken === "function") {
             token = await user.generatePasswordResetToken();
             if (!token && user.resetPasswordToken) token = user.resetPasswordToken;
+            // Always save after generating token
+            await user.save();
         } else {
             token = crypto.randomBytes(20).toString("hex");
             user.resetPasswordToken = token;
