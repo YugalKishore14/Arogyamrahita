@@ -30,7 +30,6 @@ const UserProfile = ({ isOpen, onClose }) => {
                     pincode: u.pincode || ''
                 });
             } catch (e) {
-                // fallback to auth user if api fails
                 if (user) {
                     setFormData({
                         name: user.name || '',

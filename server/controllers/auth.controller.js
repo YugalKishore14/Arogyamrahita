@@ -1,8 +1,3 @@
-/**
- * Reset password handler
- * Accepts { email, token, newPassword }
- * Verifies token and expiry, sets new password
- */
 exports.resetPassword = async (req, res) => {
     const { email, token, newPassword } = req.body;
     if (!email || !token || !newPassword) {
@@ -12,7 +7,6 @@ exports.resetPassword = async (req, res) => {
         const user = await User.findOne({ email: email.toLowerCase().trim() });
         if (!user) return res.status(404).json({ message: "User not found" });
 
-        // Token in DB is hashed, so hash the provided token for comparison
         const hashedToken = typeof user.generatePasswordResetToken === "function"
             ? require("crypto").createHash("sha256").update(token).digest("hex")
             : token;
@@ -159,13 +153,11 @@ exports.login = async (req, res) => {
         await Otp.create({
             email: user.email,
             otp,
-            // login OTP valid for 2 minutes
             expiresAt: new Date(Date.now() + 2 * 60 * 1000),
             used: false,
             resend: false,
         });
 
-        // Send OTP via Email (best-effort)
         try {
             if (user.email) {
                 await sendEmail(
@@ -259,14 +251,12 @@ exports.resendOtp = async (req, res) => {
         const newOtp = await Otp.create({
             email: user.email,
             otp,
-            // resend OTP valid for 5 minutes (as the email states)
             expiresAt: new Date(Date.now() + 5 * 60 * 1000),
             used: false,
             resend: true,
             createdAt: new Date(),
         });
 
-        // Resend OTP via Email (best-effort)
         try {
             if (user.email) {
                 await sendEmail(
@@ -409,7 +399,6 @@ exports.updateProfile = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Update user profile
         user.name = name || user.name;
         user.phone = phone || user.phone || user.number || "";
         user.address = address || user.address;
@@ -458,12 +447,10 @@ exports.forgotPassword = async (req, res) => {
         if (typeof user.generatePasswordResetToken === "function") {
             token = await user.generatePasswordResetToken();
             if (!token && user.resetPasswordToken) token = user.resetPasswordToken;
-            // Always save after generating token
             await user.save();
         } else {
             token = crypto.randomBytes(20).toString("hex");
             user.resetPasswordToken = token;
-            // 1 hour expiry
             user.resetPasswordExpires = Date.now() + 60 * 60 * 1000;
             await user.save();
         }
@@ -473,7 +460,6 @@ exports.forgotPassword = async (req, res) => {
             ? `${origin.replace(/\/$/, "")}/reset-password?token=${token}&email=${encodeURIComponent(user.email)}`
             : `Please use this token to reset your password: ${token}`;
 
-        // Send email with reset link (best-effort)
         const emailHtml = origin
             ? `<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;">
                     <p>Dear ${user.name || "User"},</p>

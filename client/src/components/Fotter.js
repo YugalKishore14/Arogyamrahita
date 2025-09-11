@@ -14,7 +14,6 @@ const Fotter = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        {/* Logo Section */}
         <motion.div
           className={`${styles.footerSection} ${styles.logoSection}`}
           whileHover={{ scale: 1.05 }}
@@ -26,7 +25,6 @@ const Fotter = () => {
           />
         </motion.div>
 
-        {/* Support Section */}
         <motion.div
           className={`${styles.footerSection} ${styles.supportSection}`}
           whileHover={{ x: 5 }}
@@ -46,7 +44,6 @@ const Fotter = () => {
           </p>
         </motion.div>
 
-        {/* Quick Links Section */}
         <motion.div
           className={`${styles.footerSection} ${styles.linksSection}`}
           whileHover={{ x: 5 }}
@@ -72,7 +69,6 @@ const Fotter = () => {
         </motion.div>
       </motion.div>
 
-      {/* Bottom */}
       <motion.div
         className={styles.footerBottom}
         initial={{ opacity: 0 }}

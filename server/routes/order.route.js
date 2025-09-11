@@ -8,11 +8,9 @@ const {
     updateOrderStatus,
 } = require("../controllers/order.controller");
 
-// User routes
 router.post("/", verifyToken, createOrder);
 router.get("/my", verifyToken, getMyOrders);
 
-// Admin routes
 router.get("/", verifyToken, verifyAdmin, listOrders);
 router.put("/:orderId/status", verifyToken, verifyAdmin, updateOrderStatus);
 

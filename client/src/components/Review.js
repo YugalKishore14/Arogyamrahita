@@ -9,50 +9,50 @@ const product3 = "https://placehold.co/400x400/D0D8CF/000000?text=Product+3";
 const ReviewProducts = () => {
   const productGridRef = useRef(null);
 
-const products = [
-  { 
-    id: 1, 
-    name: "Aarav Sharma", 
-    image: "https://randomuser.me/api/portraits/men/32.jpg", 
-    review: "Amazing quality! The shampoo feels natural and my hair looks healthier than ever." 
-  },
-  { 
-    id: 2, 
-    name: "Priya Verma", 
-    image: "https://randomuser.me/api/portraits/women/44.jpg", 
-    review: "Absolutely love the face wash. It’s gentle yet very effective. My skin feels so fresh!" 
-  },
-  { 
-    id: 3, 
-    name: "Rohan Gupta", 
-    image: "https://randomuser.me/api/portraits/men/15.jpg", 
-    review: "This cream is fantastic. Keeps my skin soft and hydrated all day." 
-  },
-  { 
-    id: 4, 
-    name: "Neha Patel", 
-    image: "https://randomuser.me/api/portraits/women/65.jpg", 
-    review: "The herbal oil works wonders! My scalp feels nourished and hair growth improved." 
-  },
-  { 
-    id: 5, 
-    name: "Karan Malhotra", 
-    image: "https://randomuser.me/api/portraits/men/28.jpg", 
-    review: "The soap smells so refreshing. My skin feels soft and chemical-free." 
-  },
-  { 
-    id: 6, 
-    name: "Simran Kaur", 
-    image: "https://randomuser.me/api/portraits/women/52.jpg", 
-    review: "I use aloe gel daily now. It’s soothing, cooling, and perfect for summers." 
-  },
-  { 
-    id: 7, 
-    name: "Aditya Mehta", 
-    image: "https://randomuser.me/api/portraits/men/40.jpg", 
-    review: "This hair serum is a game changer. My hair looks shiny and frizz-free." 
-  },
-];
+  const products = [
+    {
+      id: 1,
+      name: "Aarav Sharma",
+      image: "https://randomuser.me/api/portraits/men/32.jpg",
+      review: "Amazing quality! The shampoo feels natural and my hair looks healthier than ever."
+    },
+    {
+      id: 2,
+      name: "Priya Verma",
+      image: "https://randomuser.me/api/portraits/women/44.jpg",
+      review: "Absolutely love the face wash. It’s gentle yet very effective. My skin feels so fresh!"
+    },
+    {
+      id: 3,
+      name: "Rohan Gupta",
+      image: "https://randomuser.me/api/portraits/men/15.jpg",
+      review: "This cream is fantastic. Keeps my skin soft and hydrated all day."
+    },
+    {
+      id: 4,
+      name: "Neha Patel",
+      image: "https://randomuser.me/api/portraits/women/65.jpg",
+      review: "The herbal oil works wonders! My scalp feels nourished and hair growth improved."
+    },
+    {
+      id: 5,
+      name: "Karan Malhotra",
+      image: "https://randomuser.me/api/portraits/men/28.jpg",
+      review: "The soap smells so refreshing. My skin feels soft and chemical-free."
+    },
+    {
+      id: 6,
+      name: "Simran Kaur",
+      image: "https://randomuser.me/api/portraits/women/52.jpg",
+      review: "I use aloe gel daily now. It’s soothing, cooling, and perfect for summers."
+    },
+    {
+      id: 7,
+      name: "Aditya Mehta",
+      image: "https://randomuser.me/api/portraits/men/40.jpg",
+      review: "This hair serum is a game changer. My hair looks shiny and frizz-free."
+    },
+  ];
 
   const scroll = (direction) => {
     if (productGridRef.current) {

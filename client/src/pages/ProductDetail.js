@@ -5,8 +5,6 @@ import { useCart } from "../context/CartContext";
 import { productAPI } from "../services/Api";
 import { toast } from "react-toastify";
 import styles from "../css/ProductDetail.module.css";
-import Header from "../components/Header";
-import Fotter from "../components/Fotter";
 import { motion } from "framer-motion";
 
 const ProductDetail = () => {
@@ -273,4 +271,3 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
- 

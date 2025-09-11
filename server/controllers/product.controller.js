@@ -149,16 +149,12 @@ exports.deleteProduct = async (req, res) => {
         let imageDeleted = false;
         if (product.image) {
             try {
-                // Extract filename from full URL or relative path
-                // Examples:
-                // - https://arogyamrahita.onrender.com/uploads/filename.png -> filename.png
                 const uploadsIndex = product.image.indexOf("/uploads/");
                 if (uploadsIndex !== -1) {
                     const filename = product.image.substring(uploadsIndex + "/uploads/".length);
                     imageDeleted = imageService.deleteImage(filename);
                 }
             } catch (e) {
-                // Non-fatal: proceed even if image deletion fails
                 imageDeleted = false;
             }
         }

@@ -47,7 +47,6 @@ const Header = () => {
     }
   };
 
-  // Fetch categories once for category suggestions
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -63,7 +62,6 @@ const Header = () => {
     };
   }, []);
 
-  // Debounced search suggestions
   useEffect(() => {
     if (!searchQuery || searchQuery.trim().length === 0) {
       setSuggestions([]);
@@ -109,7 +107,6 @@ const Header = () => {
     };
   }, [searchQuery, allCategories]);
 
-  // Hide suggestions on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
@@ -131,7 +128,6 @@ const Header = () => {
     }
   };
 
-  // Scroll detect
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 50) {
@@ -150,14 +146,12 @@ const Header = () => {
         transition={{ duration: 0.5 }}
       >
         <div className={styles.container}>
-          {/* Logo */}
           <motion.div whileHover={{ scale: 1.05 }}>
             <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
               <img className={styles.logoImage} src={logoImage} alt="Logo" />
             </NavLink>
           </motion.div>
 
-          {/* Search */}
           <form className={styles.searchBar} onSubmit={handleSearch} ref={searchRef}>
             <input
               type="text"
@@ -225,7 +219,6 @@ const Header = () => {
             )}
           </form>
 
-          {/* Desktop Nav */}
           <nav className={`${styles.nav} ${styles.desktopNav}`}>
             <ul className={styles.navList}>
               {["Home", "Products", "About", "Contact"].map((item, idx) => (
@@ -246,7 +239,6 @@ const Header = () => {
             </ul>
           </nav>
 
-          {/* Right Icons */}
           <div className={styles.navIcons}>
             {user ? (
               <>

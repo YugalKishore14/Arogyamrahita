@@ -4,15 +4,12 @@ const categoryController = require("../controllers/category.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 const imageService = require("../services/image.service");
 
-// Public routes
 router.get("/", categoryController.getAllCategories);
 router.get("/:id", categoryController.getCategoryById);
 
-// Protected admin routes
 router.use(authMiddleware.verifyToken);
 router.use(authMiddleware.isAdmin);
 
-// Route for category image upload
 router.post("/upload-image", imageService.uploadImage, (req, res) => {
     try {
         if (!req.file) {
@@ -22,7 +19,6 @@ router.post("/upload-image", imageService.uploadImage, (req, res) => {
             });
         }
 
-        // Cloudinary returns the complete URL in req.file.path
         const imageUrl = req.file.path;
         res.status(200).json({
             success: true,

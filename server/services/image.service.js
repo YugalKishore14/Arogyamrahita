@@ -3,14 +3,12 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const path = require('path');
 
-// Configure Cloudinary
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Configure multer with Cloudinary storage
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
@@ -21,7 +19,6 @@ const storage = new CloudinaryStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    // Accept only image files
     if (file.mimetype.startsWith('image/')) {
         cb(null, true);
     } else {
@@ -37,18 +34,14 @@ const upload = multer({
     }
 });
 
-// Function to handle image upload
 const uploadImage = upload.single('image');
 
-// Function to get image URL (now returns Cloudinary URL directly)
 const getImageUrl = (cloudinaryUrl) => {
-    return cloudinaryUrl; // Cloudinary URL is already complete
+    return cloudinaryUrl;
 };
 
-// Function to delete image from Cloudinary
 const deleteImage = async (cloudinaryUrl) => {
     try {
-        // Extract public_id from Cloudinary URL
         const publicId = cloudinaryUrl.split('/').pop().split('.')[0];
         const result = await cloudinary.uploader.destroy(`arogyamrahita/products/${publicId}`);
         return result.result === 'ok';

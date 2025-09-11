@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const crypto = require("crypto"); // Don't forget to require crypto
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
-    // ... your existing schema definition ...
     {
         name: {
             type: String,
@@ -79,7 +78,7 @@ const userSchema = new mongoose.Schema(
                 },
             },
         ],
-        resetPasswordToken: String, // Add these two fields to your schema
+        resetPasswordToken: String,
         resetPasswordExpires: Date,
     },
     {

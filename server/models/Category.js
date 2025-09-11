@@ -13,7 +13,7 @@ const categorySchema = new mongoose.Schema(
             trim: true,
         },
         image: {
-            type: String, // Cloudinary URL
+            type: String,
         },
         isActive: {
             type: Boolean,

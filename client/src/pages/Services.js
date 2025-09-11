@@ -1,5 +1,5 @@
-import { IoMenu, IoCartOutline } from "react-icons/io5";
-import { LuUser } from "react-icons/lu";
+// import { IoMenu, IoCartOutline } from "react-icons/io5";
+// import { LuUser } from "react-icons/lu";
 import styles from "./css/Services.module.css";
 
 const Services = () => {
@@ -193,7 +193,7 @@ const Services = () => {
                 </div>
             </div>
 
-            
+
         </>
     );
 };

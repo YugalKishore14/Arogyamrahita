@@ -4,7 +4,6 @@ const { verifyToken, verifyAdmin } = require("../middlewares/auth.middleware");
 const User = require("../models/User");
 const Order = require("../models/Order");
 
-// Admin get all users with online status (online if seen within last 2 minutes)
 router.get("/users", verifyToken, verifyAdmin, async (req, res) => {
     try {
         const users = await User.find().select("-password -refreshTokens");

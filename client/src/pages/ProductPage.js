@@ -32,7 +32,6 @@ const ProductPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Read query params for category/search
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const category = params.get("category") || "";

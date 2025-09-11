@@ -308,13 +308,6 @@ const Login = () => {
                                         </Form.Group>
 
                                         <div className="text-center mb-3">
-                                            {/* <Button
-                                                variant="link"
-                                                className="p-0 text-decoration-none text-muted"
-                                                onClick={handleForgotPassword}
-                                            >
-                                                Forgot Password?
-                                            </Button> */}
                                             <div className="text-center mb-3">
                                                 <Link
                                                     to="/forgot-password"

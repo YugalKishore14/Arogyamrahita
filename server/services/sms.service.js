@@ -33,7 +33,6 @@ const sendSMS = async (to, message) => {
         ensureConfigured();
         const normalizedTo = normalizePhoneNumber(to);
 
-        // MSG91 v5 flow using template (recommended)
         const url = "https://control.msg91.com/api/v5/flow/";
         const payload = {
             template_id: MSG91_TEMPLATE_ID,

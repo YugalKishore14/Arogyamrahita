@@ -4,10 +4,8 @@ const controller = require("../controllers/discountHero.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 const imageService = require("../services/image.service");
 
-// public
 router.get("/active", controller.getActive);
 
-// admin-only below
 router.use(authMiddleware.verifyToken, authMiddleware.isAdmin);
 
 router.get("/admin/all", controller.adminList);

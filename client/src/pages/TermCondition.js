@@ -392,7 +392,7 @@ const TermCondition = () => {
                 </div>
             </div>
 
-                  
+
         </>
     );
 };
