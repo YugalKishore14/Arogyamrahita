@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -15,11 +16,10 @@ const ForgotPassword = () => {
         e.preventDefault();
         setLoading(true);
         setError('');
-
+        setSuccess('');
         try {
             await authAPI.forgotPassword(email);
-            toast.success('Password reset link sent to your email!');
-            navigate('/login'); // Redirect to login page after success
+            setSuccess('Password reset link sent to your email!');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to send reset link.');
         } finally {
@@ -52,6 +52,7 @@ const ForgotPassword = () => {
                                 </motion.div>
 
                                 {error && <Alert variant="danger">{error}</Alert>}
+                                {success && <Alert variant="success">{success}</Alert>}
 
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group className="mb-3" controlId="formBasicEmail">

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/Api';
 import { toast } from 'react-toastify';
@@ -14,6 +15,8 @@ const ResetPassword = () => {
     const token = query.get('token') || '';
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -50,23 +53,35 @@ const ResetPassword = () => {
                             <Card.Title className="mb-4">Reset Password</Card.Title>
                             {error && <Alert variant="danger">{error}</Alert>}
                             <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-3">
+                                <Form.Group className="mb-3" style={{ position: 'relative' }}>
                                     <Form.Label>New Password</Form.Label>
                                     <Form.Control
-                                        type="password"
+                                        type={showNewPassword ? 'text' : 'password'}
                                         value={newPassword}
                                         onChange={e => setNewPassword(e.target.value)}
                                         required
                                     />
+                                    <span
+                                        style={{ position: 'absolute', right: 12, top: 38, cursor: 'pointer', zIndex: 2 }}
+                                        onClick={() => setShowNewPassword(v => !v)}
+                                    >
+                                        {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </span>
                                 </Form.Group>
-                                <Form.Group className="mb-3">
+                                <Form.Group className="mb-3" style={{ position: 'relative' }}>
                                     <Form.Label>Confirm Password</Form.Label>
                                     <Form.Control
-                                        type="password"
+                                        type={showConfirmPassword ? 'text' : 'password'}
                                         value={confirmPassword}
                                         onChange={e => setConfirmPassword(e.target.value)}
                                         required
                                     />
+                                    <span
+                                        style={{ position: 'absolute', right: 12, top: 38, cursor: 'pointer', zIndex: 2 }}
+                                        onClick={() => setShowConfirmPassword(v => !v)}
+                                    >
+                                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </span>
                                 </Form.Group>
                                 <Button type="submit" variant="primary" disabled={loading} className="w-100">
                                     {loading ? 'Resetting...' : 'Reset Password'}
