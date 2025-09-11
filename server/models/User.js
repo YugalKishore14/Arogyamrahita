@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto"); // Don't forget to require crypto
 
 const userSchema = new mongoose.Schema(
+    // ... your existing schema definition ...
     {
         name: {
             type: String,
@@ -77,6 +79,8 @@ const userSchema = new mongoose.Schema(
                 },
             },
         ],
+        resetPasswordToken: String, // Add these two fields to your schema
+        resetPasswordExpires: Date,
     },
     {
         timestamps: true,
@@ -94,6 +98,20 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password);
+};
+
+// Add the new method here
+userSchema.methods.generatePasswordResetToken = function () {
+    const token = crypto.randomBytes(20).toString("hex");
+
+    this.resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+    this.resetPasswordExpires = Date.now() + 60 * 60 * 1000;
+
+    return token;
 };
 
 module.exports = mongoose.model("User", userSchema);

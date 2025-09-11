@@ -21,7 +21,7 @@ import { authAPI } from "../services/Api";
 import { useAuth } from "../context/AuthContext";
 import logoImage from "../images/arogyamlogo.png";
 import { toast } from "react-toastify";
-import { motion } from "framer-motion";   // ✅ Added
+import { motion } from "framer-motion";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -112,7 +112,7 @@ const Login = () => {
     };
 
     const handleForgotPassword = () => {
-        toast.info("Forgot password functionality coming soon!");
+        navigate('/forgot-password');
     };
 
     const goBackToLogin = () => {
@@ -308,13 +308,21 @@ const Login = () => {
                                         </Form.Group>
 
                                         <div className="text-center mb-3">
-                                            <Button
+                                            {/* <Button
                                                 variant="link"
                                                 className="p-0 text-decoration-none text-muted"
                                                 onClick={handleForgotPassword}
                                             >
                                                 Forgot Password?
-                                            </Button>
+                                            </Button> */}
+                                            <div className="text-center mb-3">
+                                                <Link
+                                                    to="/forgot-password"
+                                                    className="p-0 text-decoration-none text-muted"
+                                                >
+                                                    Forgot Password?
+                                                </Link>
+                                            </div>
                                         </div>
 
                                         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
