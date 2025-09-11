@@ -1,4 +1,42 @@
-// controllers/auth.controller.js
+/**
+ * Reset password handler
+ * Accepts { email, token, newPassword }
+ * Verifies token and expiry, sets new password
+ */
+exports.resetPassword = async (req, res) => {
+    const { email, token, newPassword } = req.body;
+    if (!email || !token || !newPassword) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+    try {
+        const user = await User.findOne({ email: email.toLowerCase().trim() });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // Token in DB is hashed, so hash the provided token for comparison
+        const hashedToken = typeof user.generatePasswordResetToken === "function"
+            ? require("crypto").createHash("sha256").update(token).digest("hex")
+            : token;
+
+        if (
+            !user.resetPasswordToken ||
+            user.resetPasswordToken !== hashedToken ||
+            !user.resetPasswordExpires ||
+            user.resetPasswordExpires < Date.now()
+        ) {
+            return res.status(400).json({ message: "Invalid or expired reset token" });
+        }
+
+        user.password = newPassword;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        res.json({ message: "Password reset successful. You can now log in." });
+    } catch (error) {
+        console.error("Reset Password Error:", error);
+        res.status(500).json({ message: "Server error during password reset" });
+    }
+};
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
@@ -11,7 +49,7 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "your_refresh_secret";
-const FRONTEND_URL = process.env.FRONTEND_URL || process.env.CLIENT_URL || ""; // optional, used for reset link
+const FRONTEND_URL = process.env.FRONTEND_URL || process.env.CLIENT_URL || "";
 
 const generateTokens = (user) => {
     const payload = {
@@ -373,7 +411,6 @@ exports.updateProfile = async (req, res) => {
 
         // Update user profile
         user.name = name || user.name;
-        // keep both phone & number compatibility
         user.phone = phone || user.phone || user.number || "";
         user.address = address || user.address;
         user.city = city || user.city;
@@ -404,12 +441,6 @@ exports.updateProfile = async (req, res) => {
     }
 };
 
-/**
- * Forgot password handler
- * Replaces the incorrect `exports.router.post('/forgot-password', ...)`
- * Creates a reset token (uses user.generatePasswordResetToken if available,
- * otherwise creates one via crypto) and sends an email with a reset link.
- */
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
 
@@ -418,19 +449,14 @@ exports.forgotPassword = async (req, res) => {
     }
 
     try {
-        // Check if user exists
         const user = await User.findOne({ email: email.toLowerCase().trim() });
         if (!user) {
-            // avoid revealing whether email exists? your earlier code returned 404 - keep the same behavior
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Try using model helper if available, else generate token here
         let token;
         if (typeof user.generatePasswordResetToken === "function") {
             token = await user.generatePasswordResetToken();
-            // If generatePasswordResetToken sets fields and saves, ensure token variable is set
-            // If it doesn't return the token, attempt to read from user.resetPasswordToken
             if (!token && user.resetPasswordToken) token = user.resetPasswordToken;
         } else {
             token = crypto.randomBytes(20).toString("hex");
@@ -440,7 +466,6 @@ exports.forgotPassword = async (req, res) => {
             await user.save();
         }
 
-        // Build reset URL - try to use FRONTEND_URL or origin header
         const origin = req.headers && req.headers.origin ? req.headers.origin : FRONTEND_URL;
         const resetUrl = origin
             ? `${origin.replace(/\/$/, "")}/reset-password?token=${token}&email=${encodeURIComponent(user.email)}`
@@ -469,7 +494,6 @@ exports.forgotPassword = async (req, res) => {
             await sendEmail(user.email, "Password reset request", emailHtml);
         } catch (e) {
             console.warn("Failed to send password reset email:", e.message || e);
-            // don't fail the request because email failed to send; still return success (or you may want to return 500)
         }
 
         return res.json({ message: "Password reset email sent" });

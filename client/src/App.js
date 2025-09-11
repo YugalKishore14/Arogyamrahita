@@ -25,6 +25,7 @@ import TermCondition from "./pages/TermCondition";
 import Faq from "./pages/Faq";
 import ReturnRefund from "./pages/ReturnRefund";
 import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -61,6 +62,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route
                 path="/admin"
                 element={

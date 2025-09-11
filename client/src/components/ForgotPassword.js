@@ -89,10 +89,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-
-// export const authAPI = {
-//     forgotPassword: async (email) => {
-//         const response = await api.post('/auth/forgot-password', { email });
-//         return response.data;
-//     },
-// };

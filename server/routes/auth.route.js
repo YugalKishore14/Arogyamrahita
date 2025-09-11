@@ -9,7 +9,8 @@ const {
     logout,
     getProfile,
     updateProfile,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 } = require("../controllers/auth.controller");
 const {
     validateRegister,
@@ -26,5 +27,6 @@ router.post("/logout", verifyToken, logout);
 router.get("/profile", verifyToken, getProfile);
 router.put("/profile", verifyToken, updateProfile);
 router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 module.exports = router;
