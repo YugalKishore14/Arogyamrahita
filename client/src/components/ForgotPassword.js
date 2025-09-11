@@ -17,7 +17,7 @@ const ForgotPassword = () => {
         setError('');
 
         try {
-            await authAPI.forgotPassword({ email }); // Call your API endpoint
+            await authAPI.forgotPassword(email);
             toast.success('Password reset link sent to your email!');
             navigate('/login'); // Redirect to login page after success
         } catch (err) {
@@ -89,3 +89,10 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
+
+// export const authAPI = {
+//     forgotPassword: async (email) => {
+//         const response = await api.post('/auth/forgot-password', { email });
+//         return response.data;
+//     },
+// };
