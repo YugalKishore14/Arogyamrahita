@@ -123,10 +123,14 @@ const Dashboard = () => {
             setError("");
             setSuccess("");
 
+            const submitData = {
+                ...formData,
+                weight: formData.weight ? Number(formData.weight) : 0,
+            };
             if (editingProduct) {
-                await productAPI.updateProduct(editingProduct._id, formData);
+                await productAPI.updateProduct(editingProduct._id, submitData);
             } else {
-                await productAPI.createProduct(formData);
+                await productAPI.createProduct(submitData);
             }
             setSuccess(
                 editingProduct
