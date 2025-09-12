@@ -5,6 +5,8 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 import Header from "./components/Header";
 import Fotter from "./components/Fotter";

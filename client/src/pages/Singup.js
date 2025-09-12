@@ -59,33 +59,47 @@ const Signup = () => {
         }
     };
 
-    // strict regex for email validation
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    const emailRegex = /^[a-zA-Z0-9]+@gmail\.com$/;
+
 
     const validateForm = () => {
         const newErrors = {};
 
         if (!formData.name.trim()) {
             newErrors.name = "Name is required";
-        } else if (formData.name.trim().length < 2 || formData.name.trim().length > 15) {
+        } else if (
+            formData.name.trim().length < 2 ||
+            formData.name.trim().length > 15
+        ) {
             newErrors.name = "Name must be between 2–15 characters";
         } else if (!/^[A-Za-z\s]+$/.test(formData.name.trim())) {
             newErrors.name = "Name can only contain letters and spaces";
         }
 
+        // Email validation
         if (!formData.email.trim()) {
             newErrors.email = "Email is required";
         } else if (!emailRegex.test(formData.email.trim())) {
-            newErrors.email = "Invalid email format (e.g. name@example.com)";
+            const email = formData.email.trim();
+            const atIdx = email.lastIndexOf('@');
+            if (atIdx === -1 || email.slice(atIdx) !== '@gmail.com') {
+                newErrors.email = "Only @gmail.com domain is allowed.";
+            } else if (!/^[a-zA-Z0-9]+$/.test(email.slice(0, atIdx))) {
+                newErrors.email = "Only English letters (a-z, A-Z) and numbers (0-9) allowed before @. No symbols or emojis.";
+            } else {
+                newErrors.email = "Invalid Gmail address.";
+            }
         }
 
+        //Indian phone number validation
         if (!formData.number.trim()) {
             newErrors.number = "Phone number is required";
-        } else if (!/^\d{10}$/.test(formData.number.trim())) {
-            newErrors.number = "Phone number must be exactly 10 digits";
+        } else if (!/^[6-9]\d{9}$/.test(formData.number.trim())) {
+            newErrors.number = "Only valid Indian mobile numbers allowed (10 digits, starts with 6-9)";
         }
 
-        // ✅ Password step by step validation
+        // Password validation
         if (!formData.password) {
             newErrors.password = "Password is required";
         } else if (formData.password.length < 8) {
@@ -93,15 +107,19 @@ const Signup = () => {
         } else if (!/^[A-Z]/.test(formData.password)) {
             newErrors.password = "Password must start with a capital letter";
         } else if (!/[a-z]/.test(formData.password)) {
-            newErrors.password = "Password must include at least one lowercase letter";
+            newErrors.password =
+                "Password must include at least one lowercase letter";
         } else if (!/[A-Z]/.test(formData.password)) {
-            newErrors.password = "Password must include at least one uppercase letter";
+            newErrors.password =
+                "Password must include at least one uppercase letter";
         } else if (!/\d/.test(formData.password)) {
             newErrors.password = "Password must include at least one number";
         } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(formData.password)) {
-            newErrors.password = "Password must include at least one special character";
+            newErrors.password =
+                "Password must include at least one special character";
         }
 
+        // Confirm Password validation
         if (!formData.confirmPassword) {
             newErrors.confirmPassword = "Please confirm your password";
         } else if (formData.password !== formData.confirmPassword) {
@@ -111,7 +129,6 @@ const Signup = () => {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -128,16 +145,12 @@ const Signup = () => {
                 number: formData.number.trim(),
                 password: formData.password,
             });
-
-            showNotification("Account created successfully! Please login.", "success");
-            setTimeout(() => {
-                navigate("/login", {
-                    state: {
-                        message: "Account created! Please login to continue.",
-                        email: response.email,
-                    },
-                });
-            }, 1200);
+            navigate("/login", {
+                state: {
+                    message: "Account created! Please login to continue.",
+                    email: response.email,
+                },
+            });
         } catch (error) {
             showNotification(
                 error.response?.data?.message || "Failed to create account",
@@ -267,6 +280,20 @@ const Signup = () => {
                                             <Form.Label className="fw-semibold">
                                                 <FaLock className="me-2" /> Password
                                             </Form.Label>
+                                            <div
+                                                className="mb-2"
+                                                style={{ color: errors.password ? "#d9534f" : "#555", fontWeight: 500 }}
+                                            >
+                                                Password must start with a capital letter.
+                                            </div>
+                                            {errors.password && (
+                                                <div
+                                                    className="mb-2"
+                                                    style={{ color: "#d9534f", fontWeight: 500 }}
+                                                >
+                                                    Please enter a strong password (at least 8 characters, one capital letter, one small letter, one number, and one special character required)
+                                                </div>
+                                            )}
                                             <div className="position-relative">
                                                 <Form.Control
                                                     type={showPassword ? "text" : "password"}
@@ -318,7 +345,13 @@ const Signup = () => {
                                                 </Button>
                                             </div>
                                             <Form.Control.Feedback type="invalid">
-                                                {errors.confirmPassword}
+                                                {errors.confirmPassword && (
+                                                    errors.confirmPassword === "Passwords do not match"
+                                                        ? <span style={{ color: '#d9534f', fontWeight: 500 }}>
+                                                            Passwords do not match, please enter both passwords the same
+                                                        </span>
+                                                        : errors.confirmPassword
+                                                )}
                                             </Form.Control.Feedback>
                                         </Form.Group>
 
