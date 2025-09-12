@@ -145,6 +145,8 @@ const Dashboard = () => {
                 newPrice: "",
                 category: "general",
                 stock: "",
+                weight: "",
+                weightUnit: "kg",
             });
             setEditingProduct(null);
             setShowModal(false);
@@ -159,13 +161,15 @@ const Dashboard = () => {
     const handleEdit = (product) => {
         setEditingProduct(product);
         setFormData({
-            name: product.name,
-            description: product.description,
-            image: product.image,
-            oldPrice: product.oldPrice,
-            newPrice: product.newPrice,
-            category: product.category,
-            stock: product.stock,
+            name: product.name || "",
+            description: product.description || "",
+            image: product.image || "",
+            oldPrice: product.oldPrice || "",
+            newPrice: product.newPrice || "",
+            category: product.category || "general",
+            stock: product.stock || "",
+            weight: product.weight !== undefined ? product.weight : "",
+            weightUnit: product.weightUnit || "kg",
         });
         setShowModal(true);
     };
@@ -202,6 +206,8 @@ const Dashboard = () => {
             newPrice: "",
             category: "general",
             stock: "",
+            weight: "",
+            weightUnit: "kg",
         });
         setShowModal(true);
         setError("");
