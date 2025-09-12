@@ -49,6 +49,9 @@ const ForgotPassword = () => {
                                 >
                                     <h3 className="fw-bold">Forgot Password</h3>
                                     <p className="text-muted">Enter your email to reset your password.</p>
+                                    <p className="text-info" style={{ fontSize: '0.95rem' }}>
+                                        <strong>Note:</strong> After receiving the reset link on your Gmail, please click the link in the <b>same tab</b> where you requested the reset. Do not open it in a new tab or window.
+                                    </p>
                                 </motion.div>
 
                                 {error && <Alert variant="danger">{error}</Alert>}

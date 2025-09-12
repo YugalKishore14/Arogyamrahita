@@ -85,15 +85,21 @@ const Signup = () => {
             newErrors.number = "Phone number must be exactly 10 digits";
         }
 
+        // ✅ Password step by step validation
         if (!formData.password) {
             newErrors.password = "Password is required";
-        } else if (
-            !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(
-                formData.password
-            )
-        ) {
-            newErrors.password =
-                "Password must be at least 8 chars with uppercase, lowercase, number, and special character";
+        } else if (formData.password.length < 8) {
+            newErrors.password = "Password must be at least 8 characters long";
+        } else if (!/^[A-Z]/.test(formData.password)) {
+            newErrors.password = "Password must start with a capital letter";
+        } else if (!/[a-z]/.test(formData.password)) {
+            newErrors.password = "Password must include at least one lowercase letter";
+        } else if (!/[A-Z]/.test(formData.password)) {
+            newErrors.password = "Password must include at least one uppercase letter";
+        } else if (!/\d/.test(formData.password)) {
+            newErrors.password = "Password must include at least one number";
+        } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(formData.password)) {
+            newErrors.password = "Password must include at least one special character";
         }
 
         if (!formData.confirmPassword) {
@@ -105,6 +111,7 @@ const Signup = () => {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
