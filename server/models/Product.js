@@ -35,6 +35,15 @@ const productSchema = new mongoose.Schema(
             type: Number,
             default: 0,
         },
+        weight: {
+            type: Number,
+            required: true,
+        },
+        weightUnit: {
+            type: String,
+            enum: ["kg", "gm", "mg", "lb", "oz"],
+            required: true,
+        },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",

@@ -24,6 +24,8 @@ const Dashboard = () => {
         newPrice: "",
         category: "general",
         stock: "",
+        weight: "",
+        weightUnit: "kg",
     });
     const [users, setUsers] = useState([]);
     const [orders, setOrders] = useState([]);
@@ -506,6 +508,35 @@ const Dashboard = () => {
                                 </select>
                             </div>
 
+
+                            <div className={styles.formGroup}>
+                                <label>Weight:</label>
+                                <input
+                                    type="number"
+                                    name="weight"
+                                    value={formData.weight}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter weight"
+                                    min="0"
+                                    step="0.01"
+                                    required
+                                />
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label>Weight Unit:</label>
+                                <select
+                                    name="weightUnit"
+                                    value={formData.weightUnit}
+                                    onChange={handleInputChange}
+                                    required
+                                >
+                                    <option value="kg">kg</option>
+                                    <option value="gm">gm</option>
+                                    <option value="mg">mg</option>
+                                    <option value="lb">lb</option>
+                                    <option value="oz">oz</option>
+                                </select>
+                            </div>
                             <div className={styles.formGroup}>
                                 <label>Stock:</label>
                                 <input

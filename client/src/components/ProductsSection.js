@@ -163,6 +163,11 @@ export default function FeaturedProductsSection() {
                 )}
                 <span className={styles.currentPrice}>₹{product.newPrice}</span>
               </div>
+              <div className={styles.productWeightInfo}>
+                <span>
+                  {product.weight} {product.weightUnit}
+                </span>
+              </div>
               <p>{product.description}</p>
               <div className={styles.productActions}>
                 <motion.button

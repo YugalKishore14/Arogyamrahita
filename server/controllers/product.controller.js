@@ -4,7 +4,7 @@ const imageService = require("../services/image.service");
 // Create a new product
 exports.createProduct = async (req, res) => {
     try {
-        const { name, description, image, oldPrice, newPrice, category, stock } = req.body;
+        const { name, description, image, oldPrice, newPrice, category, stock, weight, weightUnit } = req.body;
 
         // Use Cloudinary URL directly (already complete URL)
         let imageUrl = image;
@@ -17,6 +17,8 @@ exports.createProduct = async (req, res) => {
             newPrice,
             category,
             stock,
+            weight,
+            weightUnit,
             createdBy: req.user.id
         });
 
