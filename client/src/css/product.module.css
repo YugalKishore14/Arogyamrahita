@@ -70,8 +70,9 @@
 }
 
 .productPrices {
+  width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   gap: 15px;
   margin-bottom: 12px;
@@ -87,6 +88,12 @@
   text-decoration: line-through;
   color: #888;
   font-size: 15px;
+}
+
+.productWeightInfo {
+  margin-left: 25%;
+  font-size: 14px;
+  color: #535353;
 }
 
 .productDescription {
