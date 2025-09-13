@@ -85,6 +85,7 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showAll, setShowAll] = useState(false);
 
   const { addToCart } = useCart();
   const { isAuthenticated } = useAuth();
@@ -185,6 +186,9 @@ function Products() {
     );
   }
 
+  const PRODUCTS_TO_SHOW = 12;
+  const visibleProducts = showAll ? products : products.slice(0, PRODUCTS_TO_SHOW);
+
   return (
     <section className={styles.productsSection}>
       <motion.h2
@@ -197,7 +201,7 @@ function Products() {
       </motion.h2>
 
       <div className={styles.producterGrid}>
-        {products.map((product, index) => (
+        {visibleProducts.map((product, index) => (
           <ProductCard
             key={product._id}
             product={product}
@@ -207,6 +211,15 @@ function Products() {
           />
         ))}
       </div>
+      {!showAll && products.length > PRODUCTS_TO_SHOW && (
+        <button
+          className={styles.showAllBtn}
+          onClick={() => setShowAll(true)}
+          style={{ margin: '2rem auto', display: 'block' }}
+        >
+          Show All Products
+        </button>
+      )}
     </section>
   );
 }

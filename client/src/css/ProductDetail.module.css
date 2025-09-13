@@ -18,6 +18,7 @@
 }
 
 .mainImage {
+    height: 55vh;
     width: 80%;
     border-radius: 12px;
     overflow: hidden;
@@ -26,7 +27,7 @@
 
 .mainImage img {
     width: 100%;
-    height: auto;
+    height: 55vh;
     display: block;
     transition: transform 0.3s ease;
 }
