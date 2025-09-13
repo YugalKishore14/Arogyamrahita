@@ -34,8 +34,10 @@ const ProductPage = () => {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const category = params.get("category") || "";
+        let category = params.get("category") || "";
+        if (category) category = category.trim();
         setSelectedCategory(category);
+        console.log("[ProductPage] URL category param:", category);
     }, [location.search]);
 
     useEffect(() => {
@@ -44,8 +46,11 @@ const ProductPage = () => {
                 setLoading(true);
                 setError("");
                 const params = new URLSearchParams(location.search);
-                const categoryParam = params.get("category");
+                let categoryParam = params.get("category");
                 const searchParam = params.get("search");
+
+                if (categoryParam) categoryParam = categoryParam.trim();
+                console.log("[ProductPage] Fetching products for category:", categoryParam);
 
                 let url = "https://arogyamrahita.onrender.com/api/products";
                 const queryParts = [];
@@ -61,11 +66,13 @@ const ProductPage = () => {
                 if (response.ok) {
                     const data = await response.json();
                     setProducts(data.products || []);
+                    console.log("[ProductPage] Products fetched:", data.products);
                 } else {
                     throw new Error("Failed to fetch products");
                 }
             } catch (err) {
                 setError("Error loading products: " + err.message);
+                console.error("[ProductPage] Error fetching products:", err);
             } finally {
                 setLoading(false);
             }
@@ -82,8 +89,10 @@ const ProductPage = () => {
 
         let filtered = products.filter((product) => {
             const priceMatch = product.newPrice <= priceValue;
+            // Make category comparison case-insensitive and trimmed
             const categoryMatch =
-                !selectedCategory || product.category === selectedCategory;
+                !selectedCategory ||
+                (product.category && product.category.trim().toLowerCase() === selectedCategory.trim().toLowerCase());
             const nameMatches =
                 !searchParam || product.name?.toLowerCase().includes(searchParam);
             const categoryMatchesSearch =
@@ -105,6 +114,7 @@ const ProductPage = () => {
                 break;
         }
 
+        console.log("[ProductPage] Filtered products:", filtered);
         return filtered;
     }, [products, priceValue, selectedCategory, sortBy, location.search]);
 
