@@ -154,7 +154,10 @@ const ProductDetail = () => {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className={styles.productName}>{product.name}</h1>
+            <h1 className={styles.productName}>
+              {product.name}{" "}
+
+            </h1>
 
             <motion.div
               className={styles.productCategory}
@@ -162,7 +165,9 @@ const ProductDetail = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <span>Category: {product.category}</span>
+              <span className={styles.productWeight}>
+                weight {product.weight} {product.weightUnit}
+              </span>
             </motion.div>
 
             <div className={styles.productPrices}>
@@ -193,14 +198,14 @@ const ProductDetail = () => {
               <p>{product.description}</p>
             </motion.div>
 
-            <div className={styles.stockInfo}>
+            {/* <div className={styles.stockInfo}>
               <span>
                 Stock:{" "}
                 {product.stock > 0
                   ? `${product.stock} available`
                   : "Out of stock"}
               </span>
-            </div>
+            </div> */}
 
             {/* Quantity */}
             <motion.div

@@ -7,7 +7,6 @@ import { productAPI } from "../services/Api";
 import { GrCart } from "react-icons/gr";
 import { FaAnglesRight, FaAnglesLeft } from "react-icons/fa6";
 
-
 export default function FeaturedProductsSection() {
   const scrollContainerRef = useRef(null);
   const navigate = useNavigate();
@@ -110,7 +109,10 @@ export default function FeaturedProductsSection() {
       >
         <h2 className={styles.sectionTitle}>Featured Products</h2>
         <div className={styles.navigationButtons}>
-          <button onClick={() => scroll("left")} className={styles.scrollButton}>
+          <button
+            onClick={() => scroll("left")}
+            className={styles.scrollButton}
+          >
             <FaAnglesLeft />
           </button>
           <button
@@ -156,19 +158,29 @@ export default function FeaturedProductsSection() {
               )}
             </div>
             <div className={styles.productContent}>
-              <h3 className={styles.productName}>{product.name}</h3>
+              <h3 className={styles.productName}>
+                {product.name}{" "}
+                <span style={{ fontSize: "1rem", color: "#1f1f1fff" }}>
+                  {product.weight} {product.weightUnit}
+                </span>
+              </h3>
               <div className={styles.productPriceInfo}>
                 {product.oldPrice && product.oldPrice > product.newPrice && (
                   <span className={styles.oldPrice}>₹{product.oldPrice}</span>
                 )}
                 <span className={styles.currentPrice}>₹{product.newPrice}</span>
               </div>
-              <div className={styles.productWeightInfo}>
+              {/* <div className={styles.productWeightInfo}>
                 <span>
                   {product.weight} {product.weightUnit}
                 </span>
-              </div>
-              <p>{product.description}</p>
+              </div> */}
+              <p>
+                {product.description
+                  ? product.description.split(" ").slice(0, 20).join(" ") +
+                  (product.description.split(" ").length > 20 ? "..." : "")
+                  : ""}
+              </p>
               <div className={styles.productActions}>
                 <motion.button
                   className={styles.buyButton}

@@ -36,25 +36,29 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
       />
 
       <div className={styles.productInfo}>
-        <h3 className={styles.productName}>{product.name}</h3>
+        <h3 className={styles.productName}>
+          {product.name} {product.weight} {product.weightUnit}
+        </h3>
         <div className={styles.productPrices}>
           <span className={styles.productPrice}>₹{product.newPrice}</span>
           {product.oldPrice && (
             <span className={styles.productOldPrice}>₹{product.oldPrice}</span>
           )}
-          <div className={styles.productWeightInfo}>
+          {/* <div className={styles.productWeightInfo}>
             <span>
               {product.weight} {product.weightUnit}
             </span>
-          </div>
+          </div> */}
         </div>
-        <p className={styles.productDescription}>{product.description}</p>
+        <p className={styles.productDescription}>
+          {product.description
+            ? product.description.split(" ").slice(0, 12).join(" ") +
+            (product.description.split(" ").length > 12 ? "..." : "")
+            : ""}
+        </p>
       </div>
 
-      <div
-        className={styles.buttonGroup}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className={styles.buttonGroup} onClick={(e) => e.stopPropagation()}>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
