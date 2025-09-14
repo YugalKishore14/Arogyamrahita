@@ -1,65 +1,4 @@
-@media (max-width: 768px) {
-  .mobileNav {
-    display: block;
-    position: absolute;
-    top: 80px;
-    left: 0;
-    width: 100vw;
-    background: #fff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    z-index: 9999;
-    border-radius: 0 0 16px 16px;
-    overflow: hidden;
-    padding: 0 0 16px 0;
-    animation: slideDown 0.3s;
-  }
-
-  .mobileNav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .mobileNav li {
-    border-bottom: 1px solid #eee;
-    width: 100%;
-  }
-
-  .mobileNav li:last-child {
-    border-bottom: none;
-  }
-
-  .mobileNav a {
-    display: block;
-    padding: 16px 20px;
-    color: #111;
-    font-size: 16px;
-    text-decoration: none;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  .mobileNav a:hover,
-  .mobileNav a.active {
-    background: #e6f7f0;
-    color: #00a86b;
-  }
-}
-
-@keyframes slideDown {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
+/* 🔹 Default / Desktop Styles (first) */
 .header {
   position: fixed;
   left: 0;
@@ -257,8 +196,24 @@
   display: none;
 }
 
+/* 🔹 Animations */
+@keyframes slideDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
 
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
+/* --------------------------------------------------- */
+/* 🔹 Media Queries (sab bottom pe rakhe) */
+/* --------------------------------------------------- */
+
+/* ✅ Tablet (max-width: 1024px) */
 @media (max-width: 1024px) {
   .container {
     padding: auto 15px;
@@ -280,7 +235,56 @@
   }
 }
 
+/* ✅ Mobile (max-width: 768px) */
 @media (max-width: 768px) {
+  .mobileNav {
+    display: block;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 9999;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+    padding: 0 0 16px 0;
+    animation: slideDown 0.3s;
+  }
+
+  .mobileNav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mobileNav li {
+    border-bottom: 1px solid #eee;
+    width: 100%;
+  }
+
+  .mobileNav li:last-child {
+    border-bottom: none;
+  }
+
+  .mobileNav a {
+    display: block;
+    padding: 16px 20px;
+    color: #111;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .mobileNav a:hover,
+  .mobileNav a.active {
+    background: #e6f7f0;
+    color: #00a86b;
+  }
+
   .container {
     padding: auto 12px;
     gap: 8px;
@@ -327,6 +331,7 @@
   }
 }
 
+/* ✅ Small Mobile (max-width: 480px) */
 @media (max-width: 480px) {
   .container {
     padding: auto 8px;
@@ -358,5 +363,14 @@
 
   .iconBox {
     font-size: 22px;
+  }
+
+  .adminBtn {
+    padding: 4px 8px;
+    font-size: 9px;
+  }
+
+  .signupBtn {
+    display: none;
   }
 }
