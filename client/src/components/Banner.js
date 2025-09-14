@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "../css/banner.module.css";
 
-// apni images import karo
 import lamp from "../images/benar1.jpg";
 import bottle from "../images/benar2.jpg";
 import logo from "../images/benar3.jpg";
@@ -12,7 +11,6 @@ const images = [lamp, bottle, logo];
 const Banner = () => {
   const [current, setCurrent] = useState(0);
 
-  // Auto-slide every 3 sec
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
