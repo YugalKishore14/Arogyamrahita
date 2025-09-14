@@ -8,45 +8,58 @@ import logo from "../images/benar3.jpg";
 
 const images = [lamp, bottle, logo];
 
+const variants = {
+  enter: (direction) => ({
+    x: direction > 0 ? 300 : -300,
+    opacity: 0,
+    position: "absolute",
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    position: "relative",
+    transition: { duration: 1, ease: "easeInOut" },
+  },
+  exit: (direction) => ({
+    x: direction > 0 ? -300 : 300,
+    opacity: 0,
+    position: "absolute",
+    transition: { duration: 1, ease: "easeInOut" },
+  }),
+};
+
 const Banner = () => {
-  const [current, setCurrent] = useState(0);
+  const [[current, direction], setCurrent] = useState([0, 0]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
-    }, 5000);
+      setCurrent(([prev]) => [(prev + 1) % images.length, 1]);
+    }, 6000); // total 6 sec (1 sec slide + 5 sec pause)
     return () => clearInterval(interval);
   }, []);
 
-  // Manual next/prev
-  // const nextSlide = () => setCurrent((prev) => (prev + 1) % images.length);
-  // const prevSlide = () =>
-  //   setCurrent((prev) => (prev - 1 + images.length) % images.length);
+  const goTo = (index) => {
+    const dir = index > current ? 1 : -1;
+    setCurrent([index, dir]);
+  };
 
   return (
     <div className={styles.sliderContainer}>
       <div className={styles.slider}>
-        <AnimatePresence mode="wait" className={styles.animatePresence}>
+        <AnimatePresence mode="sync" custom={direction}>
           <motion.img
             key={images[current]}
             src={images[current]}
             alt="banner"
             className={styles.slideImage}
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.6 }}
+            variants={variants}
+            custom={direction}
+            initial="enter"
+            animate="center"
+            exit="exit"
           />
         </AnimatePresence>
       </div>
-
-      {/* Controls */}
-      {/* <button className={styles.prevBtn} onClick={prevSlide}>
-        ◀
-      </button>
-      <button className={styles.nextBtn} onClick={nextSlide}>
-        ▶
-      </button> */}
 
       {/* Indicators */}
       <div className={styles.dots}>
@@ -55,7 +68,7 @@ const Banner = () => {
             key={index}
             className={`${styles.dot} ${index === current ? styles.activeDot : ""
               }`}
-            onClick={() => setCurrent(index)}
+            onClick={() => goTo(index)}
           />
         ))}
       </div>
