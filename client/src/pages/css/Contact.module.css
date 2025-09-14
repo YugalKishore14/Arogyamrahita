@@ -1,3 +1,10 @@
+.error {
+  color: #ff2222;
+  font-size: 0.92rem;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
 .page {
   background: #ffffff;
   padding: 2rem 1rem;
