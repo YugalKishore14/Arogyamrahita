@@ -18,7 +18,7 @@
   width: 100%;
   height: 100%;
   object-fit: fill;
-  border-radius: 30px;
+  border-radius: 20px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -61,4 +61,28 @@
 
 .activeDot {
   background: #16a34a;
+}
+
+@media screen and (max-width: 768px) {
+  .sliderContainer {
+    padding: 2%;
+    height: 300px;
+  }
+
+  .slideImage {
+    border-radius: 10px;
+  }
+
+  .dots {
+    bottom: 12px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .activeDot {
+    background: #16a34a;
+  }
 }
