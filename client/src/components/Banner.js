@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "../css/banner.module.css";
-
 import lamp from "../images/benar1.jpg";
 import bottle from "../images/benar2.jpg";
 import logo from "../images/benar3.jpg";
@@ -34,7 +33,7 @@ const Banner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent(([prev]) => [(prev + 1) % images.length, 1]);
-    }, 6000); // total 6 sec (1 sec slide + 5 sec pause)
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
