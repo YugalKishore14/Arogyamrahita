@@ -219,6 +219,7 @@ const Header = () => {
             )}
           </form>
 
+          {/* Desktop Nav: Only show on desktop */}
           <nav className={`${styles.nav} ${styles.desktopNav}`}>
             <ul className={styles.navList}>
               {["Home", "Products", "About", "Contact"].map((item, idx) => (
@@ -280,7 +281,6 @@ const Header = () => {
                     <span className={styles.cartCount}>{cartCount}</span>
                   )}
                 </div>
-                {/* <span className={styles.cartText}>Cart</span> */}
               </NavLink>
             </motion.div>
 
@@ -295,12 +295,17 @@ const Header = () => {
             </motion.div>
 
             {/* Hamburger - Mobile only */}
-            <div
+            <button
               className={styles.hamburger}
-              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-menu"
+              onClick={() => setMobileOpen((prev) => !prev)}
+              style={{ background: 'none', border: 'none', padding: 0 }}
+              type="button"
             >
               {mobileOpen ? <HiX size={28} /> : <HiMenu size={28} />}
-            </div>
+            </button>
           </div>
         </div>
 
@@ -308,6 +313,7 @@ const Header = () => {
         <AnimatePresence>
           {mobileOpen && (
             <motion.nav
+              id="mobile-menu"
               className={styles.mobileNav}
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}

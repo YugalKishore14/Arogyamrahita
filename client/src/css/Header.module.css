@@ -1,10 +1,71 @@
+@media (max-width: 768px) {
+  .mobileNav {
+    display: block;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 9999;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+    padding: 0 0 16px 0;
+    animation: slideDown 0.3s;
+  }
+
+  .mobileNav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mobileNav li {
+    border-bottom: 1px solid #eee;
+    width: 100%;
+  }
+
+  .mobileNav li:last-child {
+    border-bottom: none;
+  }
+
+  .mobileNav a {
+    display: block;
+    padding: 16px 20px;
+    color: #111;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .mobileNav a:hover,
+  .mobileNav a.active {
+    background: #e6f7f0;
+    color: #00a86b;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .header {
   position: fixed;
   left: 0;
   right: 0;
   width: 100%;
   height: 80px;
-  /* fixed height instead of 10vh */
   z-index: 1000;
   background: linear-gradient(135deg,
       rgba(255, 255, 255, 0.12),
@@ -28,15 +89,15 @@
 }
 
 .container {
-  min-width: 1280px;
-  /* force same layout */
-  margin: 0 auto;
-  padding: 20px 100px;
-  /* fixed spacing */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  flex-wrap: nowrap;
+  gap: 16px;
+  width: 100%;
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 17px 20px;
 }
 
 .logoImage {
@@ -47,8 +108,7 @@
 .navList {
   display: flex;
   list-style: none;
-  gap: 32px;
-  /* fixed */
+  gap: 28px;
   margin: 0;
   padding: 0;
 }
@@ -57,10 +117,9 @@
   color: #111;
   font-weight: 500;
   font-size: 15px;
-  /* fixed */
   text-decoration: none;
   display: inline-block;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.3s ease;
+  transition: transform 0.2s ease, color 0.3s ease;
   transform-origin: center;
 }
 
@@ -81,12 +140,12 @@
 .navIcons {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 16px;
 }
 
 .adminBtn,
 .signupBtn {
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 500;
@@ -106,12 +165,12 @@
 .cartBtn {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   position: relative;
   text-decoration: none;
   color: #111;
   font-weight: 500;
-  padding: 8px 16px;
+  padding: 6px 12px;
 }
 
 .iconWrapper {
@@ -120,8 +179,7 @@
 }
 
 .cartIcon {
-  font-size: 26px;
-  /* fixed */
+  font-size: 24px;
 }
 
 .cartCount {
@@ -141,9 +199,9 @@
 
 .searchBar {
   position: relative;
-  flex: 0 0 350px;
-  /* fixed width */
+  flex: 1;
   max-width: 350px;
+  min-width: 120px;
 }
 
 .searchBar input {
@@ -178,7 +236,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 28px;
+  font-size: 26px;
   background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(6px);
   color: #111;
@@ -195,8 +253,110 @@
   display: block;
 }
 
-.hamburger,
-.mobileNav {
+.hamburger {
   display: none;
-  /* hide mobile nav permanently */
+}
+
+
+
+@media (max-width: 1024px) {
+  .container {
+    padding: auto 15px;
+    gap: 12px;
+  }
+
+  .navList {
+    gap: 18px;
+  }
+
+  .searchBar {
+    max-width: 220px;
+  }
+
+  .adminBtn,
+  .signupBtn {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: auto 12px;
+    gap: 8px;
+  }
+
+  .logoImage {
+    width: 45px;
+  }
+
+  .searchBar {
+    max-width: 160px;
+  }
+
+  .navList {
+    display: none;
+  }
+
+  .desktopNav {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+    font-size: 26px;
+    color: #111;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+  }
+
+  .navIcons {
+    gap: 8px;
+  }
+
+  .adminBtn,
+  .signupBtn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .cartBtn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: auto 8px;
+    gap: 6px;
+  }
+
+  .logoImage {
+    width: 40px;
+  }
+
+  .searchBar {
+    height: 35px;
+    max-width: 120px;
+  }
+
+  .searchIcon {
+    font-size: 16px;
+    left: 10px;
+  }
+
+  .searchBar input::placeholder {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .cartIcon {
+    font-size: 20px;
+  }
+
+  .iconBox {
+    font-size: 22px;
+  }
 }
