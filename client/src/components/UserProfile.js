@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import styles from '../css/UserProfile.module.css';
 import { IoClose, IoPerson, IoMail, IoCall, IoLocation } from 'react-icons/io5';
 import { userAPI } from '../services/Api';
+import OrderHistory from './OrderHistory';
 
 const UserProfile = ({ isOpen, onClose }) => {
     const { user, logout } = useAuth();
@@ -199,6 +200,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                         </div>
                     )}
                 </div>
+                <OrderHistory />
             </div>
         </div>
     );

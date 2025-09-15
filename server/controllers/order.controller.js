@@ -2,6 +2,7 @@ const Order = require("../models/Order");
 const User = require("../models/User");
 const { sendEmail } = require("../services/email.service");
 const { sendSMS } = require("../services/sms.service");
+const Product = require("../models/Product");
 
 // Create new order
 exports.createOrder = async (req, res) => {
@@ -12,15 +13,46 @@ exports.createOrder = async (req, res) => {
             return res.status(400).json({ message: "Items are required" });
         }
 
+        // Fetch product names for each item
+        const itemsWithNames = await Promise.all(items.map(async (item) => {
+            const product = await Product.findById(item.product);
+            if (!product) throw new Error(`Product not found: ${item.product}`);
+            return {
+                ...item,
+                name: product.name,
+                price: item.price || product.newPrice,
+                image: item.image || product.image,
+            };
+        }));
+
         const order = await Order.create({
             user: userId,
-            items,
+            items: itemsWithNames,
             totalAmount,
             shippingAddress,
             paymentInfo,
             status: "PLACED",
         });
 
+        // Send order confirmation email to user
+        try {
+            const user = await User.findById(userId);
+            if (user && user.email) {
+                const productList = itemsWithNames.map(item => `<li>${item.name} x ${item.quantity}</li>`).join("");
+                const emailHtml = `
+                    <p>Dear ${user.name || "Customer"},</p>
+                    <p>Thank you for your order #${order._id}.</p>
+                    <p><b>Order Details:</b></p>
+                    <ul>${productList}</ul>
+                    <p>Total Amount: ₹${order.totalAmount}</p>
+                    <p>We will notify you when your order is ready for delivery.</p>
+                    <p>— Arogya Rahita</p>
+                `;
+                await sendEmail(user.email, "Order Confirmation", emailHtml);
+            }
+        } catch (e) {
+            console.warn("Order confirmation email failed:", e.message || e);
+        }
         res.status(201).json({ message: "Order placed", order });
     } catch (error) {
         console.error("Create Order Error:", error);
