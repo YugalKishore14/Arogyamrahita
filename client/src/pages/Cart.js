@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PaymentModal from '../components/PaymentModal';
+import { ordersAPI } from '../services/Api';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -26,6 +28,7 @@ const Cart = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [updating, setUpdating] = useState({});
+  const [showPayment, setShowPayment] = useState(false);
 
   const handleQuantityChange = async (productId, newQuantity) => {
     if (newQuantity < 1) return;
@@ -66,7 +69,7 @@ const Cart = () => {
       navigate('/login');
       return;
     }
-    toast.info('Checkout functionality coming soon!');
+    setShowPayment(true);
   };
 
   if (loading) {
@@ -104,154 +107,194 @@ const Cart = () => {
     );
   }
 
+  // Place order handler for PaymentModal
+  const handlePlaceOrder = async (address, onSuccess, onError) => {
+    try {
+      const orderData = {
+        items: cartItems.map(item => ({
+          product: item._id,
+          name: item.name,
+          price: item.newPrice,
+          quantity: item.quantity,
+          image: item.image || '',
+        })),
+        totalAmount: getCartTotal(),
+        shippingAddress: {
+          address: address.address,
+          city: address.city,
+          state: address.state || '',
+          pincode: address.pincode,
+          phone: address.phone,
+        },
+        paymentInfo: {
+          method: 'cod',
+        },
+      };
+      await ordersAPI.create(orderData);
+      await clearCart();
+      onSuccess && onSuccess();
+    } catch (err) {
+      onError && onError(err);
+    }
+  };
+
   return (
-    <motion.div
-      className={styles.cartContainer}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      {/* Header */}
-      <div className={styles.cartHeader}>
-        <motion.button
-          className={styles.backButton}
-          onClick={() => navigate(-1)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <FaArrowLeft /> Back
-        </motion.button>
-        <h1>Shopping Cart ({cartCount} items)</h1>
-        <motion.button
-          className={styles.clearCartButton}
-          onClick={handleClearCart}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Clear Cart
-        </motion.button>
-      </div>
-
-      {/* Cart Items */}
-      <div className={styles.cartContent}>
-        <div className={styles.cartItems}>
-          <AnimatePresence>
-            {cartItems.map((item) => (
-              <motion.div
-                key={item._id}
-                className={styles.cartItem}
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 30 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className={styles.itemImage}>
-                  <img src={item.image} alt={item.name} />
-                </div>
-
-                <div className={styles.itemDetails}>
-                  <h3>{item.name}</h3>
-                  <p className={styles.itemCategory}>{item.category}</p>
-                  <div className={styles.itemPrice}>
-                    <span className={styles.currentPrice}>
-                      ₹{item.newPrice}
-                    </span>
-                    {item.oldPrice && item.oldPrice > item.newPrice && (
-                      <span className={styles.oldPrice}>₹{item.oldPrice}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Quantity Controls */}
-                <div className={styles.itemQuantity}>
-                  <motion.button
-                    onClick={() =>
-                      handleQuantityChange(item._id, item.quantity - 1)
-                    }
-                    disabled={updating[item._id]}
-                    className={styles.quantityBtn}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FaMinus />
-                  </motion.button>
-                  <span className={styles.quantity}>{item.quantity}</span>
-                  <motion.button
-                    onClick={() =>
-                      handleQuantityChange(item._id, item.quantity + 1)
-                    }
-                    disabled={updating[item._id]}
-                    className={styles.quantityBtn}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FaPlus />
-                  </motion.button>
-                </div>
-
-                {/* Total Price */}
-                <div className={styles.itemTotal}>
-                  <span>₹{item.newPrice * item.quantity}</span>
-                </div>
-
-                {/* Remove Item */}
-                <motion.button
-                  onClick={() => handleRemoveItem(item._id)}
-                  className={styles.removeButton}
-                  title="Remove item"
-                  whileHover={{ rotate: 15, scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <FaTrash />
-                </motion.button>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+    <>
+      <PaymentModal
+        isOpen={showPayment}
+        onClose={() => setShowPayment(false)}
+        onPlaceOrder={handlePlaceOrder}
+        cartItems={cartItems}
+        total={getCartTotal()}
+      />
+      <motion.div
+        className={styles.cartContainer}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className={styles.cartHeader}>
+          <motion.button
+            className={styles.backButton}
+            onClick={() => navigate(-1)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaArrowLeft /> Back
+          </motion.button>
+          <h1>Shopping Cart ({cartCount} items)</h1>
+          <motion.button
+            className={styles.clearCartButton}
+            onClick={handleClearCart}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Clear Cart
+          </motion.button>
         </div>
 
-        {/* Cart Summary */}
-        <motion.div
-          className={styles.cartSummary}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <h3>Order Summary</h3>
-          <div className={styles.summaryRow}>
-            <span>Subtotal ({cartCount} items):</span>
-            <span>₹{getCartTotal()}</span>
-          </div>
-          <div className={styles.summaryRow}>
-            <span>Shipping:</span>
-            <span>Free</span>
-          </div>
-          {/* Tax removed */}
-          <hr />
-          <div className={styles.summaryRow}>
-            <strong>Total:</strong>
-            <strong>
-              ₹{getCartTotal()}
-            </strong>
+        {/* Cart Items */}
+        <div className={styles.cartContent}>
+          <div className={styles.cartItems}>
+            <AnimatePresence>
+              {cartItems.map((item) => (
+                <motion.div
+                  key={item._id}
+                  className={styles.cartItem}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 30 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className={styles.itemImage}>
+                    <img src={item.image} alt={item.name} />
+                  </div>
+
+                  <div className={styles.itemDetails}>
+                    <h3>{item.name}</h3>
+                    <p className={styles.itemCategory}>{item.category}</p>
+                    <div className={styles.itemPrice}>
+                      <span className={styles.currentPrice}>
+                        ₹{item.newPrice}
+                      </span>
+                      {item.oldPrice && item.oldPrice > item.newPrice && (
+                        <span className={styles.oldPrice}>₹{item.oldPrice}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Quantity Controls */}
+                  <div className={styles.itemQuantity}>
+                    <motion.button
+                      onClick={() =>
+                        handleQuantityChange(item._id, item.quantity - 1)
+                      }
+                      disabled={updating[item._id]}
+                      className={styles.quantityBtn}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <FaMinus />
+                    </motion.button>
+                    <span className={styles.quantity}>{item.quantity}</span>
+                    <motion.button
+                      onClick={() =>
+                        handleQuantityChange(item._id, item.quantity + 1)
+                      }
+                      disabled={updating[item._id]}
+                      className={styles.quantityBtn}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <FaPlus />
+                    </motion.button>
+                  </div>
+
+                  {/* Total Price */}
+                  <div className={styles.itemTotal}>
+                    <span>₹{item.newPrice * item.quantity}</span>
+                  </div>
+
+                  {/* Remove Item */}
+                  <motion.button
+                    onClick={() => handleRemoveItem(item._id)}
+                    className={styles.removeButton}
+                    title="Remove item"
+                    whileHover={{ rotate: 15, scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <FaTrash />
+                  </motion.button>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
 
-          <motion.button
-            className={styles.checkoutButton}
-            onClick={handleCheckout}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          {/* Cart Summary */}
+          <motion.div
+            className={styles.cartSummary}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
           >
-            Proceed to Checkout
-          </motion.button>
+            <h3>Order Summary</h3>
+            <div className={styles.summaryRow}>
+              <span>Subtotal ({cartCount} items):</span>
+              <span>₹{getCartTotal()}</span>
+            </div>
+            <div className={styles.summaryRow}>
+              <span>Shipping:</span>
+              <span>Free</span>
+            </div>
+            {/* Tax removed */}
+            <hr />
+            <div className={styles.summaryRow}>
+              <strong>Total:</strong>
+              <strong>
+                ₹{getCartTotal()}
+              </strong>
+            </div>
 
-          <motion.button
-            className={styles.continueShopping}
-            onClick={() => navigate('/')}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Continue Shopping
-          </motion.button>
-        </motion.div>
-      </div>
-    </motion.div>
+            <motion.button
+              className={styles.checkoutButton}
+              onClick={handleCheckout}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Proceed to Checkout
+            </motion.button>
+
+            <motion.button
+              className={styles.continueShopping}
+              onClick={() => navigate('/')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Continue Shopping
+            </motion.button>
+          </motion.div>
+        </div>
+      </motion.div>
+    </>
   );
 };
 
