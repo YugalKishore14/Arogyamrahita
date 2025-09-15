@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 // app.use(cors());
 app.use(cors({
-    origin: ["https://arogyamrahita.vercel.app/"],
+    origin: ["https://arogyamrahita.vercel.app"],
     credentials: true,
 }));
 // app.use(cors({
