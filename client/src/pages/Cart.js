@@ -223,15 +223,12 @@ const Cart = () => {
             <span>Shipping:</span>
             <span>Free</span>
           </div>
-          <div className={styles.summaryRow}>
-            <span>Tax:</span>
-            <span>₹{Math.round(getCartTotal() * 0.18)}</span>
-          </div>
+          {/* Tax removed */}
           <hr />
           <div className={styles.summaryRow}>
             <strong>Total:</strong>
             <strong>
-              ₹{getCartTotal() + Math.round(getCartTotal() * 0.18)}
+              ₹{getCartTotal()}
             </strong>
           </div>
 
