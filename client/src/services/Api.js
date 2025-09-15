@@ -148,9 +148,14 @@ export const productAPI = {
     },
 };
 
+
 export const userAPI = {
     updateProfile: async (profileData) => {
         const response = await api.put('/auth/profile', profileData);
+        return response.data;
+    },
+    getMyOrders: async () => {
+        const response = await api.get('/orders/my');
         return response.data;
     },
 };

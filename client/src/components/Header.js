@@ -8,7 +8,7 @@ import { GiShoppingCart } from "react-icons/gi";
 import { IoSearch } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 import { HiMenu, HiX } from "react-icons/hi";
-import UserProfile from "./UserProfile";
+// import UserProfile from "./UserProfile";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { productAPI, categoryAPI } from "../services/Api";
 
@@ -32,7 +32,7 @@ const Header = () => {
 
   const handleAccountClick = () => {
     if (user) {
-      setShowUserProfile(true);
+      navigate("/profile");
     } else {
       window.location.href = "/login";
     }
@@ -338,10 +338,7 @@ const Header = () => {
         </AnimatePresence>
       </motion.header>
 
-      <UserProfile
-        isOpen={showUserProfile}
-        onClose={() => setShowUserProfile(false)}
-      />
+      {/* UserProfile popup removed. Now navigates to /profile */}
     </div>
   );
 };

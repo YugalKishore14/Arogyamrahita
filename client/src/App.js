@@ -26,8 +26,10 @@ import Services from "./pages/Services";
 import TermCondition from "./pages/TermCondition";
 import Faq from "./pages/Faq";
 import ReturnRefund from "./pages/ReturnRefund";
+
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import UserProfilePage from "./pages/UserProfilePage";
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -93,8 +95,14 @@ function App() {
               <Route path="/products" element={<ProductPage />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
+
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/profile" element={
+                <PrivateRoute>
+                  <UserProfilePage />
+                </PrivateRoute>
+              } />
               <Route path="*" element={<Navigate to="/" replace />} />
               <Route path="/privacy" element={<Services />} />
               <Route path="/termCondition" element={<TermCondition />} />
