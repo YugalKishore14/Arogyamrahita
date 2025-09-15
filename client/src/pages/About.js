@@ -1,5 +1,9 @@
-import React from "react";
 import styles from "../css/About.module.css";
+import WhoWeAreImage from "../images/Who_We_Are_Icon_simple_compose.png";
+import OurProductsImage from "../images/Our_Product_Range_Icon_simple_compose.png";
+import OurMissionImage from "../images/Our_Promises_Icon_simple_compose.png";
+import CustomerSatisfactionImage from "../images/Customer_Satisfaction_simple_compose.png";
+import WhyChooseUsImage from "../images/Why_Choose_Aarogyam_simple_compose.png";
 
 const About = () => {
     const aboutData = [
@@ -8,7 +12,7 @@ const About = () => {
             text: `Welcome to Arogyam Rahita, a brand dedicated to providing authentic and natural organic products that enrich your life with purity, taste, and health. 
       We specialize in traditional Indian food products made with care, love, and the wisdom of Ayurveda and Indian culture. 
       Our vision is to reconnect people with the power of nature and promote healthy, chemical-free living.`,
-            image: "https://knnindia.co.in/uploads/newsfiles/AGRi-FOOD-21-6-20241.jpg",
+            image: WhoWeAreImage,
         },
         {
             title: "🥗 Our Product Range",
@@ -18,7 +22,7 @@ const About = () => {
                 "Pulses & Grains (Dal & Anaj) → Nutritious, farm-fresh pulses and grains that promote a healthy diet.",
                 "Health Foods & Other Products → Naturally prepared items that support wellness and immunity.",
             ],
-            image: "https://knnindia.co.in/uploads/newsfiles/AGRi-FOOD-21-6-20241.jpg",
+            image: OurProductsImage,
         },
         {
             title: "🤝 Our Promise",
@@ -28,7 +32,7 @@ const About = () => {
                 "Ensuring hygienic processing and safe packaging.",
                 "Providing products that are rich in taste, nutrition, and authenticity.",
             ],
-            image: "https://knnindia.co.in/uploads/newsfiles/AGRi-FOOD-21-6-20241.jpg",
+            image: OurMissionImage,
         },
         {
             title: "🌎 Our Mission & Vision",
@@ -50,7 +54,7 @@ const About = () => {
                 "Quality assurance for every order.",
                 "Friendly support for customer queries.",
             ],
-            image: "https://knnindia.co.in/uploads/newsfiles/AGRi-FOOD-21-6-20241.jpg",
+            image: CustomerSatisfactionImage,
         },
         {
             title: "✨ Why Choose Arogyam Rahita?",
@@ -60,7 +64,7 @@ const About = () => {
                 "Ethical sourcing and farmer empowerment.",
                 "Reliable service and customer-first approach.",
             ],
-            image: "https://knnindia.co.in/uploads/newsfiles/AGRi-FOOD-21-6-20241.jpg",
+            image: WhyChooseUsImage,
         },
     ];
 

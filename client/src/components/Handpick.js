@@ -3,34 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import styles from "../css/handpick.module.css";
 import { categoryAPI } from "../services/Api";
-import defaultImage from "../images/bottel.png";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
-const getDefaultImageForCategory = (categoryName) => {
-  const categoryImages = {
-    oils: defaultImage,
-    seeds: defaultImage,
-    aata: defaultImage,
-    pickle: defaultImage,
-    "dry fruits": defaultImage,
-    millets: defaultImage,
-    "sabut masala": defaultImage,
-    "crush masala": defaultImage,
-    rice: defaultImage,
-    tea: defaultImage,
-    "fast(varat)": defaultImage,
-    "self life": defaultImage,
-  };
-  return categoryImages[categoryName?.toLowerCase()] || defaultImage;
-};
+
 
 const CategoryCard = ({ title, imageUrl, onClick }) => {
-  const [imageSrc, setImageSrc] = useState(
-    imageUrl || getDefaultImageForCategory(title)
-  );
+  const [imageSrc, setImageSrc] = useState(imageUrl);
 
   const handleImageError = () => {
-    setImageSrc(getDefaultImageForCategory(title));
+    setImageSrc("");
   };
 
   return (
