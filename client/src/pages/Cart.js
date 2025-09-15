@@ -94,7 +94,7 @@ const Cart = () => {
         <p>Add some products to get started!</p>
         <motion.button
           className={styles.continueShopping}
-          onClick={() => navigate('/products')}
+          onClick={() => navigate('/')}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -246,7 +246,7 @@ const Cart = () => {
 
           <motion.button
             className={styles.continueShopping}
-            onClick={() => navigate('/products')}
+            onClick={() => navigate('/')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

@@ -64,10 +64,12 @@ export const CartProvider = ({ children }) => {
         }
     }, [isAuthenticated, loadCartFromDB, loadCartFromLocalStorage]);
 
+
+    // Always keep cartCount in sync with cartItems
     useEffect(() => {
+        setCartCount(cartItems.reduce((total, item) => total + item.quantity, 0));
         if (!isAuthenticated()) {
             localStorage.setItem('cart', JSON.stringify(cartItems));
-            setCartCount(cartItems.reduce((total, item) => total + item.quantity, 0));
         }
     }, [cartItems, isAuthenticated]);
 
