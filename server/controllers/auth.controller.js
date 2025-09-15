@@ -374,10 +374,6 @@ exports.getProfile = async (req, res) => {
                 email: user.email,
                 number: user.number,
                 phone: user.phone || user.number || "",
-                address: user.address || "",
-                city: user.city || "",
-                state: user.state || "",
-                pincode: user.pincode || "",
                 role: user.role,
                 lastLogin: user.lastLogin,
             },
@@ -390,7 +386,7 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     try {
-        const { name, phone, address, city, state, pincode } = req.body;
+        const { name, number } = req.body;
         const userId = req.user && req.user.id;
         if (!userId) return res.status(400).json({ message: "User not authenticated" });
 
@@ -399,12 +395,17 @@ exports.updateProfile = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
+        // Validation: name (letters, numbers, spaces), number (digits only)
+        const nameRegex = /^[A-Za-z0-9 ]+$/;
+        const numberRegex = /^[0-9]+$/;
+        if (!nameRegex.test(name)) {
+            return res.status(400).json({ message: "Name can only contain letters, numbers, and spaces. No emoji or symbols allowed." });
+        }
+        if (!numberRegex.test(number)) {
+            return res.status(400).json({ message: "Number can only contain digits. No emoji or symbols allowed." });
+        }
         user.name = name || user.name;
-        user.phone = phone || user.phone || user.number || "";
-        user.address = address || user.address;
-        user.city = city || user.city;
-        user.state = state || user.state;
-        user.pincode = pincode || user.pincode;
+        user.number = number || user.number;
 
         await user.save();
 
@@ -416,10 +417,6 @@ exports.updateProfile = async (req, res) => {
                 email: user.email,
                 number: user.number,
                 phone: user.phone || user.number || "",
-                address: user.address || "",
-                city: user.city || "",
-                state: user.state || "",
-                pincode: user.pincode || "",
                 role: user.role,
                 lastLogin: user.lastLogin,
             },

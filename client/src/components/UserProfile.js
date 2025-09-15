@@ -9,11 +9,7 @@ const UserProfile = ({ isOpen, onClose }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         name: user?.name || '',
-        phone: user?.phone || '',
-        address: user?.address || '',
-        city: user?.city || '',
-        state: user?.state || '',
-        pincode: user?.pincode || ''
+        number: user?.number || '',
     });
 
     useEffect(() => {
@@ -23,21 +19,13 @@ const UserProfile = ({ isOpen, onClose }) => {
                 const u = res.user || {};
                 setFormData({
                     name: u.name || '',
-                    phone: u.phone || '',
-                    address: u.address || '',
-                    city: u.city || '',
-                    state: u.state || '',
-                    pincode: u.pincode || ''
+                    number: u.number || '',
                 });
             } catch (e) {
                 if (user) {
                     setFormData({
                         name: user.name || '',
-                        phone: user.phone || '',
-                        address: user.address || '',
-                        city: user.city || '',
-                        state: user.state || '',
-                        pincode: user.pincode || ''
+                        number: user.number || '',
                     });
                 }
             }
@@ -57,9 +45,20 @@ const UserProfile = ({ isOpen, onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
         setMessage('');
 
+        const nameValid = /^[A-Za-z0-9 ]+$/.test(formData.name);
+        const numberValid = /^[0-9]+$/.test(formData.number);
+        if (!nameValid) {
+            setMessage('Name can only contain letters, numbers, and spaces. No emoji or symbols allowed.');
+            return;
+        }
+        if (!numberValid) {
+            setMessage('Number can only contain digits. No emoji or symbols allowed.');
+            return;
+        }
+
+        setLoading(true);
         try {
             const response = await userAPI.updateProfile(formData);
             setMessage('Profile updated successfully!');
@@ -119,53 +118,24 @@ const UserProfile = ({ isOpen, onClose }) => {
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label>Phone Number</label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                />
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label>Address</label>
-                                <textarea
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                    rows="3"
-                                />
-                            </div>
-
-                            <div className={styles.formRow}>
-                                <div className={styles.formGroup}>
-                                    <label>City</label>
-                                    <input
-                                        type="text"
-                                        name="city"
-                                        value={formData.city}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label>State</label>
-                                    <input
-                                        type="text"
-                                        name="state"
-                                        value={formData.state}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label>Pincode</label>
+                                <label>Number</label>
                                 <input
                                     type="text"
-                                    name="pincode"
-                                    value={formData.pincode}
+                                    name="number"
+                                    value={formData.number}
                                     onChange={handleChange}
+                                    required
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label>Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={user?.email || ''}
+                                    readOnly
+                                    disabled
                                 />
                             </div>
 
@@ -199,28 +169,16 @@ const UserProfile = ({ isOpen, onClose }) => {
                             <div className={styles.infoItem}>
                                 <IoCall className={styles.icon} />
                                 <div>
-                                    <label>Phone</label>
-                                    <p>{formData.phone || 'Not provided'}</p>
+                                    <label>Number</label>
+                                    <p>{formData.number || 'Not provided'}</p>
                                 </div>
                             </div>
 
                             <div className={styles.infoItem}>
-                                <IoLocation className={styles.icon} />
+                                <IoMail className={styles.icon} />
                                 <div>
-                                    <label>Address</label>
-                                    <p>{formData.address || 'Not provided'}</p>
-                                </div>
-                            </div>
-
-                            <div className={styles.infoItem}>
-                                <IoLocation className={styles.icon} />
-                                <div>
-                                    <label>City, State, Pincode</label>
-                                    <p>
-                                        {[formData.city, formData.state, formData.pincode]
-                                            .filter(Boolean)
-                                            .join(', ') || 'Not provided'}
-                                    </p>
+                                    <label>Email</label>
+                                    <p>{user?.email || 'Not provided'}</p>
                                 </div>
                             </div>
 
