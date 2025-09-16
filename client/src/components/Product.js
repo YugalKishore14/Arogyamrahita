@@ -44,11 +44,6 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
           {product.oldPrice && (
             <span className={styles.productOldPrice}>₹{product.oldPrice}</span>
           )}
-          {/* <div className={styles.productWeightInfo}>
-            <span>
-              {product.weight} {product.weightUnit}
-            </span>
-          </div> */}
         </div>
         <p className={styles.productDescription}>
           {product.description

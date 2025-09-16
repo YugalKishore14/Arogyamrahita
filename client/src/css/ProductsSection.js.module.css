@@ -83,7 +83,7 @@ scrollButton:active {
 .productCard {
   flex-shrink: 0;
   width: 20rem;
-  min-height: 35rem;
+  height: 31rem;
   backdrop-filter: blur(14px);
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -272,7 +272,7 @@ scrollButton:active {
 
   .productCard {
     width: 15rem;
-    height: 24rem;
+    height: auto;
   }
 
   .productImagese {
@@ -287,7 +287,7 @@ scrollButton:active {
 
   .productCard {
     width: 14rem;
-    height: 22rem;
+    height: auto;
   }
 
   .productImagese {
