@@ -17,13 +17,13 @@ const variants = {
     x: 0,
     opacity: 1,
     position: "relative",
-    transition: { duration: 1, ease: "easeInOut" },
+    transition: { duration: 0.5, ease: "easeInOut" },
   },
   exit: (direction) => ({
     x: direction > 0 ? -300 : 300,
     opacity: 0,
     position: "absolute",
-    transition: { duration: 1, ease: "easeInOut" },
+    transition: { duration: 0.5, ease: "easeInOut" },
   }),
 };
 
