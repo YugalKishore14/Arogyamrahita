@@ -1,16 +1,18 @@
-import React, { useRef, useEffect, useState } from "react";
-import "./App.css";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { CartProvider } from "./context/CartContext";
+import { CartProvider, useCart } from "./context/CartContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-
+import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/Header";
 import Fotter from "./components/Fotter";
-
 import Login from "./pages/Login";
 import Signup from "./pages/Singup";
 import Dashboard from "./Admin/Dashboard";
@@ -22,14 +24,24 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
+import PaymentPage from "./pages/PaymentPage";
 import Services from "./pages/Services";
 import TermCondition from "./pages/TermCondition";
 import Faq from "./pages/Faq";
 import ReturnRefund from "./pages/ReturnRefund";
-
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import UserProfilePage from "./pages/UserProfilePage";
+import { ordersAPI } from "./services/Api";
+import "./App.css";
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -44,15 +56,49 @@ const AdminRoute = ({ children }) => {
   return isAdmin() ? children : <Navigate to="/" replace />;
 };
 
-const ScrollToTop = () => {
-  const { pathname } = useLocation();
+function PaymentPageWrapper() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { address, cartItems, total } = location.state || {};
+  const { clearCart } = useCart();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+  const handlePayment = async (method) => {
+    if (!address || !cartItems || !total) {
+      navigate("/cart");
+      return;
+    }
+    try {
+      const orderData = {
+        items: cartItems.map((item) => ({
+          product: item._id,
+          name: item.name,
+          price: item.newPrice,
+          quantity: item.quantity,
+          image: item.image || "",
+        })),
+        totalAmount: total,
+        shippingAddress: {
+          address: address.address,
+          city: address.city,
+          state: address.state || "",
+          pincode: address.pincode,
+          phone: address.phone,
+        },
+        paymentInfo: {
+          method,
+        },
+      };
+      await ordersAPI.create(orderData);
+      await clearCart();
+      navigate("/cart", { state: { orderSuccess: true } });
+    } catch (err) {
+      alert("Order failed. Try again.");
+    }
+  };
 
-  return null;
-};
+  return <PaymentPage onPayment={handlePayment} />;
+}
+
 function App() {
   return (
     <AuthProvider>
@@ -67,6 +113,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+
               <Route
                 path="/admin"
                 element={
@@ -91,29 +138,36 @@ function App() {
                   </AdminRoute>
                 }
               />
+
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<ProductPage />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
-
+              <Route path="/payment" element={<PaymentPageWrapper />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/profile" element={
-                <PrivateRoute>
-                  <UserProfilePage />
-                </PrivateRoute>
-              } />
-              <Route path="*" element={<Navigate to="/" replace />} />
+
+              <Route
+                path="/profile"
+                element={
+                  <PrivateRoute>
+                    <UserProfilePage />
+                  </PrivateRoute>
+                }
+              />
+
               <Route path="/privacy" element={<Services />} />
               <Route path="/termCondition" element={<TermCondition />} />
               <Route path="/faq" element={<Faq />} />
               <Route path="/returnRefund" element={<ReturnRefund />} />
 
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
 
           <Fotter />
         </div>
+        <ToastContainer />
       </CartProvider>
     </AuthProvider>
   );

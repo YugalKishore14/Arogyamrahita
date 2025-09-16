@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import PaymentModal from '../components/PaymentModal';
-import { ordersAPI } from '../services/Api';
+import CheckoutStepper from '../components/CheckoutStepper';
 import { useNavigate } from 'react-router-dom';
+import { ordersAPI } from '../services/Api';
+// import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -29,6 +31,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const [updating, setUpdating] = useState({});
   const [showPayment, setShowPayment] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   const handleQuantityChange = async (productId, newQuantity) => {
     if (newQuantity < 1) return;
@@ -70,6 +73,7 @@ const Cart = () => {
       return;
     }
     setShowPayment(true);
+    setOrderSuccess(false);
   };
 
   if (loading) {
@@ -108,42 +112,31 @@ const Cart = () => {
   }
 
   // Place order handler for PaymentModal
-  const handlePlaceOrder = async (address, onSuccess, onError) => {
-    try {
-      const orderData = {
-        items: cartItems.map(item => ({
-          product: item._id,
-          name: item.name,
-          price: item.newPrice,
-          quantity: item.quantity,
-          image: item.image || '',
-        })),
-        totalAmount: getCartTotal(),
-        shippingAddress: {
-          address: address.address,
-          city: address.city,
-          state: address.state || '',
-          pincode: address.pincode,
-          phone: address.phone,
-        },
-        paymentInfo: {
-          method: 'cod',
-        },
-      };
-      await ordersAPI.create(orderData);
-      await clearCart();
-      onSuccess && onSuccess();
-    } catch (err) {
-      onError && onError(err);
-    }
+  // Instead of placing order, navigate to payment page with address and cart info
+  const handleAddressSubmit = (address, onSuccess, onError) => {
+    setShowPayment(false);
+    navigate('/payment', {
+      state: {
+        address,
+        cartItems,
+        total: getCartTotal(),
+      },
+    });
+    onSuccess && onSuccess();
   };
+
+  // Stepper logic: 0 = Cart, 1 = Address, 2 = Payment Success
+  let currentStep = 0;
+  if (showPayment && !orderSuccess) currentStep = 1;
+  if (orderSuccess) currentStep = 2;
 
   return (
     <>
+      <CheckoutStepper currentStep={currentStep} />
       <PaymentModal
         isOpen={showPayment}
         onClose={() => setShowPayment(false)}
-        onPlaceOrder={handlePlaceOrder}
+        onPlaceOrder={handleAddressSubmit}
         cartItems={cartItems}
         total={getCartTotal()}
       />

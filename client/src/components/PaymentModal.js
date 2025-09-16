@@ -68,7 +68,7 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                 textAlign: 'center',
                 boxShadow: '0 2px 16px rgba(0,0,0,0.2)'
             }}>
-                <h2>Cash on Delivery</h2>
+                <h2>Delivery Address</h2>
                 {success ? (
                     <>
                         <p style={{ color: 'green', fontWeight: 'bold' }}>Order Placed Successfully!</p>
@@ -76,7 +76,7 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                     </>
                 ) : (
                     <>
-                        <div style={{ margin: '16px 0', color: '#1976d2', fontWeight: 500 }}>Pay with cash when your order arrives.</div>
+                        {/* Payment method selection removed. Only address fields shown. */}
                         <div style={{ marginBottom: 12, textAlign: 'left' }}>
                             <input type="text" placeholder="Full Name" value={address.name} onChange={e => setAddress({ ...address, name: e.target.value })} style={{ padding: 8, width: '100%', marginBottom: 8 }} disabled={processing} />
                             <input type="text" placeholder="Phone Number" value={address.phone} onChange={e => setAddress({ ...address, phone: e.target.value })} style={{ padding: 8, width: '100%', marginBottom: 8 }} disabled={processing} />

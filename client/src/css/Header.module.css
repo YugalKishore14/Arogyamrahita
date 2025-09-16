@@ -1,8 +1,8 @@
-/* 🔹 Default / Desktop Styles (first) */
 .header {
   position: fixed;
   left: 0;
   right: 0;
+  top: 7px;
   width: 100%;
   height: 80px;
   z-index: 1000;
