@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-// onPlaceOrder(address, onSuccess, onError)
 const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
-    const [method] = useState('cod'); // Only allow COD
+    const [method] = useState('cod');
     const [processing, setProcessing] = useState(false);
     const [success, setSuccess] = useState(false);
     const [address, setAddress] = useState({
@@ -18,7 +17,6 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
     if (!isOpen) return null;
 
     const handlePay = async () => {
-        // Validate address fields
         if (!address.name || !address.phone || !address.email || !address.address || !address.city || !address.pincode) {
             setError('Please fill all address fields.');
             return;
@@ -76,7 +74,6 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                     </>
                 ) : (
                     <>
-                        {/* Payment method selection removed. Only address fields shown. */}
                         <div style={{ marginBottom: 12, textAlign: 'left' }}>
                             <input type="text" placeholder="Full Name" value={address.name} onChange={e => setAddress({ ...address, name: e.target.value })} style={{ padding: 8, width: '100%', marginBottom: 8 }} disabled={processing} />
                             <input type="text" placeholder="Phone Number" value={address.phone} onChange={e => setAddress({ ...address, phone: e.target.value })} style={{ padding: 8, width: '100%', marginBottom: 8 }} disabled={processing} />

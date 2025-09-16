@@ -3,11 +3,13 @@
     align-items: center;
     justify-content: center;
     margin: 24px 0 32px 0;
+    flex-wrap: wrap;
 }
 
 .stepWrapper {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .stepNumber {
@@ -22,12 +24,14 @@
     line-height: 32px;
     margin-right: 8px;
     font-size: 18px;
+    flex-shrink: 0;
 }
 
 .stepLabel {
     font-size: 16px;
     font-weight: 500;
     margin-right: 12px;
+    white-space: nowrap;
 }
 
 .connector {
@@ -63,4 +67,57 @@
 
 .inactive .stepLabel {
     color: #888;
+}
+
+@media (max-width: 480px) {
+    .stepNumber {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 10px;
+        margin-right: 4px;
+    }
+
+    .stepLabel {
+        font-size: 10px;
+    }
+
+    .connector {
+        display: none;
+    }
+}
+
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .stepNumber {
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+        font-size: 14px;
+    }
+
+    .stepLabel {
+        font-size: 14px;
+    }
+
+    .connector {
+        width: 30px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .stepNumber {
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        font-size: 18px;
+    }
+
+    .stepLabel {
+        font-size: 16px;
+    }
+
+    .connector {
+        width: 50px;
+    }
 }

@@ -1,7 +1,7 @@
 .container {
     padding: 40px 20px;
     max-width: 1500px;
-    margin: auto;
+    margin: 3% auto;
     font-family: Arial, sans-serif;
     color: #333;
 }
@@ -10,12 +10,14 @@
     text-align: center;
     font-size: 2.5rem;
     color: #166534;
-    /* dark green */
     margin-bottom: 40px;
     font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 6px;
 }
 
 .section {
+    margin-top: 10%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -69,7 +71,6 @@
     line-height: 1.5;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .section {
         flex-direction: column !important;

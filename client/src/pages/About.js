@@ -4,6 +4,7 @@ import OurProductsImage from "../images/Our_Product_Range_Icon_simple_compose.pn
 import OurMissionImage from "../images/Our_Promises_Icon_simple_compose.png";
 import CustomerSatisfactionImage from "../images/Customer_Satisfaction_simple_compose.png";
 import WhyChooseUsImage from "../images/Why_Choose_Aarogyam_simple_compose.png";
+import MissionImage from "../images/Mission_Icon_simple_compose.png"
 
 const About = () => {
     const aboutData = [
@@ -44,7 +45,7 @@ const About = () => {
             ],
             footer:
                 "Our vision is to build a healthier community where people choose natural foods over processed alternatives and experience the true benefits of organic living.",
-            image: "https://knnindia.co.in/uploads/newsfiles/AGRi-FOOD-21-6-20241.jpg",
+            image: MissionImage,
         },
         {
             title: "📦 Customer Satisfaction",
@@ -70,7 +71,7 @@ const About = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.heading}>🟢 About Us – Arogyam Rahita</h1>
+            <h1 className={styles.heading}>About Us – Arogyam Rahita</h1>
 
             {aboutData.map((section, index) => (
                 <div

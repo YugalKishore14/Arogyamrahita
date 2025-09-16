@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../css/PaymentPage.module.css';
 import CheckoutStepper from '../components/CheckoutStepper';
 
+
 const PaymentPage = ({ onPayment }) => {
     const [selectedMethod, setSelectedMethod] = useState('cash');
+    const [showSuccess, setShowSuccess] = useState(false);
+    const navigate = useNavigate();
 
     const handleSelect = (method) => {
         setSelectedMethod(method);
@@ -13,6 +17,11 @@ const PaymentPage = ({ onPayment }) => {
         e.preventDefault();
         if (selectedMethod === 'cash') {
             onPayment && onPayment('cash');
+            setShowSuccess(true);
+            setTimeout(() => {
+                setShowSuccess(false);
+                navigate('/');
+            }, 1800);
         }
     };
 
@@ -60,6 +69,14 @@ const PaymentPage = ({ onPayment }) => {
                     Pay with Cash
                 </button>
             </form>
+            {showSuccess && (
+                <div className={styles.successPopup}>
+                    <div className={styles.successBox}>
+                        <span role="img" aria-label="success" style={{ fontSize: 32 }}>✅</span>
+                        <div>Your order is successful!</div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
