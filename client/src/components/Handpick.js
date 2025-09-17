@@ -224,7 +224,7 @@ const Handpick = () => {
           <div className={styles.scrollContainer} ref={scrollContainerRef}>
             {categories.map((category, index) => (
               <CategoryCard
-                key={category._id || index}
+                key={`${category._id || 'cat'}-${index}`}
                 title={category.name}
                 imageUrl={category.image}
                 onClick={() => handleCategoryClick(category)}

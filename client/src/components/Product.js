@@ -29,8 +29,6 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
         src={product.image}
         alt={product.name}
         className={styles.productImage}
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.3 }}
         onClick={handleImageClick}
         style={{ cursor: "pointer" }}
       />

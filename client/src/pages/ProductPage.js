@@ -52,7 +52,7 @@ const ProductPage = () => {
                 if (categoryParam) categoryParam = categoryParam.trim();
                 console.log("[ProductPage] Fetching products for category:", categoryParam);
 
-                let url = "https://arogyamrahita.onrender.com/api/products";
+                let url = "https://arogya-production.up.railway.app/api/products";
                 const queryParts = [];
                 if (categoryParam)
                     queryParts.push(`category=${encodeURIComponent(categoryParam)}`);
