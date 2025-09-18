@@ -89,7 +89,7 @@ function PaymentPageWrapper() {
       };
       await ordersAPI.create(orderData);
       await clearCart();
-      navigate("/cart", { state: { orderSuccess: true } });
+      navigate("/", { state: { orderSuccess: true } });
     } catch (err) {
       alert("Order failed. Try again.");
     }
