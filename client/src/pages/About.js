@@ -10,7 +10,7 @@ const About = () => {
     const aboutData = [
         {
             title: "🌿 Who We Are",
-            text: `Welcome to Arogyam Rahita, a brand dedicated to providing authentic and natural organic products that enrich your life with purity, taste, and health. 
+            text: `Welcome to Aarogyam Rahita, a brand dedicated to providing authentic and natural organic products that enrich your life with purity, taste, and health. 
       We specialize in traditional Indian food products made with care, love, and the wisdom of Ayurveda and Indian culture. 
       Our vision is to reconnect people with the power of nature and promote healthy, chemical-free living.`,
             image: WhoWeAreImage,
@@ -58,7 +58,7 @@ const About = () => {
             image: CustomerSatisfactionImage,
         },
         {
-            title: "✨ Why Choose Arogyam Rahita?",
+            title: "✨ Why Choose Aarogyam Rahita?",
             list: [
                 "100% natural and chemical-free products.",
                 "Traditional recipes and authentic taste.",
@@ -71,7 +71,7 @@ const About = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.heading}>About Us – Arogyam Rahita</h1>
+            <h1 className={styles.heading}>About Us – Aarogyam Rahita</h1>
 
             {aboutData.map((section, index) => (
                 <div

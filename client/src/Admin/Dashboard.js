@@ -30,6 +30,21 @@ const Dashboard = () => {
     const [users, setUsers] = useState([]);
     const [orders, setOrders] = useState([]);
     const [orderUpdating, setOrderUpdating] = useState(null);
+    const [orderNameFilter, setOrderNameFilter] = useState("");
+    const [orderDateFilter, setOrderDateFilter] = useState("");
+    // Filtered orders by name and date
+    const filteredOrders = orders.filter((o) => {
+        let match = true;
+        if (orderNameFilter) {
+            match = o.user?.name?.toLowerCase().includes(orderNameFilter.toLowerCase());
+        }
+        if (match && orderDateFilter) {
+            // Assuming o.createdAt is ISO string
+            const orderDate = o.createdAt ? o.createdAt.slice(0, 10) : "";
+            match = orderDate === orderDateFilter;
+        }
+        return match;
+    });
 
     const categories = [
         "general",
@@ -273,8 +288,23 @@ const Dashboard = () => {
 
                 <div className={styles.ordersSection}>
                     <h2 className={styles.sectionTitle}>Orders</h2>
+                    <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
+                        <input
+                            type="text"
+                            placeholder="Filter by user name"
+                            value={orderNameFilter}
+                            onChange={e => setOrderNameFilter(e.target.value)}
+                            style={{ padding: 8, borderRadius: 8, border: '1px solid #ccc', minWidth: 180 }}
+                        />
+                        <input
+                            type="date"
+                            value={orderDateFilter}
+                            onChange={e => setOrderDateFilter(e.target.value)}
+                            style={{ padding: 8, borderRadius: 8, border: '1px solid #ccc' }}
+                        />
+                    </div>
                     <div className={styles.ordersList}>
-                        {orders.map((o) => (
+                        {filteredOrders.map((o) => (
                             <div key={o._id} className={styles.orderCard}>
                                 <div className={styles.orderHeader}>
                                     <div>
