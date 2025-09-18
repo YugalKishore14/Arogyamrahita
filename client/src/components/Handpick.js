@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import styles from "../css/handpick.module.css";
-import { categoryAPI } from "../services/Api";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import { productAPI } from "../services/Api";
 
 
 
@@ -45,7 +45,7 @@ const CategoryCard = ({ title, imageUrl, onClick }) => {
 };
 
 const Handpick = () => {
-  const [categories, setCategories] = useState([]);
+  const [categoryProducts, setCategoryProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const scrollContainerRef = useRef(null);
@@ -54,12 +54,34 @@ const Handpick = () => {
   const autoScrollRef = useRef(null);
   const resumeTimeout = useRef(null);
 
+
   useEffect(() => {
-    fetchCategories();
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const data = await productAPI.getAllProducts();
+        if (data && Array.isArray(data.products)) {
+          const catMap = {};
+          data.products.forEach((prod) => {
+            if (prod.category && !catMap[prod.category]) {
+              catMap[prod.category] = prod;
+            }
+          });
+          setCategoryProducts(Object.values(catMap));
+        } else {
+          setCategoryProducts([]);
+        }
+      } catch (err) {
+        setError("Failed to load products");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
   }, []);
 
   useEffect(() => {
-    if (categories.length > 0) {
+    if (categoryProducts.length > 0) {
       startAutoScroll();
       const container = scrollContainerRef.current;
 
@@ -114,33 +136,7 @@ const Handpick = () => {
         container.removeEventListener("touchend", handleTouchEnd);
       };
     }
-  }, [categories]);
-
-  const fetchCategories = async () => {
-    try {
-      setLoading(true);
-      const response = await categoryAPI.getAllCategories();
-      if (response.success) {
-        const seen = new Set();
-        const uniqueCategories = response.categories.filter((cat) => {
-          const name = cat.name?.trim().toLowerCase();
-          if (!seen.has(name)) {
-            seen.add(name);
-            return true;
-          }
-          return false;
-        });
-        setCategories([...uniqueCategories, ...uniqueCategories]);
-      } else {
-        setError("Failed to fetch categories");
-      }
-    } catch (err) {
-      setError("Error loading categories");
-      console.error("Error fetching categories:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [categoryProducts]);
 
   const startAutoScroll = () => {
     const container = scrollContainerRef.current;
@@ -192,7 +188,7 @@ const Handpick = () => {
   };
 
   const handleCategoryClick = (category) => {
-    navigate(`/products?category=${encodeURIComponent(category.name)}`);
+    navigate(`/products?category=${encodeURIComponent(category.category)}`);
   };
 
   return (
@@ -222,12 +218,12 @@ const Handpick = () => {
       ) : (
         <div style={{ position: "relative" }}>
           <div className={styles.scrollContainer} ref={scrollContainerRef}>
-            {categories.map((category, index) => (
+            {categoryProducts.map((product, index) => (
               <CategoryCard
-                key={`${category._id || 'cat'}-${index}`}
-                title={category.name}
-                imageUrl={category.image}
-                onClick={() => handleCategoryClick(category)}
+                key={`cat-${index}`}
+                title={product.category}
+                imageUrl={product.image}
+                onClick={() => handleCategoryClick(product)}
               />
             ))}
           </div>

@@ -16,7 +16,6 @@ import Fotter from "./components/Fotter";
 import Login from "./pages/Login";
 import Signup from "./pages/Singup";
 import Dashboard from "./Admin/Dashboard";
-import CategoryAdmin from "./Admin/CategoryAdmin";
 import DiscountHeroAdmin from "./Admin/DiscountHeroAdmin";
 import ProductPage from "./pages/ProductPage";
 import ProductDetail from "./pages/ProductDetail";
@@ -119,14 +118,6 @@ function App() {
                 element={
                   <AdminRoute>
                     <Dashboard />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path="/admin/categories"
-                element={
-                  <AdminRoute>
-                    <CategoryAdmin />
                   </AdminRoute>
                 }
               />

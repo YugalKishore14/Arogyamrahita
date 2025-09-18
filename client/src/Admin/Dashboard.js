@@ -239,9 +239,6 @@ const Dashboard = () => {
             <div className={styles.header}>
                 <h1>Admin Dashboard</h1>
                 <div className={styles.headerButtons}>
-                    <Link to="/admin/categories" className={styles.mainSiteBtn}>
-                        Manage Categories
-                    </Link>
                     <Link to="/admin/discount-hero" className={styles.mainSiteBtn}>
                         Manage Discount
                     </Link>
