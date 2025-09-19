@@ -186,7 +186,7 @@ const Cart = () => {
                     <h3>
                       {item.name}
                       {item.weight ? (
-                        <span style={{ fontWeight: 400, fontSize: '1rem', color: '#232323ff', marginLeft: 8 }}>
+                        <span className={styles.itemWeight}>
                           {item.weight} {item.weightUnit || ''}
                         </span>
                       ) : null}
