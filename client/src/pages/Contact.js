@@ -223,6 +223,26 @@ export default function Contact() {
           </motion.button>
         </form>
       </motion.div>
+      {/* Map Card */}
+      <motion.div
+        className={styles.card}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+      >
+        <h2 className={styles.heading}>📍 FIND US ON GOOGLE MAP</h2>
+        <div className={styles.mapWrapper}>
+          <iframe
+            title="map"
+            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3488.323342087102!2d77.66556017551575!3d29.037016075446274!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjnCsDAyJzEzLjMiTiA3N8KwNDAnMDUuMyJF!5e0!3m2!1sen!2sin!4v1757412801036!5m2!1sen!2sin"
+            width="100%"
+            height="300"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+          ></iframe>
+        </div>
+      </motion.div>
     </div>
   );
 }
