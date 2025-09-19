@@ -183,9 +183,7 @@ const Cart = () => {
                   </div>
 
                   <div className={styles.itemDetails}>
-                    <h3>
-                      {item.name} {item.weight ? `${item.weight} ${item.weightUnit || ''}` : ''}
-                    </h3>
+                    <h3>{item.name}</h3>
                     <p className={styles.itemCategory}>{item.category}</p>
                     <div className={styles.itemPrice}>
                       <span className={styles.currentPrice}>
