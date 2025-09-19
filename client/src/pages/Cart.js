@@ -183,7 +183,14 @@ const Cart = () => {
                   </div>
 
                   <div className={styles.itemDetails}>
-                    <h3>{item.name}</h3>
+                    <h3>
+                      {item.name}
+                      {item.weight ? (
+                        <span style={{ fontWeight: 400, fontSize: '1rem', color: '#232323ff', marginLeft: 8 }}>
+                          {item.weight} {item.weightUnit || ''}
+                        </span>
+                      ) : null}
+                    </h3>
                     <p className={styles.itemCategory}>{item.category}</p>
                     <div className={styles.itemPrice}>
                       <span className={styles.currentPrice}>
