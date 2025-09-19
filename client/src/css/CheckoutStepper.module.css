@@ -28,17 +28,17 @@
 }
 
 .stepLabel {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
     margin-right: 12px;
     white-space: nowrap;
 }
 
 .connector {
-    width: 40px;
+    width: 30px;
     height: 3px;
     background: #e0e0e0;
-    margin: 0 8px;
+    margin: 0 6px;
     border-radius: 2px;
 }
 
@@ -114,10 +114,10 @@
     }
 
     .stepLabel {
-        font-size: 16px;
+        font-size: 12px;
     }
 
     .connector {
-        width: 50px;
+        width: 30px;
     }
 }
