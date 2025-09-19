@@ -22,8 +22,17 @@
   background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
   text-align: center;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+
+.productsSection::-webkit-scrollbar {
+  display: none;
+}
+
 
 .title {
   font-size: 2.5rem;
