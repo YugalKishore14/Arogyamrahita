@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../css/AdminDashboard.module.css';
 
-const ImageUpload = ({ onImageUpload, currentImageUrl = '', label = 'Image', uploadPath = 'https://arogyamrahita.onrender.com/api/products/upload-image' }) => {
+const ImageUpload = ({ onImageUpload, currentImageUrl = '', label = 'Image', uploadPath = 'https://arogya-production.up.railway.app/api/products/upload-image' }) => {
     const [uploading, setUploading] = useState(false);
     const [uploadError, setUploadError] = useState('');
 
