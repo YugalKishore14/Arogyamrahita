@@ -43,7 +43,9 @@ export const CartProvider = ({ children }) => {
                     oldPrice: item.product.oldPrice || item.price,
                     image: item.product.image,
                     category: item.product.category,
-                    quantity: item.quantity
+                    quantity: item.quantity,
+                    weight: item.product.weight,
+                    weightUnit: item.product.weightUnit
                 }));
                 setCartItems(items);
                 setCartCount(items.reduce((total, item) => total + item.quantity, 0));
@@ -65,7 +67,6 @@ export const CartProvider = ({ children }) => {
     }, [isAuthenticated, loadCartFromDB, loadCartFromLocalStorage]);
 
 
-    // Always keep cartCount in sync with cartItems
     useEffect(() => {
         setCartCount(cartItems.reduce((total, item) => total + item.quantity, 0));
         if (!isAuthenticated()) {
@@ -85,7 +86,9 @@ export const CartProvider = ({ children }) => {
                         oldPrice: item.product.oldPrice || item.price,
                         image: item.product.image,
                         category: item.product.category,
-                        quantity: item.quantity
+                        quantity: item.quantity,
+                        weight: item.product.weight,
+                        weightUnit: item.product.weightUnit
                     }));
                     setCartItems(items);
                     setCartCount(items.reduce((total, item) => total + item.quantity, 0));
