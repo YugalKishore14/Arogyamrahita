@@ -1,4 +1,5 @@
 .container {
+    width: 100%;
     display: flex;
     font-family: 'Inter', sans-serif;
     background-color: #f4f5f7;
@@ -6,10 +7,9 @@
 }
 
 .sidebar {
-    position: fixed;
+    position: sticky;
     top: 110px;
     left: 0;
-    /* height: calc(100vh - 70px); */
     height: auto;
     width: 280px;
     background-color: #ffffff;
@@ -18,12 +18,15 @@
     box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
     border-radius: 10px;
     overflow-y: auto;
-    z-index: 1000;
+    /* z-index: 1000; */
     transition: transform 0.3s ease-in-out;
     transform: translateX(-100%);
     scrollbar-width: none;
     -ms-overflow-style: none;
+    max-height: calc(100vh - 110px);
+    /* footer आने से पहले तक sidebar sticky रहेगा */
 }
+
 
 .fixedSidebar {
     position: sticky;
@@ -34,7 +37,6 @@
 
 .scrollSidebar {
     position: relative;
-    /* ab footer ke sath scroll */
     top: auto;
 }
 
@@ -163,7 +165,7 @@
 
 .main.sidebarVisible {
     width: calc(100% - 280px);
-    margin-left: 280px;
+    /* margin-left: 280px; */
 }
 
 .topBar {
