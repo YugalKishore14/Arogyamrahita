@@ -1,10 +1,10 @@
 import styles from "../css/About.module.css";
-import WhoWeAreImage from "../images/Who_We_Are_Icon_simple_compose.png";
-import OurProductsImage from "../images/Our_Product_Range_Icon_simple_compose.png";
-import OurMissionImage from "../images/Our_Promises_Icon_simple_compose.png";
-import CustomerSatisfactionImage from "../images/Customer_Satisfaction_simple_compose.png";
-import WhyChooseUsImage from "../images/Why_Choose_Aarogyam_simple_compose.png";
-import MissionImage from "../images/Mission_Icon_simple_compose.png"
+import WhoWeAreImage from "../images/WhoWeAre.jpeg";
+import OurProductsImage from "../images/OurProductRange.jpeg";
+import OurMissionImage from "../images/OurPromise.jpeg";
+import CustomerSatisfactionImage from "../images/CustomerSatisfaction.jpeg";
+import WhyChooseUsImage from "../images/WhyChooseAarogyamRahita.jpeg";
+import MissionImage from "../images/OurMissionVision.jpeg"
 
 const About = () => {
     const aboutData = [
