@@ -337,9 +337,22 @@
     width: 40px;
   }
 
+  .hiMenu {
+    font-size: 15px;
+  }
+
+  .hixCros {
+    font-size: 15px;
+  }
+
+
   .searchBar {
     height: 35px;
     max-width: 120px;
+  }
+
+  .searchBar input {
+    font-size: 10px;
   }
 
   .searchIcon {
@@ -353,11 +366,11 @@
   }
 
   .cartIcon {
-    font-size: 20px;
+    font-size: 15px;
   }
 
   .iconBox {
-    font-size: 22px;
+    font-size: 15px;
   }
 
   .adminBtn {

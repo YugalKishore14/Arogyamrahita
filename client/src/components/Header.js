@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import styles from "../css/Header.module.css";
@@ -14,6 +14,7 @@ import { productAPI, categoryAPI } from "../services/Api";
 
 const Header = () => {
   const { isAdmin, user, logout } = useAuth();
+  const location = useLocation();
   const { cartCount } = useCart();
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -243,7 +244,7 @@ const Header = () => {
           <div className={styles.navIcons}>
             {user ? (
               <>
-                {isAdmin() && (
+                {isAdmin() && location.pathname !== "/admin" && (
                   <motion.div whileHover={{ scale: 1.05 }}>
                     <NavLink to="/admin" className={`${styles.adminBtn} ${({ isActive }) => isActive ? "active" : ""}`}>
                       Admin Panel
@@ -304,7 +305,7 @@ const Header = () => {
               style={{ background: 'none', border: 'none', padding: 0 }}
               type="button"
             >
-              {mobileOpen ? <HiX size={28} /> : <HiMenu size={28} />}
+              {mobileOpen ? <HiX className={styles.hixCros} /> : <HiMenu className={styles.hiMenu} />}
             </button>
           </div>
         </div>
