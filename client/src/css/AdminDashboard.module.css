@@ -469,7 +469,7 @@
     }
 
     .header h1 {
-        font-size: 2rem;
+        font-size: 1rem;
     }
 
     .headerButtons {
@@ -483,5 +483,29 @@
 
     .quickStats {
         grid-template-columns: 1fr;
+    }
+
+    .mainSiteBtn {
+        padding: 5px 20px;
+    }
+
+    .logoutBtn {
+        padding: 5px 20px;
+    }
+
+    .sectionTitle {
+        font-size: 1rem;
+    }
+
+    .usersSection {
+        padding: 15px;
+    }
+
+    .userName {
+        font-size: 13px;
+    }
+
+    #activeStatus {
+        font-size: 10px;
     }
 }
