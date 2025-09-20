@@ -359,7 +359,7 @@ const Dashboard = () => {
                 {/* Orders */}
                 <div className={styles.ordersSection}>
                     <h2 className={styles.sectionTitle}>Orders</h2>
-                    <div style={{ display: "flex", gap: 16, marginBottom: 16 }}>
+                    <div className={styles.input} style={{ display: "flex", gap: 16, marginBottom: 16 }}>
                         <input
                             type="text"
                             placeholder="Filter by user name"
@@ -369,7 +369,7 @@ const Dashboard = () => {
                                 padding: 8,
                                 borderRadius: 8,
                                 border: "1px solid #ccc",
-                                minWidth: 180,
+                                minWidth: 132,
                             }}
                         />
                         <input
@@ -427,10 +427,10 @@ const Dashboard = () => {
                                 {/* Invoice Button */}
                                 <div style={{ marginTop: "12px" }}>
                                     <button
-                                        className={styles.submitBtn}
+                                        className={styles.invoiceSubmitBtn}
                                         onClick={() => generateInvoicePDF(o)}
                                     >
-                                        🧾 Download / Print Invoice
+                                        🧾 Download/Print Invoice
                                     </button>
                                 </div>
 
