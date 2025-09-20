@@ -73,7 +73,7 @@ scrollButton:active {
   gap: 1.5rem;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding-bottom: 1rem;
+  padding: 1rem;
 }
 
 .productCarousel::-webkit-scrollbar {

@@ -7,6 +7,8 @@ import ImagePlaceholder from "../components/ImagePlaceholder";
 import { productAPI, adminAPI, ordersAPI } from "../services/Api";
 import OrderTracker from "../components/OrderTracker";
 import { BsGlobeCentralSouthAsia } from "react-icons/bs";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const Dashboard = () => {
     const { logout, user, isAdmin, loading: authLoading } = useAuth();
@@ -33,6 +35,7 @@ const Dashboard = () => {
     const [orderUpdating, setOrderUpdating] = useState(null);
     const [orderNameFilter, setOrderNameFilter] = useState("");
     const [orderDateFilter, setOrderDateFilter] = useState("");
+
     const filteredOrders = orders.filter((o) => {
         let match = true;
         if (orderNameFilter) {
@@ -123,6 +126,71 @@ const Dashboard = () => {
             setOrderUpdating(null);
         }
     };
+
+    // 🔹 Generate PDF Invoice
+
+const generateInvoicePDF = (order) => {
+  const doc = new jsPDF();
+
+  // ==== COMPANY INFO ====
+  doc.setFontSize(16);
+  doc.text("Arogyam Rahita", 20, 20);
+  doc.setFontSize(11);
+  doc.text("Sanik Vihar, Meerut", 20, 28);
+  doc.text("Phone: (000) 000-0000", 20, 34);
+
+  // ==== INVOICE INFO (without big INVOICE text) ====
+  doc.setFontSize(11);
+  doc.text(`Invoice #: ${order._id || "_____"}`, 150, 40);
+  doc.text(`Date: ${order.createdAt ? order.createdAt.slice(0, 10) : "_____"}`, 150, 46);
+
+  // Customer ID shift left so it's not cut
+  doc.text(`Customer ID: ${order.user?._id || "_____"}`, 20, 46);
+  doc.text("Terms: Net 30 Days", 150, 52);
+
+  // ==== BILL TO / SHIP TO ====
+  doc.setFontSize(12);
+  doc.text("Bill To:", 20, 60);
+  doc.setFontSize(11);
+  doc.text(order.user?.name || "_________", 20, 66);
+  doc.text(order.user?.email || "_________", 20, 72);
+  doc.text(order.user?.address || "_________", 20, 78);
+
+  doc.setFontSize(12);
+  doc.text("Ship To:", 100, 60);
+  doc.setFontSize(11);
+  doc.text(order.user?.name || "_________", 100, 66);
+  doc.text(order.user?.email || "_________", 100, 72);
+  doc.text(order.user?.address || "_________", 100, 78);
+
+  // ==== TABLE (ITEMS) ====
+  const items = (order.items || []).map((it) => [
+    it.name,
+    it.quantity,
+    "" + String(it.price), // Fix: prevent weird "1"
+    "" + String(it.price * it.quantity),
+  ]);
+
+  autoTable(doc, {
+    startY: 90,
+    head: [["Description", "Qty", "Unit Price", "Amount"]],
+    body: items,
+    styles: { fontSize: 11 },
+  });
+
+  // ==== TOTAL ====
+  const finalY = doc.lastAutoTable.finalY + 10;
+  doc.setFontSize(12);
+  doc.text(`TOTAL: ${order.totalAmount || 0}`, 150, finalY);
+
+  // ==== FOOTER ====
+  doc.setFontSize(10);
+  doc.text("Thank you for your business!", 20, finalY + 20);
+  doc.text("If you have any questions about this invoice, please contact:", 20, finalY + 28);
+  doc.text("Arogyam Rahita | Phone: (000) 000-0000 | email@domain.com", 20, finalY + 34);
+
+  doc.save(`invoice_${order._id || "draft"}.pdf`);
+};
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -271,6 +339,7 @@ const Dashboard = () => {
             {success && <div className={styles.success}>{success}</div>}
 
             <div className={styles.mainContent}>
+                {/* Users */}
                 <div className={styles.usersSection}>
                     <h2 className={styles.sectionTitle}>Users Presence</h2>
                     <div className={styles.usersList}>
@@ -287,6 +356,7 @@ const Dashboard = () => {
                     </div>
                 </div>
 
+                {/* Orders */}
                 <div className={styles.ordersSection}>
                     <h2 className={styles.sectionTitle}>Orders</h2>
                     <div style={{ display: "flex", gap: 16, marginBottom: 16 }}>
@@ -353,6 +423,17 @@ const Dashboard = () => {
                                         </select>
                                     </div>
                                 </div>
+
+                                {/* Invoice Button */}
+                                <div style={{ marginTop: "12px" }}>
+                                    <button
+                                        className={styles.submitBtn}
+                                        onClick={() => generateInvoicePDF(o)}
+                                    >
+                                        🧾 Download / Print Invoice
+                                    </button>
+                                </div>
+
                                 <div style={{ margin: "12px 0" }}>
                                     <OrderTracker status={o.status} />
                                 </div>
@@ -360,6 +441,8 @@ const Dashboard = () => {
                         ))}
                     </div>
                 </div>
+
+                {/* Add Product */}
                 <div className={styles.addProductSection}>
                     <h2 className={styles.sectionTitle}>Add New Product</h2>
                     <button
@@ -386,6 +469,7 @@ const Dashboard = () => {
                     </div>
                 </div>
 
+                {/* Manage Products */}
                 <div className={styles.productsSection}>
                     <h2 className={styles.sectionTitle}>Manage Products</h2>
                     {loading ? (
@@ -463,6 +547,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
+            {/* Product Modal */}
             {showModal && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>

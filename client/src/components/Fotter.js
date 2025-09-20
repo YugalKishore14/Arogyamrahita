@@ -1,12 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "../css/Fotter.module.css";
-import image from "../images/arogyamlogo.png";
 import { Link } from "react-router-dom";
 
 const Fotter = () => {
   return (
     <footer className={styles.footer}>
+      {/* Top Section (Newsletter + Columns) */}
       <motion.div
         className={styles.footerContainer}
         initial={{ opacity: 0, y: 30 }}
@@ -14,68 +14,113 @@ const Fotter = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
+        {/* Newsletter */}
         <motion.div
-          className={`${styles.footerSection} ${styles.logoSection}`}
-          whileHover={{ scale: 1.05 }}
+          className={`${styles.footerSection} ${styles.newsletterSection}`}
+          whileHover={{ scale: 1.02 }}
         >
-          <img
-            src={image}
-            alt="Āarogyām Rahita Logo"
-            className={styles.footerLogo}
-          />
+          <h3 className={styles.newsletterTitle}>Don't Miss Out</h3>
+          <p className={styles.newsletterText}>
+            Sign up for the latest beauty news, product samples and coupons
+          </p>
+          <form className={styles.newsletterForm}>
+            <input
+              type="email"
+              placeholder="Enter Your Email Address"
+              required
+            />
+            <input type="date" placeholder="MM/DD/YYYY" required />
+            <button type="submit">Sign Up</button>
+          </form>
+          <p className={styles.note}>
+            This site is intended for US consumers. By signing up, you agree to
+            our <Link to="/privacy">Privacy Policy</Link> and{" "}
+            <Link to="/termCondition">Terms of Use</Link>.
+          </p>
         </motion.div>
 
+        {/* Footer Columns */}
         <motion.div
-          className={`${styles.footerSection} ${styles.supportSection}`}
+          className={`${styles.footerSection} ${styles.linksSection}`}
           whileHover={{ x: 5 }}
         >
-          <h3>Support</h3>
-          <p>
-            C-3 Sainik Vihar Near Divider Road,
-            <br />
-            Meerut 250001 Uttar Pradesh
-          </p>
-          <p>
-            <a href="mailto:rahitaarogyam@gmail.com">rahitaarogyam@gmail.com</a>
-          </p>
-
-          <p>
-            <a href="tel:+918979444801">+91 89794 44801</a>
-          </p>
+          <h3>Company</h3>
+          <ul>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/experts">Experts and Spokesmodels</Link>
+            </li>
+          </ul>
         </motion.div>
 
         <motion.div
           className={`${styles.footerSection} ${styles.linksSection}`}
           whileHover={{ x: 5 }}
         >
-          <h3>Quick Link</h3>
+          <h3>Customer Service</h3>
           <ul>
             <li>
-              <Link to="/privacy">Privacy Policy</Link>
+              <Link to="/contact">Contact Us</Link>
             </li>
             <li>
-              <Link to="/termCondition">Terms Of Use</Link>
+              <Link to="/account">My Account</Link>
             </li>
             <li>
-              <Link to="/faq">FAQ</Link>
+              <Link to="/storeLocator">Store Locator</Link>
             </li>
             <li>
-              <Link to="/contact">Contact</Link>
+              <Link to="/rewards">Redeem Rewards</Link>
+            </li>
+          </ul>
+        </motion.div>
+
+        <motion.div
+          className={`${styles.footerSection} ${styles.linksSection}`}
+          whileHover={{ x: 5 }}
+        >
+          <h3>More to Explore</h3>
+          <ul>
+            <li>
+              <Link to="/magazine">Beauty Magazine</Link>
             </li>
             <li>
-              <Link to="/returnRefund">Return & Refund</Link>
+              <Link to="/tools">Tools & Consultations</Link>
+            </li>
+            <li>
+              <Link to="/offers">Offers</Link>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/#LorealParis" target="_blank" rel="noreferrer">
+                #LorealParis
+              </a>
             </li>
           </ul>
         </motion.div>
       </motion.div>
 
+      {/* Bottom Bar */}
       <motion.div
         className={styles.footerBottom}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.3 }}
       >
-        <p>© Copyright Āarogyām Rahita 2025. All right reserved</p>
+        <div className={styles.socialIcons}>
+          <a href="#"><i className="fab fa-instagram"></i></a>
+          <a href="#"><i className="fab fa-facebook-f"></i></a>
+          <a href="#"><i className="fab fa-twitter"></i></a>
+          <a href="#"><i className="fab fa-youtube"></i></a>
+          <a href="#"><i className="fab fa-pinterest"></i></a>
+        </div>
+        <div className={styles.bottomLinks}>
+          <Link to="/sitemap">Site Map</Link>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/termCondition">Terms</Link>
+          <Link to="/userContent">User Content Terms</Link>
+        </div>
+        <p>© 2025 Āarogyām Rahita. All rights reserved.</p>
       </motion.div>
     </footer>
   );

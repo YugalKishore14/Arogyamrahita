@@ -37,7 +37,6 @@ const ProductPage = () => {
         let category = params.get("category") || "";
         if (category) category = category.trim();
         setSelectedCategory(category);
-        console.log("[ProductPage] URL category param:", category);
     }, [location.search]);
 
     useEffect(() => {
@@ -50,7 +49,6 @@ const ProductPage = () => {
                 const searchParam = params.get("search");
 
                 if (categoryParam) categoryParam = categoryParam.trim();
-                console.log("[ProductPage] Fetching products for category:", categoryParam);
 
                 let url = "https://arogya-production.up.railway.app/api/products";
                 const queryParts = [];
@@ -66,13 +64,11 @@ const ProductPage = () => {
                 if (response.ok) {
                     const data = await response.json();
                     setProducts(data.products || []);
-                    console.log("[ProductPage] Products fetched:", data.products);
                 } else {
                     throw new Error("Failed to fetch products");
                 }
             } catch (err) {
                 setError("Error loading products: " + err.message);
-                console.error("[ProductPage] Error fetching products:", err);
             } finally {
                 setLoading(false);
             }
@@ -89,10 +85,11 @@ const ProductPage = () => {
 
         let filtered = products.filter((product) => {
             const priceMatch = product.newPrice <= priceValue;
-            // Make category comparison case-insensitive and trimmed
             const categoryMatch =
                 !selectedCategory ||
-                (product.category && product.category.trim().toLowerCase() === selectedCategory.trim().toLowerCase());
+                (product.category &&
+                    product.category.trim().toLowerCase() ===
+                        selectedCategory.trim().toLowerCase());
             const nameMatches =
                 !searchParam || product.name?.toLowerCase().includes(searchParam);
             const categoryMatchesSearch =
@@ -109,12 +106,10 @@ const ProductPage = () => {
             case "price-high":
                 filtered.sort((a, b) => b.newPrice - a.newPrice);
                 break;
-            case "popular":
             default:
                 break;
         }
 
-        console.log("[ProductPage] Filtered products:", filtered);
         return filtered;
     }, [products, priceValue, selectedCategory, sortBy, location.search]);
 
@@ -154,8 +149,9 @@ const ProductPage = () => {
                     {isOpen ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
                 </div>
                 <div
-                    className={`${styles.filterContent} ${isOpen ? styles.open : styles.closed
-                        }`}
+                    className={`${styles.filterContent} ${
+                        isOpen ? styles.open : styles.closed
+                    }`}
                 >
                     {children}
                 </div>
@@ -164,188 +160,199 @@ const ProductPage = () => {
     };
 
     return (
-        <>
-            <div className={styles.container}>
-                <button
-                    className={styles.hamburgerBtn}
-                    onClick={() => setIsSidebarOpen(true)}
-                >
-                    <Menu size={24} />
-                </button>
-
-                {/* Sidebar */}
-                <aside
-                    className={`${styles.sidebar} ${isSidebarOpen ? styles.showSidebar : ""
-                        }`}
-                >
-                    <div className={styles.sidebarHeader}>
-                        <h2 className={styles.sidebarTitle}>Filters</h2>
-                        <div className={styles.sidebarIcons}>
-                            <ListFilter size={20} />
-                            <Menu
-                                size={20}
-                                className={styles.closeBtn}
-                                onClick={() => setIsSidebarOpen(false)}
-                            />
-                        </div>
+        <div className={styles.container}>
+            {/* Sidebar */}
+            <aside
+                className={`${styles.sidebar} ${
+                    isSidebarOpen ? styles.showSidebar : ""
+                }`}
+            >
+                <div className={styles.sidebarHeader}>
+                    <h2 className={styles.sidebarTitle}>Filters</h2>
+                    <div className={styles.sidebarIcons}>
+                        <ListFilter size={20} />
+                        <Menu
+                            size={20}
+                            className={styles.closeBtn}
+                            onClick={() => setIsSidebarOpen(false)}
+                        />
                     </div>
+                </div>
 
-                    <FilterSection title="Category" sectionKey="category">
-                        <ul className={styles.list}>
+                <FilterSection title="Category" sectionKey="category">
+                    <ul className={styles.list}>
+                        <li
+                            key="all"
+                            className={styles.listItem}
+                            onClick={() => {
+                                setSelectedCategory("");
+                                const params = new URLSearchParams(location.search);
+                                params.delete("category");
+                                navigate(
+                                    `/products${
+                                        params.toString() ? `?${params.toString()}` : ""
+                                    }`
+                                );
+                            }}
+                            style={{
+                                cursor: "pointer",
+                                fontWeight: selectedCategory === "" ? "600" : "400",
+                            }}
+                        >
+                            <span>All</span>
+                            <ChevronRight size={16} />
+                        </li>
+                        {categories.map((item, index) => (
                             <li
-                                key="all"
+                                key={index}
                                 className={styles.listItem}
                                 onClick={() => {
-                                    setSelectedCategory("");
+                                    setSelectedCategory(item);
                                     const params = new URLSearchParams(location.search);
-                                    params.delete("category");
-                                    navigate(
-                                        `/products${params.toString() ? `?${params.toString()}` : ""
-                                        }`
-                                    );
+                                    params.set("category", item);
+                                    navigate(`/products?${params.toString()}`);
                                 }}
                                 style={{
                                     cursor: "pointer",
-                                    fontWeight: selectedCategory === "" ? "600" : "400",
+                                    fontWeight:
+                                        selectedCategory === item ? "600" : "400",
                                 }}
                             >
-                                <span>All</span>
+                                <span>{item}</span>
                                 <ChevronRight size={16} />
                             </li>
-                            {categories.map((item, index) => (
-                                <li
-                                    key={index}
-                                    className={styles.listItem}
-                                    onClick={() => {
-                                        setSelectedCategory(item);
-                                        const params = new URLSearchParams(location.search);
-                                        params.set("category", item);
-                                        navigate(`/products?${params.toString()}`);
-                                    }}
-                                    style={{
-                                        cursor: "pointer",
-                                        fontWeight: selectedCategory === item ? "600" : "400",
-                                    }}
-                                >
-                                    <span>{item}</span>
-                                    <ChevronRight size={16} />
-                                </li>
-                            ))}
-                        </ul>
-                    </FilterSection>
+                        ))}
+                    </ul>
+                </FilterSection>
 
-                    <FilterSection title="Price" sectionKey="price">
-                        <div className={styles.priceRange}>
-                            <input
-                                type="range"
-                                min="0"
-                                max="1000"
-                                value={priceValue}
-                                onChange={(e) => setPriceValue(e.target.value)}
-                                className={styles.rangeInput}
-                            />
-                            <div className={styles.priceLabels}>
-                                <span>₹{priceValue}</span>
-                                <span>₹1000</span>
-                            </div>
-                            <div className={styles.currentPrice}>Selected: ₹{priceValue}</div>
+                <FilterSection title="Price" sectionKey="price">
+                    <div className={styles.priceRange}>
+                        <input
+                            type="range"
+                            min="0"
+                            max="1000"
+                            value={priceValue}
+                            onChange={(e) => setPriceValue(e.target.value)}
+                            className={styles.rangeInput}
+                        />
+                        <div className={styles.priceLabels}>
+                            <span>₹{priceValue}</span>
+                            <span>₹1000</span>
                         </div>
-                    </FilterSection>
-                </aside>
-
-                {/* Main */}
-                <main className={styles.main}>
-                    <div className={styles.topBar}>
-                        <h1 className={styles.pageTitle}>Organic Products</h1>
-                        <div className={styles.sortSection}>
-                            <span className={styles.productCount}>
-                                Showing {filteredAndSortedProducts.length} of {products.length}{" "}
-                                Products
-                            </span>
-                            <div className={styles.sortWrapper}>
-                                <span className={styles.sortLabel}>Sort by</span>
-                                <select
-                                    className={styles.sortSelect}
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value)}
-                                >
-                                    <option value="popular">Most Popular</option>
-                                    <option value="price-low">Price: Low to High</option>
-                                    <option value="price-high">Price: High to Low</option>
-                                </select>
-                            </div>
+                        <div className={styles.currentPrice}>
+                            Selected: ₹{priceValue}
                         </div>
                     </div>
+                </FilterSection>
+            </aside>
 
-                    <div className={styles.productsGrid}>
-                        {loading ? (
-                            <div className={styles.loading}>Loading products...</div>
-                        ) : error ? (
-                            <div className={styles.error}>{error}</div>
-                        ) : filteredAndSortedProducts.length === 0 ? (
-                            <div className={styles.noProducts}>No products available</div>
-                        ) : (
-                            filteredAndSortedProducts.map((product) => (
-                                <div key={product._id} className={styles.card}>
-                                    {product.image ? (
-                                        <img
-                                            src={product.image}
-                                            alt={product.name}
-                                            className={styles.productImage}
-                                            onError={(e) => {
-                                                e.target.style.display = "none";
-                                            }}
-                                            onClick={() => navigate(`/product/${product._id}`)}
-                                            style={{ cursor: "pointer" }}
-                                        />
-                                    ) : (
-                                        <ImagePlaceholder
-                                            width="100%"
-                                            height="auto"
-                                            text="No Image"
-                                        />
-                                    )}
-                                    <div className={styles.cardBody}>
-                                        <h3 className={styles.productName}>
-                                            {product.name} {product.weight} {product.weightUnit}
-                                        </h3>
-                                        <div className={styles.priceWrapper}>
-                                            <span className={styles.newPrice}>
-                                                ₹{product.newPrice}
+            {/* Main */}
+            <main className={styles.main}>
+                <div className={styles.topBar}>
+                    {/* Hamburger left side */}
+                    {!isSidebarOpen && (
+                        <button
+                            className={styles.hamburgerBtn}
+                            onClick={() => setIsSidebarOpen(true)}
+                        >
+                            <Menu size={18} />
+                        </button>
+                    )}
+                    <h1 className={styles.pageTitle}>Organic Products</h1>
+                    <div className={styles.sortSection}>
+                        <span className={styles.productCount}>
+                            Showing {filteredAndSortedProducts.length} of{" "}
+                            {products.length} Products
+                        </span>
+                        <div className={styles.sortWrapper}>
+                            <span className={styles.sortLabel}>Sort by</span>
+                            <select
+                                className={styles.sortSelect}
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                            >
+                                <option value="popular">Most Popular</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles.productsGrid}>
+                    {loading ? (
+                        <div className={styles.loading}>Loading products...</div>
+                    ) : error ? (
+                        <div className={styles.error}>{error}</div>
+                    ) : filteredAndSortedProducts.length === 0 ? (
+                        <div className={styles.noProducts}>
+                            No products available
+                        </div>
+                    ) : (
+                        filteredAndSortedProducts.map((product) => (
+                            <div key={product._id} className={styles.card}>
+                                {product.image ? (
+                                    <img
+                                        src={product.image}
+                                        alt={product.name}
+                                        className={styles.productImage}
+                                        onError={(e) => {
+                                            e.target.style.display = "none";
+                                        }}
+                                        onClick={() =>
+                                            navigate(`/product/${product._id}`)
+                                        }
+                                        style={{ cursor: "pointer" }}
+                                    />
+                                ) : (
+                                    <ImagePlaceholder
+                                        width="100%"
+                                        height="auto"
+                                        text="No Image"
+                                    />
+                                )}
+                                <div className={styles.cardBody}>
+                                    <h3 className={styles.productName}>
+                                        {product.name} {product.weight}{" "}
+                                        {product.weightUnit}
+                                    </h3>
+                                    <div className={styles.priceWrapper}>
+                                        <span className={styles.newPrice}>
+                                            ₹{product.newPrice}
+                                        </span>
+                                        {product.oldPrice && (
+                                            <span className={styles.oldPrice}>
+                                                ₹{product.oldPrice}
                                             </span>
-                                            {product.oldPrice && (
-                                                <span className={styles.oldPrice}>
-                                                    ₹{product.oldPrice}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <p className={styles.productDescription}>
-                                            {product.description?.length > 100
-                                                ? product.description.substring(0, 100) + "..."
-                                                : product.description}
-                                        </p>
-                                        <div className={styles.cardActions}>
-                                            <button
-                                                className={styles.cartButton}
-                                                onClick={() => handleAddToCart(product)}
-                                            >
-                                                <ShoppingCart size={20} />
-                                            </button>
-                                            <button
-                                                className={styles.buyButton}
-                                                onClick={() => handleBuyNow(product)}
-                                            >
-                                                Buy Now
-                                            </button>
-                                        </div>
+                                        )}
+                                    </div>
+                                    <p className={styles.productDescription}>
+                                        {product.description?.length > 100
+                                            ? product.description.substring(0, 100) +
+                                              "..."
+                                            : product.description}
+                                    </p>
+                                    <div className={styles.cardActions}>
+                                        <button
+                                            className={styles.cartButton}
+                                            onClick={() => handleAddToCart(product)}
+                                        >
+                                            <ShoppingCart size={20} />
+                                        </button>
+                                        <button
+                                            className={styles.buyButton}
+                                            onClick={() => handleBuyNow(product)}
+                                        >
+                                            Buy Now
+                                        </button>
                                     </div>
                                 </div>
-                            ))
-                        )}
-                    </div>
-                </main>
-            </div>
-        </>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </main>
+        </div>
     );
 };
 
