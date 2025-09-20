@@ -142,4 +142,20 @@ textarea {
   .row {
     flex-direction: column;
   }
+
+  .heading {
+    font-size: 1rem;
+  }
+
+  input {
+    padding: 0.45rem;
+  }
+
+  .field label {
+    font-size: 0.7rem;
+  }
+
+  .button {
+    padding: 0.5rem 0.5rem;
+  }
 }
