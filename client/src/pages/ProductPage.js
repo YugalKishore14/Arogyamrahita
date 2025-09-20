@@ -89,7 +89,7 @@ const ProductPage = () => {
                 !selectedCategory ||
                 (product.category &&
                     product.category.trim().toLowerCase() ===
-                        selectedCategory.trim().toLowerCase());
+                    selectedCategory.trim().toLowerCase());
             const nameMatches =
                 !searchParam || product.name?.toLowerCase().includes(searchParam);
             const categoryMatchesSearch =
@@ -149,9 +149,8 @@ const ProductPage = () => {
                     {isOpen ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
                 </div>
                 <div
-                    className={`${styles.filterContent} ${
-                        isOpen ? styles.open : styles.closed
-                    }`}
+                    className={`${styles.filterContent} ${isOpen ? styles.open : styles.closed
+                        }`}
                 >
                     {children}
                 </div>
@@ -163,16 +162,15 @@ const ProductPage = () => {
         <div className={styles.container}>
             {/* Sidebar */}
             <aside
-                className={`${styles.sidebar} ${
-                    isSidebarOpen ? styles.showSidebar : ""
-                }`}
+                className={`${styles.sidebar} ${isSidebarOpen ? styles.showSidebar : ""
+                    }`}
             >
                 <div className={styles.sidebarHeader}>
                     <h2 className={styles.sidebarTitle}>Filters</h2>
                     <div className={styles.sidebarIcons}>
-                        <ListFilter size={20} />
+                        {/* <ListFilter size={20} /> */}
                         <Menu
-                            size={20}
+                            size={18}
                             className={styles.closeBtn}
                             onClick={() => setIsSidebarOpen(false)}
                         />
@@ -189,8 +187,7 @@ const ProductPage = () => {
                                 const params = new URLSearchParams(location.search);
                                 params.delete("category");
                                 navigate(
-                                    `/products${
-                                        params.toString() ? `?${params.toString()}` : ""
+                                    `/products${params.toString() ? `?${params.toString()}` : ""
                                     }`
                                 );
                             }}
@@ -247,7 +244,7 @@ const ProductPage = () => {
             </aside>
 
             {/* Main */}
-            <main className={styles.main}>
+            <main className={`${styles.main} ${isSidebarOpen ? styles.sidebarVisible : ""}`}>
                 <div className={styles.topBar}>
                     {/* Hamburger left side */}
                     {!isSidebarOpen && (
@@ -329,7 +326,7 @@ const ProductPage = () => {
                                     <p className={styles.productDescription}>
                                         {product.description?.length > 100
                                             ? product.description.substring(0, 100) +
-                                              "..."
+                                            "..."
                                             : product.description}
                                     </p>
                                     <div className={styles.cardActions}>

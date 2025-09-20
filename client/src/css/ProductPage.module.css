@@ -5,14 +5,12 @@
     min-height: 100vh;
 }
 
-/* ------------------- */
-/* Sidebar (default hidden) */
-/* ------------------- */
 .sidebar {
     position: fixed;
-    top: 70px; /* Navbar ke niche */
+    top: 110px;
     left: 0;
-    height: calc(100vh - 70px);
+    /* height: calc(100vh - 70px); */
+    height: auto;
     width: 280px;
     background-color: #ffffff;
     scroll-behavior: smooth;
@@ -22,8 +20,24 @@
     overflow-y: auto;
     z-index: 1000;
     transition: transform 0.3s ease-in-out;
-    transform: translateX(-100%); /* 👈 Default hidden */
+    transform: translateX(-100%);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
+
+.fixedSidebar {
+    position: sticky;
+    top: 110px;
+    overflow-y: auto;
+    max-height: calc(100vh - 110px);
+}
+
+.scrollSidebar {
+    position: relative;
+    /* ab footer ke sath scroll */
+    top: auto;
+}
+
 
 .showSidebar {
     transform: translateX(0);
@@ -38,6 +52,17 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
+.closeBtn {
+    background: #fff;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    z-index: 1100;
+    width: 30px;
+    height: 30px;
+}
+
 .sidebarTitle {
     font-size: 1.25rem;
     font-weight: 600;
@@ -49,7 +74,6 @@
     color: #4b5563;
 }
 
-/* Filters */
 .filterSection {
     border-bottom: 1px solid #e5e7eb;
     margin-bottom: 1rem;
@@ -128,15 +152,18 @@
     margin-top: 0.5rem;
 }
 
-/* ------------------- */
-/* Main Content */
-/* ------------------- */
 .main {
-    flex: 1;
-    margin-left: 0; /* Sidebar hidden by default */
+    width: 100%;
+    margin-left: 0;
     padding: 1.5rem;
     min-height: calc(100vh - 70px);
     overflow-y: auto;
+    transition: all 0.3s ease;
+}
+
+.main.sidebarVisible {
+    width: calc(100% - 280px);
+    margin-left: 280px;
 }
 
 .topBar {
@@ -155,7 +182,7 @@
     font-size: 1.5rem;
     font-weight: 700;
     color: #1f2937;
-    margin-left: 60px; /* space for hamburger */
+    margin-left: 60px;
 }
 
 .sortSection {
@@ -181,9 +208,6 @@
     outline: none;
 }
 
-/* ------------------- */
-/* Product Cards */
-/* ------------------- */
 .productsGrid {
     display: grid;
     gap: 1.5rem;
@@ -288,9 +312,6 @@
     overflow: hidden;
 }
 
-/* ------------------- */
-/* States */
-/* ------------------- */
 .loading,
 .error,
 .noProducts {
@@ -309,9 +330,6 @@
     color: #999;
 }
 
-/* ------------------- */
-/* Hamburger Button (Always visible) */
-/* ------------------- */
 .hamburgerBtn {
     display: block;
     position: absolute;
@@ -323,19 +341,17 @@
     font-size: 1.2rem;
     padding: 6px 10px;
     border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     cursor: pointer;
     z-index: 1100;
 }
 
-/* ------------------- */
-/* Responsive Tweaks */
-/* ------------------- */
 @media (max-width: 768px) {
     .hamburgerBtn {
         font-size: 1rem;
         padding: 5px 8px;
     }
+
     .pageTitle {
         margin-left: 50px;
     }
