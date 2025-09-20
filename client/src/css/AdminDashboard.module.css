@@ -566,4 +566,13 @@
         padding: 10px;
         font-size: 0.7rem;
     }
+
+    .orderCard {
+        padding: 12px;
+    }
+
+    .submitBtn {
+        padding: 10px;
+        font-size: 0.7rem;
+    }
 }

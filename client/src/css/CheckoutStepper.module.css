@@ -88,36 +88,27 @@
 }
 
 
-@media (min-width: 481px) and (max-width: 768px) {
+@media (max-width: 768px) {
     .stepNumber {
-        width: 28px;
-        height: 28px;
-        line-height: 28px;
-        font-size: 14px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 10px;
     }
 
     .stepLabel {
-        font-size: 14px;
+        font-size: 10px;
     }
 
     .connector {
-        width: 30px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .stepNumber {
-        width: 36px;
-        height: 36px;
-        line-height: 36px;
-        font-size: 18px;
+        width: 20px;
     }
 
-    .stepLabel {
-        font-size: 12px;
-    }
-
-    .connector {
-        width: 30px;
-    }
+    /* .stepperContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        flex-wrap: wrap;
+    } */
 }
