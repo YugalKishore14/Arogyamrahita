@@ -99,15 +99,15 @@
 
 @media (max-width: 600px) {
   .featuredContainer {
-    padding: 20px;
+    padding: 10px;
     margin: 20px;
   }
 
   .reviewCard {
-    width: 200px;
+    width: 300px;
   }
 
   .featuredHeader h2 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 }

@@ -25,17 +25,6 @@
   gap: 0.6rem;
 }
 
-/* .scrollButton {
-  background: rgba(17, 153, 142, 0.9);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.6rem;
-  cursor: pointer;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-} */
-
 
 .scrollButton {
   background: linear-gradient(135deg, #11998e, #38ef7d);
@@ -292,5 +281,10 @@ scrollButton:active {
 
   .productImagese {
     height: 160px;
+  }
+
+  .featuredProductsContainer {
+    width: 100%;
+    padding: 2rem 5px;
   }
 }

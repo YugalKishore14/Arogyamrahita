@@ -107,8 +107,8 @@
 
 @media (max-width: 600px) {
   .heroContainer {
-    padding: 1.5rem;
-    margin: 1rem;
+    padding: 1rem;
+    margin: 2rem;
   }
 
   .heroText h1 {

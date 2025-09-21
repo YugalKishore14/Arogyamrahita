@@ -83,7 +83,7 @@
 }
 
 .productName {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #222;
 }
@@ -216,6 +216,7 @@
 
   .prodCard {
     max-width: 100%;
+    padding: 9px;
   }
 
   .productPrices {
@@ -239,6 +240,16 @@
 
   p {
     margin-bottom: 0;
+  }
+
+  .productPrice {
+    color: #11998e;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .productOldPrice {
+    font-size: 14px;
   }
 }
 

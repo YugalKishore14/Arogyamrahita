@@ -144,12 +144,15 @@
   }
 
   .sectionTitle {
-    font-size: 1.8rem;
+    font-size: 22px;
   }
 
   .cardTitle {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
+  .mainContainer {
+    padding: 40px 5px;
+  }
 
 }
