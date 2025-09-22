@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-    Container,
-    Row,
-    Col,
-    Card,
-    Form,
-    Button,
-    Spinner,
-} from "react-bootstrap";
+import { Container, Row, Col, Card, Form, Button, Spinner } from "react-bootstrap";
 import {
     FaUser,
     FaEnvelope,
@@ -19,10 +11,10 @@ import {
     FaExclamationTriangle,
 } from "react-icons/fa";
 import { authAPI } from "../services/Api";
-import "../css/AuthForms.css";
 import { useAuth } from "../context/AuthContext";
 import logoImage from "../images/arogyamlogo.png";
 import { motion } from "framer-motion";
+import styles from "../css/AuthForms.module.css";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -47,25 +39,16 @@ const Signup = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
         if (errors[name]) {
-            setErrors((prev) => ({
-                ...prev,
-                [name]: "",
-            }));
+            setErrors((prev) => ({ ...prev, [name]: "" }));
         }
     };
 
-
     const emailRegex = /^[a-zA-Z0-9]+@gmail\.com$/;
-
 
     const validateForm = () => {
         const newErrors = {};
-
         if (!formData.name.trim()) {
             newErrors.name = "Name is required";
         } else if (
@@ -77,7 +60,6 @@ const Signup = () => {
             newErrors.name = "Name can only contain letters and spaces";
         }
 
-        // Email validation
         if (!formData.email.trim()) {
             newErrors.email = "Email is required";
         } else if (!emailRegex.test(formData.email.trim())) {
@@ -86,42 +68,36 @@ const Signup = () => {
             if (atIdx === -1 || email.slice(atIdx) !== '@gmail.com') {
                 newErrors.email = "Only @gmail.com domain is allowed.";
             } else if (!/^[a-zA-Z0-9]+$/.test(email.slice(0, atIdx))) {
-                newErrors.email = "Only English letters (a-z, A-Z) and numbers (0-9) allowed before @. No symbols or emojis.";
+                newErrors.email = "Only letters and numbers allowed before @.";
             } else {
                 newErrors.email = "Invalid Gmail address.";
             }
         }
 
-        //Indian phone number validation
         if (!formData.number.trim()) {
             newErrors.number = "Phone number is required";
         } else if (!/^[6-9]\d{9}$/.test(formData.number.trim())) {
-            newErrors.number = "Only valid Indian mobile numbers allowed (10 digits, starts with 6-9)";
+            newErrors.number = "Enter valid Indian mobile number (10 digits)";
         }
 
-        // Password validation
         if (!formData.password) {
             newErrors.password = "Password is required";
         } else if (formData.password.length < 8) {
-            newErrors.password = "Password must be at least 8 characters long";
+            newErrors.password = "At least 8 characters required";
         } else if (!/^[A-Z]/.test(formData.password)) {
-            newErrors.password = "Password must start with a capital letter";
+            newErrors.password = "Password must start with capital letter";
         } else if (!/[a-z]/.test(formData.password)) {
-            newErrors.password =
-                "Password must include at least one lowercase letter";
+            newErrors.password = "Must include at least one lowercase letter";
         } else if (!/[A-Z]/.test(formData.password)) {
-            newErrors.password =
-                "Password must include at least one uppercase letter";
+            newErrors.password = "Must include at least one uppercase letter";
         } else if (!/\d/.test(formData.password)) {
-            newErrors.password = "Password must include at least one number";
+            newErrors.password = "Must include at least one number";
         } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(formData.password)) {
-            newErrors.password =
-                "Password must include at least one special character";
+            newErrors.password = "Must include at least one special character";
         }
 
-        // Confirm Password validation
         if (!formData.confirmPassword) {
-            newErrors.confirmPassword = "Please confirm your password";
+            newErrors.confirmPassword = "Please confirm password";
         } else if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = "Passwords do not match";
         }
@@ -132,10 +108,7 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         setLoading(true);
         try {
@@ -146,16 +119,10 @@ const Signup = () => {
                 password: formData.password,
             });
             navigate("/login", {
-                state: {
-                    message: "Account created! Please login to continue.",
-                    email: response.email,
-                },
+                state: { message: "Account created! Please login.", email: response.email },
             });
         } catch (error) {
-            showNotification(
-                error.response?.data?.message || "Failed to create account",
-                "error"
-            );
+            showNotification(error.response?.data?.message || "Failed to create account", "error");
         } finally {
             setLoading(false);
         }
@@ -165,13 +132,15 @@ const Signup = () => {
         <>
             {notification && (
                 <motion.div
-                    className={`custom-notification custom-notification-${notification.type}`}
+                    className={`${styles.customNotification} ${notification.type === "success"
+                        ? styles.customNotificationSuccess
+                        : styles.customNotificationError}`}
                     initial={{ opacity: 0, y: -30 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -30 }}
                     transition={{ duration: 0.3 }}
                 >
-                    <div className="d-flex align-items-center">
+                    <div>
                         {notification.type === "success" ? (
                             <FaCheckCircle className="me-2" />
                         ) : (
@@ -180,7 +149,7 @@ const Signup = () => {
                         <span>{notification.message}</span>
                     </div>
                     <button
-                        className="notification-close"
+                        className={styles.notificationClose}
                         onClick={() => setNotification(null)}
                     >
                         ×
@@ -188,10 +157,7 @@ const Signup = () => {
                 </motion.div>
             )}
 
-            <Container
-                fluid
-                className="min-vh-100 bg-light d-flex align-items-center justify-content-center"
-            >
+            <Container fluid className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
                 <Row className="w-100 justify-content-center">
                     <Col md={6} lg={5} xl={4}>
                         <motion.div
@@ -199,28 +165,23 @@ const Signup = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <Card className="shadow-lg border-0">
-                                <Card.Body className="p-5">
+                            <Card className="shadow-lg border-0 my-3">
+                                <Card.Body className={styles.cardBody}>
                                     <motion.div
                                         className="text-center mb-4"
                                         initial={{ opacity: 0, y: -20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
                                     >
-                                        <img
-                                            src={logoImage}
-                                            style={{ width: "100px", height: "100px" }}
-                                            alt="Logo"
-                                            className="mb-1"
-                                        />
-                                        <h2 className="fw-bold text-dark">Create Account</h2>
-                                        <p className="text-muted">Join our Arogyam Community</p>
+                                        <img src={logoImage} alt="Logo" className={styles.logoImage} />
+                                        <h2 className={styles.title}>Create Account</h2>
+                                        <p className={styles.subTitle}>Join our Arogyam Community</p>
                                     </motion.div>
 
                                     <Form onSubmit={handleSubmit}>
-                                        {/* Name */}
+                                        {/* Full Name */}
                                         <Form.Group className="mb-3">
-                                            <Form.Label className="fw-semibold">
+                                            <Form.Label className={styles.labelName}>
                                                 <FaUser className="me-2" /> Full Name
                                             </Form.Label>
                                             <Form.Control
@@ -230,17 +191,15 @@ const Signup = () => {
                                                 onChange={handleChange}
                                                 placeholder="Enter your full name"
                                                 isInvalid={!!errors.name}
-                                                className="py-2"
+                                                className={styles.input}
                                             />
-                                            <Form.Control.Feedback type="invalid">
-                                                {errors.name}
-                                            </Form.Control.Feedback>
+                                            <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                                         </Form.Group>
 
                                         {/* Email */}
                                         <Form.Group className="mb-3">
-                                            <Form.Label className="fw-semibold">
-                                                <FaEnvelope className="me-2" /> Email Address
+                                            <Form.Label className={styles.labelName}>
+                                                <FaEnvelope className="me-2" /> Email
                                             </Form.Label>
                                             <Form.Control
                                                 type="email"
@@ -249,16 +208,14 @@ const Signup = () => {
                                                 onChange={handleChange}
                                                 placeholder="Enter your email"
                                                 isInvalid={!!errors.email}
-                                                className="py-2"
+                                                className={styles.input}
                                             />
-                                            <Form.Control.Feedback type="invalid">
-                                                {errors.email}
-                                            </Form.Control.Feedback>
+                                            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                                         </Form.Group>
 
                                         {/* Phone */}
                                         <Form.Group className="mb-3">
-                                            <Form.Label className="fw-semibold">
+                                            <Form.Label className={styles.labelName}>
                                                 <FaUser className="me-2" /> Phone Number
                                             </Form.Label>
                                             <Form.Control
@@ -268,30 +225,22 @@ const Signup = () => {
                                                 onChange={handleChange}
                                                 placeholder="Enter your phone number"
                                                 isInvalid={!!errors.number}
-                                                className="py-2"
+                                                className={styles.input}
                                             />
-                                            <Form.Control.Feedback type="invalid">
-                                                {errors.number}
-                                            </Form.Control.Feedback>
+                                            <Form.Control.Feedback type="invalid">{errors.number}</Form.Control.Feedback>
                                         </Form.Group>
 
                                         {/* Password */}
                                         <Form.Group className="mb-3">
-                                            <Form.Label className="fw-semibold">
+                                            <Form.Label className={styles.labelName}>
                                                 <FaLock className="me-2" /> Password
                                             </Form.Label>
-                                            <div
-                                                className="mb-2"
-                                                style={{ color: errors.password ? "#d9534f" : "#555", fontWeight: 500 }}
-                                            >
+                                            <div className={styles.passwordHint}>
                                                 Password must start with a capital letter.
                                             </div>
                                             {errors.password && (
-                                                <div
-                                                    className="mb-2"
-                                                    style={{ color: "#d9534f", fontWeight: 500 }}
-                                                >
-                                                    Please enter a strong password (at least 8 characters, one capital letter, one small letter, one number, and one special character required)
+                                                <div className={styles.passwordError}>
+                                                    Please enter a strong password (min 8 chars, one capital, one small, one number, one special character)
                                                 </div>
                                             )}
                                             <div className="position-relative">
@@ -302,25 +251,22 @@ const Signup = () => {
                                                     onChange={handleChange}
                                                     placeholder="Enter your password"
                                                     isInvalid={!!errors.password}
-                                                    className="py-2 pe-5"
+                                                    className={`${styles.input} pe-5`}
                                                 />
-                                                <Button
-                                                    variant="link"
-                                                    className="position-absolute top-50 end-0 translate-middle-y border-0 text-muted"
+                                                <button
+                                                    type="button"
+                                                    className={styles.eyeButton}
                                                     onClick={() => setShowPassword(!showPassword)}
-                                                    tabIndex={-1}
                                                 >
-                                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                                                </Button>
+                                                    {showPassword ? <FaEyeSlash className={styles.eye} /> : <FaEye className={styles.eye} />}
+                                                </button>
                                             </div>
-                                            <Form.Control.Feedback type="invalid">
-                                                {errors.password}
-                                            </Form.Control.Feedback>
+                                            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                                         </Form.Group>
 
                                         {/* Confirm Password */}
                                         <Form.Group className="mb-4">
-                                            <Form.Label className="fw-semibold">
+                                            <Form.Label className={styles.labelName}>
                                                 <FaLock className="me-2" /> Confirm Password
                                             </Form.Label>
                                             <div className="position-relative">
@@ -331,27 +277,18 @@ const Signup = () => {
                                                     onChange={handleChange}
                                                     placeholder="Confirm your password"
                                                     isInvalid={!!errors.confirmPassword}
-                                                    className="py-2 pe-5"
+                                                    className={`${styles.input} pe-5`}
                                                 />
-                                                <Button
-                                                    variant="link"
-                                                    className="position-absolute top-50 end-0 translate-middle-y border-0 text-muted"
-                                                    onClick={() =>
-                                                        setShowConfirmPassword(!showConfirmPassword)
-                                                    }
-                                                    tabIndex={-1}
+                                                <button
+                                                    type="button"
+                                                    className={styles.eyeButton}
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                                 >
-                                                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                                                </Button>
+                                                    {showConfirmPassword ? <FaEyeSlash className={styles.eye} /> : <FaEye className={styles.eye} />}
+                                                </button>
                                             </div>
                                             <Form.Control.Feedback type="invalid">
-                                                {errors.confirmPassword && (
-                                                    errors.confirmPassword === "Passwords do not match"
-                                                        ? <span style={{ color: '#d9534f', fontWeight: 500 }}>
-                                                            Passwords do not match, please enter both passwords the same
-                                                        </span>
-                                                        : errors.confirmPassword
-                                                )}
+                                                {errors.confirmPassword}
                                             </Form.Control.Feedback>
                                         </Form.Group>
 
@@ -360,16 +297,12 @@ const Signup = () => {
                                             type="submit"
                                             variant="primary"
                                             size="lg"
-                                            className="w-100 fw-semibold py-2"
+                                            className={styles.submitBtn}
                                             disabled={loading}
                                         >
                                             {loading ? (
                                                 <>
-                                                    <Spinner
-                                                        animation="border"
-                                                        size="sm"
-                                                        className="me-2"
-                                                    />
+                                                    <Spinner animation="border" size="sm" className="me-2" />
                                                     Creating Account...
                                                 </>
                                             ) : (
@@ -379,14 +312,10 @@ const Signup = () => {
                                     </Form>
 
                                     <hr className="my-4" />
-
                                     <div className="text-center">
-                                        <p className="mb-0 text-muted">
+                                        <p className={styles.p}>
                                             Already have an account?{" "}
-                                            <Link
-                                                to="/login"
-                                                className="text-primary fw-semibold text-decoration-none"
-                                            >
+                                            <Link to="/login" className={styles.loginLink}>
                                                 Sign In
                                             </Link>
                                         </p>
