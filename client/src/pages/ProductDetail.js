@@ -135,7 +135,6 @@ const ProductDetail = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          {/* Product Image */}
           <motion.div
             className={styles.productImages}
             initial={{ scale: 0.9, opacity: 0 }}
@@ -147,26 +146,21 @@ const ProductDetail = () => {
             </div>
           </motion.div>
 
-          {/* Product Info */}
           <motion.div
             className={styles.productInfo}
             initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className={styles.productName}>
-              {product.name}{" "}
-
-            </h1>
-
             <motion.div
-              className={styles.productCategory}
+              className={styles.nameRow}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
+              <h1 className={styles.productName}>{product.name}</h1>
               <span className={styles.productWeight}>
-                weight {product.weight} {product.weightUnit}
+                {product.weight} {product.weightUnit}
               </span>
             </motion.div>
 
@@ -198,16 +192,6 @@ const ProductDetail = () => {
               <p>{product.description}</p>
             </motion.div>
 
-            {/* <div className={styles.stockInfo}>
-              <span>
-                Stock:{" "}
-                {product.stock > 0
-                  ? `${product.stock} available`
-                  : "Out of stock"}
-              </span>
-            </div> */}
-
-            {/* Quantity */}
             <motion.div
               className={styles.quantitySelector}
               initial={{ opacity: 0 }}
@@ -232,7 +216,6 @@ const ProductDetail = () => {
               </div>
             </motion.div>
 
-            {/* Actions */}
             <motion.div
               className={styles.productActions}
               initial={{ opacity: 0 }}
