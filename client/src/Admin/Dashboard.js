@@ -26,7 +26,7 @@ const Dashboard = () => {
         oldPrice: "",
         newPrice: "",
         category: "general",
-        variants: [], // Array of { name, weight, weightUnit, additionalPrice, stock }
+        variants: [],
     });
     const [variantInput, setVariantInput] = useState({
         name: "",
