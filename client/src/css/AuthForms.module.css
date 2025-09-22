@@ -177,4 +177,8 @@
     .p {
         font-size: 10px;
     }
+
+    .card {
+        min-width: 345px;
+    }
 }
