@@ -57,11 +57,11 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
           <h3 className={styles.productName}>
             {product.name}
           </h3>
-          {lastVariant && (
+          {/* {lastVariant && (
             <span className={styles.productWeightInfo}>
               {lastVariant.weight} {lastVariant.weightUnit}
             </span>
-          )}
+          )} */}
         </div>
         {/* Show last variant's weight/unit if exists */}
         <div className={styles.productPrices}>
@@ -80,11 +80,11 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
             (product.description.split(" ").length > 12 ? "..." : "")
             : ""}
         </p>
-        {product.variants && product.variants.length > 0 && (
+        {/* {product.variants && product.variants.length > 0 && (
           <div className={styles.variantStock}>
             Stock: {getDisplayStock()}
           </div>
-        )}
+        )} */}
       </div>
 
       <div className={styles.buttonGroup} onClick={e => e.stopPropagation()}>

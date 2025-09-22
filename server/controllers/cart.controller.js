@@ -25,6 +25,9 @@ exports.addToCart = async (req, res) => {
         const { productId, quantity = 1, variant } = req.body;
         const userId = req.user.id;
 
+        console.log("[addToCart] Request body:", req.body);
+        console.log("[addToCart] User:", req.user);
+
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
@@ -66,7 +69,9 @@ exports.addToCart = async (req, res) => {
         });
     } catch (error) {
         console.error("Add to Cart Error:", error);
-        res.status(500).json({ message: "Server error while adding to cart" });
+        // Add more detailed error output
+        console.error("[addToCart] Error stack:", error.stack);
+        res.status(500).json({ message: "Server error while adding to cart", error: error.message, stack: error.stack });
     }
 };
 

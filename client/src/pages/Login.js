@@ -26,7 +26,7 @@ const Login = () => {
 
     useEffect(() => {
         if (location.state?.message) {
-            toast.success(location.state.message);
+            // toast.success(location.state.message);
             if (location.state.email) setEmail(location.state.email);
         }
     }, [location.state]);
@@ -51,7 +51,7 @@ const Login = () => {
             await authAPI.login({ email, password });
             setShowOtpForm(true);
             setTimer(120);
-            toast.success("OTP sent to your email!");
+            // toast.success("OTP sent to your email!");
         } catch (err) {
             setError(err.response?.data?.message || "Failed to send OTP. Please try again.");
         } finally {
@@ -66,7 +66,7 @@ const Login = () => {
         try {
             const response = await authAPI.verifyOtp({ email, otp });
             login(response.token, response.user);
-            toast.success("Login successful!");
+            // toast.success("Login successful!");
             navigate("/");
         } catch (err) {
             setError(err.response?.data?.message || "Invalid OTP. Please try again.");
@@ -79,7 +79,7 @@ const Login = () => {
         try {
             await authAPI.resendOtp({ email });
             setTimer(300);
-            toast.success("New OTP sent!");
+            // toast.success("New OTP sent!");
         } catch (err) {
             toast.error(err.response?.data?.message || "Failed to resend OTP");
         }
