@@ -166,14 +166,13 @@
     align-items: center;
   }
 }
-/* Already added 1024px media query aapke code me hai */
 
-/* Tablet (768px and below) */
 @media (max-width: 768px) {
   .footerContainer {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    padding-bottom: 0px;
   }
 
   .newsletterSection {
@@ -192,12 +191,8 @@
   }
 
   .linksSection {
-    margin: 20px 0;
+    margin: 5px 0;
     flex: 1 1 100%;
-  }
-
-  .socialIcons {
-    margin: 20px 0;
   }
 
   .bottomLinks {
@@ -208,6 +203,14 @@
 
   .bottomLinks a {
     margin: 5px 8px;
+  }
+
+  .linksSection li {
+    margin-bottom: 0;
+  }
+
+  .socialIcons {
+    margin-bottom: 0;
   }
 }
 
