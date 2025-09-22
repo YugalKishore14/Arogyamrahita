@@ -5,8 +5,8 @@ const ImageUpload = ({
     onImageUpload,
     currentImageUrl = "",
     label = "Image",
-    uploadPath = "http://localhost:4000/api/products/upload-image"
-    // uploadPath = "https://arogya-production.up.railway.app/api/products/upload-image",
+    // uploadPath = "http://localhost:4000/api/products/upload-image"
+    uploadPath = "https://arogya-production.up.railway.app/api/products/upload-image",
 }) => {
     const [uploading, setUploading] = useState(false);
     const [uploadError, setUploadError] = useState("");
