@@ -78,13 +78,42 @@ const ProductPage = () => {
         fetchProducts();
     }, [location.search, selectedCategory]);
 
-    const categories = [...new Set(products.map((product) => product.category))];
+    // Collect all categories from products
+    const categories = useMemo(() => {
+        return [...new Set(products.map((product) => product.category))];
+    }, [products]);
+
+    // Helper to flatten products by variants for filtering/sorting
+    const flattenProductsByVariants = (products) => {
+        let result = [];
+        for (const product of products) {
+            if (Array.isArray(product.variants) && product.variants.length > 0) {
+                for (const variant of product.variants) {
+                    result.push({
+                        ...product,
+                        variant,
+                        newPrice: variant.newPrice,
+                        oldPrice: variant.oldPrice,
+                        weight: variant.weight,
+                        weightUnit: variant.weightUnit,
+                        stock: variant.stock,
+                        variantName: variant.name,
+                    });
+                }
+            } else {
+                result.push({ ...product, variant: null });
+            }
+        }
+        return result;
+    };
 
     const filteredAndSortedProducts = useMemo(() => {
         const params = new URLSearchParams(location.search);
         const searchParam = (params.get("search") || "").toLowerCase();
 
-        let filtered = products.filter((product) => {
+        let flatProducts = flattenProductsByVariants(products);
+
+        let filtered = flatProducts.filter((product) => {
             const priceMatch = product.newPrice <= priceValue;
             const categoryMatch =
                 !selectedCategory ||
@@ -287,8 +316,8 @@ const ProductPage = () => {
                             No products available
                         </div>
                     ) : (
-                        filteredAndSortedProducts.map((product) => (
-                            <div key={product._id} className={styles.card}>
+                        filteredAndSortedProducts.map((product, idx) => (
+                            <div key={product._id + (product.variant ? `_${product.variant.name}` : '') + idx} className={styles.card}>
                                 {product.image ? (
                                     <img
                                         src={product.image}
@@ -311,14 +340,14 @@ const ProductPage = () => {
                                 )}
                                 <div className={styles.cardBody}>
                                     <h3 className={styles.productName}>
-                                        {product.name} {product.weight}{" "}
-                                        {product.weightUnit}
+                                        {product.name} {product.weight} {product.weightUnit}
+                                        {product.variantName ? ` (${product.variantName})` : ''}
                                     </h3>
                                     <div className={styles.priceWrapper}>
                                         <span className={styles.newPrice}>
                                             ₹{product.newPrice}
                                         </span>
-                                        {product.oldPrice && (
+                                        {product.oldPrice && product.oldPrice > product.newPrice && (
                                             <span className={styles.oldPrice}>
                                                 ₹{product.oldPrice}
                                             </span>

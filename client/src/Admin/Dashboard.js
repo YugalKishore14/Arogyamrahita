@@ -584,14 +584,45 @@ const Dashboard = () => {
                                                     ? product.description.substring(0, 100) + "..."
                                                     : product.description}
                                             </p>
-                                            <div className={styles.productPrices}>
-                                                <span className={styles.oldPrice}>
-                                                    ₹{product.oldPrice}
-                                                </span>
-                                                <span className={styles.newPrice}>
-                                                    ₹{product.newPrice}
-                                                </span>
-                                            </div>
+                                            {/* Show all variants if present */}
+                                            {product.variants && product.variants.length > 0 ? (
+                                                <div className={styles.variantList}>
+                                                    <strong>Variants:</strong>
+                                                    <table style={{ width: '100%', marginTop: 8, borderCollapse: 'collapse', fontSize: '0.95em' }}>
+                                                        <thead>
+                                                            <tr style={{ background: '#f5f5f5' }}>
+                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Name</th>
+                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Weight</th>
+                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Unit</th>
+                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>New Price</th>
+                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Old Price</th>
+                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Stock</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {product.variants.map((v, idx) => (
+                                                                <tr key={idx}>
+                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd' }}>{v.name || '-'}</td>
+                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd' }}>{v.weight}</td>
+                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd' }}>{v.weightUnit}</td>
+                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd', color: '#388e3c', fontWeight: 600 }}>₹{v.newPrice}</td>
+                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd', color: '#b71c1c', textDecoration: v.oldPrice && v.oldPrice > v.newPrice ? 'line-through' : 'none' }}>{v.oldPrice && v.oldPrice > v.newPrice ? `₹${v.oldPrice}` : '-'}</td>
+                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd' }}>{v.stock}</td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            ) : (
+                                                <div className={styles.productPrices}>
+                                                    <span className={styles.oldPrice}>
+                                                        ₹{product.oldPrice}
+                                                    </span>
+                                                    <span className={styles.newPrice}>
+                                                        ₹{product.newPrice}
+                                                    </span>
+                                                </div>
+                                            )}
                                             <p>
                                                 <strong>Category:</strong> {product.category}
                                             </p>

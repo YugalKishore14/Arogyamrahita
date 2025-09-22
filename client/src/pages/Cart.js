@@ -178,6 +178,10 @@ const Cart = () => {
                     itemKey += `_${idx}`;
                   }
                 }
+
+                // Prefer variant price/weight if present
+                const price = item.variant && item.variant.newPrice !== undefined ? item.variant.newPrice : item.newPrice;
+                const oldPrice = item.variant && item.variant.oldPrice !== undefined ? item.variant.oldPrice : item.oldPrice;
                 const weight = item.variant && item.variant.weight ? item.variant.weight : item.weight;
                 const weightUnit = item.variant && item.variant.weightUnit ? item.variant.weightUnit : item.weightUnit;
                 return (
@@ -205,10 +209,10 @@ const Cart = () => {
                       <p className={styles.itemCategory}>{item.category}</p>
                       <div className={styles.itemPrice}>
                         <span className={styles.currentPrice}>
-                          ₹{item.newPrice}
+                          ₹{price}
                         </span>
-                        {item.oldPrice && item.oldPrice > item.newPrice && (
-                          <span className={styles.oldPrice}>₹{item.oldPrice}</span>
+                        {oldPrice && oldPrice > price && (
+                          <span className={styles.oldPrice}>₹{oldPrice}</span>
                         )}
                       </div>
                     </div>
@@ -238,9 +242,10 @@ const Cart = () => {
                       </motion.button>
                     </div>
 
+
                     {/* Total Price */}
                     <div className={styles.itemTotal}>
-                      <span>₹{item.newPrice * item.quantity}</span>
+                      <span>₹{price * item.quantity}</span>
                     </div>
 
                     {/* Remove Item */}
