@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/Api';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { motion } from "framer-motion";
 
 const ForgotPassword = () => {
