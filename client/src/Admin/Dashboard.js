@@ -102,7 +102,6 @@ const Dashboard = () => {
         }
     };
 
-    // Variant management handlers
     const handleVariantInputChange = (e) => {
         const { name, value } = e.target;
         setVariantInput((prev) => ({ ...prev, [name]: value }));
@@ -187,19 +186,16 @@ const Dashboard = () => {
         }
     };
 
-    // 🔹 Generate PDF Invoice
 
     const generateInvoicePDF = (order) => {
         const doc = new jsPDF();
 
-        // ==== COMPANY INFO ====
         doc.setFontSize(16);
         doc.text("Arogyam Rahita", 20, 20);
         doc.setFontSize(11);
         doc.text("Sanik Vihar, Meerut", 20, 28);
         doc.text("Phone: (000) 000-0000", 20, 34);
 
-        // ==== INVOICE INFO (without big INVOICE text) ====
         doc.setFontSize(11);
         doc.text(`Invoice #: ${order._id || "_____"}`, 150, 40);
         doc.text(
@@ -212,7 +208,6 @@ const Dashboard = () => {
         doc.text(`Customer ID: ${order.user?._id || "_____"}`, 20, 46);
         doc.text("Terms: Net 30 Days", 150, 52);
 
-        // ==== BILL TO / SHIP TO ====
         doc.setFontSize(12);
         doc.text("Bill To:", 20, 60);
         doc.setFontSize(11);
@@ -227,11 +222,10 @@ const Dashboard = () => {
         doc.text(order.user?.email || "_________", 100, 72);
         doc.text(order.user?.address || "_________", 100, 78);
 
-        // ==== TABLE (ITEMS) ====
         const items = (order.items || []).map((it) => [
             it.name,
             it.quantity,
-            "" + String(it.price), // Fix: prevent weird "1"
+            "" + String(it.price),
             "" + String(it.price * it.quantity),
         ]);
 
@@ -242,12 +236,10 @@ const Dashboard = () => {
             styles: { fontSize: 11 },
         });
 
-        // ==== TOTAL ====
         const finalY = doc.lastAutoTable.finalY + 10;
         doc.setFontSize(12);
         doc.text(`TOTAL: ${order.totalAmount || 0}`, 150, finalY);
 
-        // ==== FOOTER ====
         doc.setFontSize(10);
         doc.text("Thank you for your business!", 20, finalY + 20);
         doc.text(
@@ -331,9 +323,6 @@ const Dashboard = () => {
     };
 
     const handleDelete = async (productId) => {
-        if (!window.confirm("Are you sure you want to delete this product?")) {
-            return;
-        }
 
         try {
             setLoading(true);

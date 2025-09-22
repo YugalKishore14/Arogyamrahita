@@ -91,7 +91,7 @@ function PaymentPageWrapper() {
       await clearCart();
       navigate("/", { state: { orderSuccess: true } });
     } catch (err) {
-      alert("Order failed. Try again.");
+      // alert removed: Order failed. Try again.
     }
   };
 

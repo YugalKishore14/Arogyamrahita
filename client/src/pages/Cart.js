@@ -55,13 +55,12 @@ const Cart = () => {
   };
 
   const handleClearCart = async () => {
-    if (window.confirm('Are you sure you want to clear your cart?')) {
-      try {
-        await clearCart();
-        toast.success('Cart cleared successfully');
-      } catch (error) {
-        toast.error('Failed to clear cart');
-      }
+    // window.confirm removed: Always clear cart without confirmation
+    try {
+      await clearCart();
+      toast.success('Cart cleared successfully');
+    } catch (error) {
+      toast.error('Failed to clear cart');
     }
   };
 

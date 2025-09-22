@@ -77,7 +77,7 @@ export default function Contact() {
     )
       .then(
         (res) => {
-          alert("✅ Message sent successfully!");
+          // alert removed: Message sent successfully!
           setFormData({
             first_name: "",
             last_name: "",
@@ -90,7 +90,7 @@ export default function Contact() {
           });
         },
         (err) => {
-          alert("❌ Failed to send. Please try again.");
+          // alert removed: Failed to send. Please try again.
           console.error(err);
         }
       )
