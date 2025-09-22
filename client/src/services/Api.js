@@ -89,8 +89,8 @@ export const cartAPI = {
         return response.data;
     },
 
-    addToCart: async (productId, quantity = 1) => {
-        const response = await api.post('/cart/add', { productId, quantity });
+    addToCart: async (productId, quantity = 1, variant = null) => {
+        const response = await api.post('/cart/add', { productId, quantity, variant });
         return response.data;
     },
 

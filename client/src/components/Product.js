@@ -11,8 +11,27 @@ import { GrCart } from "react-icons/gr";
 function ProductCard({ product, onAddToCart, onBuyNow }) {
   const navigate = useNavigate();
 
+  // Show last variant if exists
+  const lastVariant = product.variants && product.variants.length > 0
+    ? product.variants[product.variants.length - 1]
+    : null;
+
   const handleImageClick = () => {
     navigate(`/product/${product._id}`);
+  }
+
+  // Helper to get price/stock for last variant or base product
+  const getDisplayPrice = () => {
+    if (lastVariant) {
+      return lastVariant.newPrice;
+    }
+    return product.newPrice;
+  };
+  const getDisplayStock = () => {
+    if (lastVariant) {
+      return lastVariant.stock;
+    }
+    return product.stock;
   };
 
   return (
@@ -34,13 +53,25 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
       />
 
       <div className={styles.productInfo}>
-        <h3 className={styles.productName}>
-          {product.name} {product.weight} {product.weightUnit}
-        </h3>
+        <div className={styles.productNameRow}>
+          <h3 className={styles.productName}>
+            {product.name}
+          </h3>
+          {lastVariant && (
+            <span className={styles.productWeightInfo}>
+              {lastVariant.weight} {lastVariant.weightUnit}
+            </span>
+          )}
+        </div>
+        {/* Show last variant's weight/unit if exists */}
         <div className={styles.productPrices}>
-          <span className={styles.productPrice}>₹{product.newPrice}</span>
-          {product.oldPrice && (
-            <span className={styles.productOldPrice}>₹{product.oldPrice}</span>
+          <span className={styles.productPrice}>₹{getDisplayPrice()}</span>
+          {lastVariant && lastVariant.oldPrice && lastVariant.oldPrice > lastVariant.newPrice ? (
+            <span className={styles.productOldPrice}>₹{lastVariant.oldPrice}</span>
+          ) : (
+            product.oldPrice && product.oldPrice > product.newPrice ? (
+              <span className={styles.productOldPrice}>₹{product.oldPrice}</span>
+            ) : null
           )}
         </div>
         <p className={styles.productDescription}>
@@ -49,13 +80,18 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
             (product.description.split(" ").length > 12 ? "..." : "")
             : ""}
         </p>
+        {product.variants && product.variants.length > 0 && (
+          <div className={styles.variantStock}>
+            Stock: {getDisplayStock()}
+          </div>
+        )}
       </div>
 
-      <div className={styles.buttonGroup} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.buttonGroup} onClick={e => e.stopPropagation()}>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => onBuyNow(product)}
+          onClick={() => onBuyNow({ ...product, selectedVariant: lastVariant || null })}
           className={styles.buyBtn}
         >
           Buy Now
@@ -64,7 +100,7 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => onAddToCart(product)}
+          onClick={() => onAddToCart({ ...product, selectedVariant: lastVariant || null })}
           className={styles.cartBtn}
         >
           <GrCart className={styles.cartIcon} />

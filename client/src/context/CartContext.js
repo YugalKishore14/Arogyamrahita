@@ -75,9 +75,12 @@ export const CartProvider = ({ children }) => {
     }, [cartItems, isAuthenticated]);
 
     const addToCart = async (product, quantity = 1) => {
+        // Compose a unique key for product+variant
+        const variantKey = product.selectedVariant ? `${product._id}_${product.selectedVariant.name || product.selectedVariant.sku || ''}` : product._id;
         if (isAuthenticated()) {
             try {
-                const response = await cartAPI.addToCart(product._id, quantity);
+                // Send variant info to backend if present
+                const response = await cartAPI.addToCart(product._id, quantity, product.selectedVariant || null);
                 if (response.cart && response.cart.items) {
                     const items = response.cart.items.map(item => ({
                         _id: item.product._id,
@@ -88,32 +91,50 @@ export const CartProvider = ({ children }) => {
                         category: item.product.category,
                         quantity: item.quantity,
                         weight: item.product.weight,
-                        weightUnit: item.product.weightUnit
+                        weightUnit: item.product.weightUnit,
+                        variant: item.variant || null // If backend supports
                     }));
                     setCartItems(items);
                     setCartCount(items.reduce((total, item) => total + item.quantity, 0));
                 }
             } catch (error) {
                 console.error('Error adding to cart in database:', error);
-                updateLocalCart(product, quantity);
+                updateLocalCart(product, quantity, variantKey);
             }
         } else {
-            updateLocalCart(product, quantity);
+            updateLocalCart(product, quantity, variantKey);
         }
     };
 
-    const updateLocalCart = (product, quantity) => {
+    const updateLocalCart = (product, quantity, variantKey) => {
         setCartItems(prevItems => {
-            const existingItem = prevItems.find(item => item._id === product._id);
+            // Find by product id and variant (if any)
+            const existingItem = prevItems.find(item => {
+                if (item._id !== product._id) return false;
+                if (product.selectedVariant) {
+                    return item.variant && item.variant.name === product.selectedVariant.name;
+                }
+                return !item.variant;
+            });
 
             if (existingItem) {
                 return prevItems.map(item =>
-                    item._id === product._id
+                    item._id === product._id && (
+                        (!product.selectedVariant && !item.variant) ||
+                        (product.selectedVariant && item.variant && item.variant.name === product.selectedVariant.name)
+                    )
                         ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
             } else {
-                return [...prevItems, { ...product, quantity }];
+                return [
+                    ...prevItems,
+                    {
+                        ...product,
+                        quantity,
+                        variant: product.selectedVariant || null
+                    }
+                ];
             }
         });
     };

@@ -17,11 +17,11 @@ const productSchema = new mongoose.Schema(
         },
         oldPrice: {
             type: Number,
-            required: true,
+            required: false,
         },
         newPrice: {
             type: Number,
-            required: true,
+            required: false,
         },
         category: {
             type: String,
@@ -37,13 +37,24 @@ const productSchema = new mongoose.Schema(
         },
         weight: {
             type: Number,
-            required: true,
+            required: false,
         },
         weightUnit: {
             type: String,
             enum: ["kg", "gm", "mg", "lb", "oz"],
-            required: true,
+            required: false,
         },
+        variants: [
+            {
+                name: { type: String, required: true },
+                weight: { type: Number, required: true },
+                weightUnit: { type: String, enum: ["kg", "gm", "mg", "lb", "oz"], required: true },
+                oldPrice: { type: Number, required: true },
+                newPrice: { type: Number, required: true },
+                stock: { type: Number, default: 0 },
+                sku: { type: String },
+            }
+        ],
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",

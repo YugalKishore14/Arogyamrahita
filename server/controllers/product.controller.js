@@ -4,23 +4,28 @@ const imageService = require("../services/image.service");
 // Create a new product
 exports.createProduct = async (req, res) => {
     try {
-        const { name, description, image, oldPrice, newPrice, category, stock, weight, weightUnit } = req.body;
+        const { name, description, image, oldPrice, newPrice, category, stock, weight, weightUnit, variants } = req.body;
 
         // Use Cloudinary URL directly (already complete URL)
         let imageUrl = image;
 
-        const product = new Product({
+        let productData = {
             name,
             description,
             image: imageUrl,
-            oldPrice,
-            newPrice,
             category,
             stock,
-            weight,
-            weightUnit,
             createdBy: req.user.id
-        });
+        };
+        if (Array.isArray(variants) && variants.length > 0) {
+            productData.variants = variants;
+        } else {
+            productData.oldPrice = oldPrice;
+            productData.newPrice = newPrice;
+            productData.weight = weight;
+            productData.weightUnit = weightUnit;
+        }
+        const product = new Product(productData);
 
         const savedProduct = await product.save();
         res.status(201).json({
@@ -95,7 +100,7 @@ exports.getProductById = async (req, res) => {
 // Update product
 exports.updateProduct = async (req, res) => {
     try {
-        const { name, description, image, oldPrice, newPrice, category, stock, isActive } = req.body;
+        const { name, description, image, oldPrice, newPrice, category, stock, isActive, variants } = req.body;
 
         // Use Cloudinary URL directly (already complete URL)
         let imageUrl = image;
@@ -110,7 +115,8 @@ exports.updateProduct = async (req, res) => {
                 newPrice,
                 category,
                 stock,
-                isActive
+                isActive,
+                variants: Array.isArray(variants) ? variants : [],
             },
             { new: true, runValidators: true }
         );

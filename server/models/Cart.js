@@ -14,6 +14,15 @@ const cartItemSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
+    },
+    variant: {
+        name: { type: String },
+        weight: { type: Number },
+        weightUnit: { type: String },
+        oldPrice: { type: Number },
+        newPrice: { type: Number },
+        stock: { type: Number },
+        sku: { type: String },
     }
 });
 

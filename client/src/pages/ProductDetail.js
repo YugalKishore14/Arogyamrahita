@@ -17,6 +17,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState(null);
 
   useEffect(() => {
     if (id) {
@@ -30,6 +31,9 @@ const ProductDetail = () => {
       const response = await productAPI.getProductById(id);
       if (response.success) {
         setProduct(response.product);
+        if (response.product.variants && response.product.variants.length > 0) {
+          setSelectedVariant(0);
+        }
       } else {
         setError("Product not found");
       }
@@ -48,14 +52,24 @@ const ProductDetail = () => {
       return;
     }
 
+    const variantObj =
+      product.variants &&
+        product.variants.length > 0 &&
+        selectedVariant !== null
+        ? product.variants[selectedVariant]
+        : null;
+
     addToCart(
       {
         _id: product._id,
         name: product.name,
-        newPrice: product.newPrice,
+        newPrice: variantObj
+          ? variantObj.price || product.newPrice
+          : product.newPrice,
         oldPrice: product.oldPrice,
         image: product.image,
         category: product.category,
+        selectedVariant: variantObj,
       },
       quantity
     );
@@ -70,14 +84,24 @@ const ProductDetail = () => {
       return;
     }
 
+    const variantObj =
+      product.variants &&
+        product.variants.length > 0 &&
+        selectedVariant !== null
+        ? product.variants[selectedVariant]
+        : null;
+
     addToCart(
       {
         _id: product._id,
         name: product.name,
-        newPrice: product.newPrice,
+        newPrice: variantObj
+          ? variantObj.price || product.newPrice
+          : product.newPrice,
         oldPrice: product.oldPrice,
         image: product.image,
         category: product.category,
+        selectedVariant: variantObj,
       },
       quantity
     );
@@ -159,27 +183,63 @@ const ProductDetail = () => {
               transition={{ delay: 0.2 }}
             >
               <h1 className={styles.productName}>{product.name}</h1>
-              <span className={styles.productWeight}>
-                {product.weight} {product.weightUnit}
-              </span>
+              {product.variants &&
+                product.variants.length > 0 &&
+                selectedVariant !== null ? (
+                <span className={styles.productWeight}>
+                  {product.variants[selectedVariant].weight}{" "}
+                  {product.variants[selectedVariant].weightUnit}
+                </span>
+              ) : (
+                <span className={styles.productWeight}>
+                  {product.weight} {product.weightUnit}
+                </span>
+              )}
             </motion.div>
 
             <div className={styles.productPrices}>
-              <span className={styles.currentPrice}>₹{product.newPrice}</span>
-              {product.oldPrice && product.oldPrice > product.newPrice && (
-                <span className={styles.oldPrice}>₹{product.oldPrice}</span>
+              <span className={styles.currentPrice}>
+                ₹
+                {product.variants &&
+                  product.variants.length > 0 &&
+                  selectedVariant !== null
+                  ? product.variants[selectedVariant]?.newPrice || product.newPrice
+                  : product.newPrice}
+              </span>
+              {product.variants && product.variants.length > 0 && selectedVariant !== null ? (
+                product.variants[selectedVariant]?.oldPrice && product.variants[selectedVariant]?.oldPrice > product.variants[selectedVariant]?.newPrice ? (
+                  <span className={styles.oldPrice}>₹{product.variants[selectedVariant]?.oldPrice}</span>
+                ) : null
+              ) : (
+                product.oldPrice && product.oldPrice > product.newPrice ? (
+                  <span className={styles.oldPrice}>₹{product.oldPrice}</span>
+                ) : null
               )}
             </div>
 
-            {product.oldPrice && product.oldPrice > product.newPrice && (
-              <motion.div
-                className={styles.discount}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <span>Save ₹{product.oldPrice - product.newPrice}</span>
-              </motion.div>
+            {/* Discount display for selected variant */}
+            {product.variants && product.variants.length > 0 && selectedVariant !== null ? (
+              product.variants[selectedVariant]?.oldPrice && product.variants[selectedVariant]?.oldPrice > product.variants[selectedVariant]?.newPrice ? (
+                <motion.div
+                  className={styles.discount}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <span>Save ₹{product.variants[selectedVariant]?.oldPrice - product.variants[selectedVariant]?.newPrice}</span>
+                </motion.div>
+              ) : null
+            ) : (
+              product.oldPrice && product.oldPrice > product.newPrice ? (
+                <motion.div
+                  className={styles.discount}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <span>Save ₹{product.oldPrice - product.newPrice}</span>
+                </motion.div>
+              ) : null
             )}
 
             <motion.div
@@ -209,11 +269,38 @@ const ProductDetail = () => {
                 <span>{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  disabled={product.stock <= 0 || quantity >= product.stock}
+                  disabled={
+                    product.variants &&
+                      product.variants.length > 0 &&
+                      selectedVariant !== null
+                      ? product.variants[selectedVariant].stock <= 0 ||
+                      quantity >= product.variants[selectedVariant].stock
+                      : product.stock <= 0 || quantity >= product.stock
+                  }
                 >
                   +
                 </button>
               </div>
+              {/* Variant selector */}
+              {product.variants && product.variants.length > 0 && (
+                <div className={styles.variantSelector}>
+                  <label htmlFor="variant-select">Select Weight:</label>
+                  <select
+                    id="variant-select"
+                    value={selectedVariant}
+                    onChange={(e) => {
+                      setSelectedVariant(Number(e.target.value));
+                      setQuantity(1); // Reset quantity on variant change
+                    }}
+                  >
+                    {product.variants.map((variant, idx) => (
+                      <option key={idx} value={idx}>
+                        {variant.name} - {variant.weight} {variant.weightUnit} {variant.stock === 0 ? "(Out of stock)" : ""}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </motion.div>
 
             <motion.div
@@ -225,7 +312,13 @@ const ProductDetail = () => {
               <motion.button
                 className={styles.buyNowBtn}
                 onClick={handleBuyNow}
-                disabled={product.stock <= 0}
+                disabled={
+                  product.variants &&
+                    product.variants.length > 0 &&
+                    selectedVariant !== null
+                    ? product.variants[selectedVariant].stock <= 0
+                    : product.stock <= 0
+                }
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -234,7 +327,13 @@ const ProductDetail = () => {
               <motion.button
                 className={styles.addToCartBtn}
                 onClick={handleAddToCart}
-                disabled={product.stock <= 0}
+                disabled={
+                  product.variants &&
+                    product.variants.length > 0 &&
+                    selectedVariant !== null
+                    ? product.variants[selectedVariant].stock <= 0
+                    : product.stock <= 0
+                }
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -242,15 +341,19 @@ const ProductDetail = () => {
               </motion.button>
             </motion.div>
 
-            {product.stock <= 0 && (
-              <motion.p
-                className={styles.outOfStock}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                This product is currently out of stock
-              </motion.p>
-            )}
+            {(product.variants &&
+              product.variants.length > 0 &&
+              selectedVariant !== null
+              ? product.variants[selectedVariant].stock <= 0
+              : product.stock <= 0) && (
+                <motion.p
+                  className={styles.outOfStock}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  This product is currently out of stock
+                </motion.p>
+              )}
           </motion.div>
         </motion.div>
       </motion.div>

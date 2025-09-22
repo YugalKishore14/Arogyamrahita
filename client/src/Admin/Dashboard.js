@@ -26,9 +26,15 @@ const Dashboard = () => {
         oldPrice: "",
         newPrice: "",
         category: "general",
-        stock: "",
+        variants: [], // Array of { name, weight, weightUnit, additionalPrice, stock }
+    });
+    const [variantInput, setVariantInput] = useState({
+        name: "",
         weight: "",
         weightUnit: "kg",
+        oldPrice: "",
+        newPrice: "",
+        stock: "",
     });
     const [users, setUsers] = useState([]);
     const [orders, setOrders] = useState([]);
@@ -96,6 +102,60 @@ const Dashboard = () => {
         }
     };
 
+    // Variant management handlers
+    const handleVariantInputChange = (e) => {
+        const { name, value } = e.target;
+        setVariantInput((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const addVariant = (e) => {
+        e.preventDefault();
+        if (
+            !variantInput.name ||
+            !variantInput.weight ||
+            !variantInput.weightUnit ||
+            variantInput.stock === "" ||
+            variantInput.oldPrice === "" ||
+            variantInput.newPrice === ""
+        )
+            return;
+        setFormData((prev) => {
+            const safeVariants = Array.isArray(prev.variants) ? prev.variants : [];
+            return {
+                ...prev,
+                variants: [
+                    ...safeVariants,
+                    {
+                        name: variantInput.name,
+                        weight: Number(variantInput.weight),
+                        weightUnit: variantInput.weightUnit,
+                        oldPrice: Number(variantInput.oldPrice),
+                        newPrice: Number(variantInput.newPrice),
+                        stock: Number(variantInput.stock),
+                    },
+                ],
+            };
+        });
+        setVariantInput({
+            name: "",
+            weight: "",
+            weightUnit: "kg",
+            oldPrice: "",
+            newPrice: "",
+            stock: "",
+        });
+    };
+
+    const removeVariant = (idx) => {
+        setFormData((prev) => {
+            const safeVariants = Array.isArray(prev.variants) ? prev.variants : [];
+            return {
+                ...prev,
+                variants: safeVariants.filter((_, i) => i !== idx),
+            };
+        });
+    };
+
     const fetchUsers = async () => {
         try {
             const data = await adminAPI.listUsers();
@@ -142,7 +202,11 @@ const Dashboard = () => {
         // ==== INVOICE INFO (without big INVOICE text) ====
         doc.setFontSize(11);
         doc.text(`Invoice #: ${order._id || "_____"}`, 150, 40);
-        doc.text(`Date: ${order.createdAt ? order.createdAt.slice(0, 10) : "_____"}`, 150, 46);
+        doc.text(
+            `Date: ${order.createdAt ? order.createdAt.slice(0, 10) : "_____"}`,
+            150,
+            46
+        );
 
         // Customer ID shift left so it's not cut
         doc.text(`Customer ID: ${order.user?._id || "_____"}`, 20, 46);
@@ -186,8 +250,16 @@ const Dashboard = () => {
         // ==== FOOTER ====
         doc.setFontSize(10);
         doc.text("Thank you for your business!", 20, finalY + 20);
-        doc.text("If you have any questions about this invoice, please contact:", 20, finalY + 28);
-        doc.text("Arogyam Rahita | Phone: (000) 000-0000 | email@domain.com", 20, finalY + 34);
+        doc.text(
+            "If you have any questions about this invoice, please contact:",
+            20,
+            finalY + 28
+        );
+        doc.text(
+            "Arogyam Rahita | Phone: (000) 000-0000 | email@domain.com",
+            20,
+            finalY + 34
+        );
 
         doc.save(`invoice_${order._id || "draft"}.pdf`);
     };
@@ -348,7 +420,10 @@ const Dashboard = () => {
                                 <span className={styles.userName}>
                                     {u.name} ({u.email})
                                 </span>
-                                <span id={styles.activeStatus} className={u.online ? styles.online : styles.offline}>
+                                <span
+                                    id={styles.activeStatus}
+                                    className={u.online ? styles.online : styles.offline}
+                                >
                                     {u.online ? "● Online" : "● Offline"}
                                 </span>
                             </div>
@@ -359,7 +434,10 @@ const Dashboard = () => {
                 {/* Orders */}
                 <div className={styles.ordersSection}>
                     <h2 className={styles.sectionTitle}>Orders</h2>
-                    <div className={styles.input} style={{ display: "flex", gap: 16, marginBottom: 16 }}>
+                    <div
+                        className={styles.input}
+                        style={{ display: "flex", gap: 16, marginBottom: 16 }}
+                    >
                         <input
                             type="text"
                             placeholder="Filter by user name"
@@ -589,36 +667,6 @@ const Dashboard = () => {
                                 currentImageUrl={formData.image}
                             />
 
-                            <div className={styles.priceGroup}>
-                                <div className={styles.formGroup}>
-                                    <label>Old Price (₹):</label>
-                                    <input
-                                        type="number"
-                                        name="oldPrice"
-                                        value={formData.oldPrice}
-                                        onChange={handleInputChange}
-                                        placeholder="0"
-                                        min="0"
-                                        step="0.01"
-                                        required
-                                    />
-                                </div>
-
-                                <div className={styles.formGroup}>
-                                    <label>New Price (₹):</label>
-                                    <input
-                                        type="number"
-                                        name="newPrice"
-                                        value={formData.newPrice}
-                                        onChange={handleInputChange}
-                                        placeholder="0"
-                                        min="0"
-                                        step="0.01"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
                             <div className={styles.formGroup}>
                                 <label>Category:</label>
                                 <select
@@ -634,45 +682,116 @@ const Dashboard = () => {
                                 </select>
                             </div>
 
+                            {/* Variants Section */}
                             <div className={styles.formGroup}>
-                                <label>Weight:</label>
-                                <input
-                                    type="number"
-                                    name="weight"
-                                    value={formData.weight}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter weight"
-                                    min="0"
-                                    step="0.01"
-                                    required
-                                />
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label>Weight Unit:</label>
-                                <select
-                                    name="weightUnit"
-                                    value={formData.weightUnit}
-                                    onChange={handleInputChange}
-                                    required
+                                <label>Add Product Variant (Weight):</label>
+                                <div
+                                    style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}
                                 >
-                                    <option value="kg">kg</option>
-                                    <option value="gm">gm</option>
-                                    <option value="ltr">ltr</option>
-                                    <option value="mg">mg</option>
-                                    <option value="oz">oz</option>
-                                </select>
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label>Stock:</label>
-                                <input
-                                    type="number"
-                                    name="stock"
-                                    value={formData.stock}
-                                    onChange={handleInputChange}
-                                    placeholder="0"
-                                    min="0"
-                                    required
-                                />
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={variantInput.name}
+                                        onChange={handleVariantInputChange}
+                                        placeholder="Variant"
+                                        style={{ width: "120px" }}
+                                    />
+                                    <input
+                                        type="number"
+                                        name="weight"
+                                        value={variantInput.weight}
+                                        onChange={handleVariantInputChange}
+                                        placeholder="Weight"
+                                        min="0"
+                                        step="0.01"
+                                        style={{ width: "100px" }}
+                                    />
+                                    <select
+                                        name="weightUnit"
+                                        value={variantInput.weightUnit}
+                                        onChange={handleVariantInputChange}
+                                        style={{ width: "100px" }}
+                                    >
+                                        <option value="kg">kg</option>
+                                        <option value="gm">gm</option>
+                                        <option value="ltr">ltr</option>
+                                        <option value="mg">mg</option>
+                                        <option value="oz">oz</option>
+                                    </select>
+                                    <input
+                                        type="number"
+                                        name="oldPrice"
+                                        value={variantInput.oldPrice}
+                                        onChange={handleVariantInputChange}
+                                        placeholder="Old Price (₹)"
+                                        min="0"
+                                        step="0.01"
+                                        style={{ width: "100px" }}
+                                    />
+                                    <input
+                                        type="number"
+                                        name="newPrice"
+                                        value={variantInput.newPrice}
+                                        onChange={handleVariantInputChange}
+                                        placeholder="New Price (₹)"
+                                        min="0"
+                                        step="0.01"
+                                        style={{ width: "100px" }}
+                                    />
+                                    <input
+                                        type="number"
+                                        name="stock"
+                                        value={variantInput.stock}
+                                        onChange={handleVariantInputChange}
+                                        placeholder="Stock"
+                                        min="0"
+                                        style={{ width: "100px" }}
+                                    />
+                                    <button
+                                        onClick={addVariant}
+                                        style={{ padding: "0.2rem 0.8rem", borderRadius: "10px" }}
+                                    >
+                                        Add
+                                    </button>
+                                </div>
+                                {/* List of added variants */}
+                                {formData.variants && formData.variants.length > 0 && (
+                                    <div className={styles.variantTableWrapper}>
+                                        <table className={styles.variantTable}>
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Weight</th>
+                                                    <th>Unit</th>
+                                                    <th>Old Price (₹)</th>
+                                                    <th>New Price (₹)</th>
+                                                    <th>Stock</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {formData.variants.map((v, idx) => (
+                                                    <tr key={idx}>
+                                                        <td>{v.name}</td>
+                                                        <td>{v.weight}</td>
+                                                        <td>{v.weightUnit}</td>
+                                                        <td>{v.oldPrice}</td>
+                                                        <td>{v.newPrice}</td>
+                                                        <td>{v.stock}</td>
+                                                        <td>
+                                                            <button
+                                                                onClick={() => removeVariant(idx)}
+                                                                className={styles.variantRemoveBtn}
+                                                            >
+                                                                Remove
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
                             </div>
 
                             <button

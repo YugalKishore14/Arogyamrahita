@@ -22,7 +22,7 @@ exports.getCart = async (req, res) => {
 // Add item to cart
 exports.addToCart = async (req, res) => {
     try {
-        const { productId, quantity = 1 } = req.body;
+        const { productId, quantity = 1, variant } = req.body;
         const userId = req.user.id;
 
         const product = await Product.findById(productId);
@@ -35,9 +35,16 @@ exports.addToCart = async (req, res) => {
             cart = new Cart({ user: userId, items: [] });
         }
 
-        const existingItem = cart.items.find(item =>
-            item.product.toString() === productId
-        );
+        // Find by product and variant (if any)
+        const existingItem = cart.items.find(item => {
+            if (item.product.toString() !== productId) return false;
+            if (variant && item.variant && item.variant.name === variant.name) return true;
+            if (!variant && !item.variant) return true;
+            return false;
+        });
+
+        let priceToUse = product.newPrice;
+        if (variant && variant.newPrice) priceToUse = variant.newPrice;
 
         if (existingItem) {
             existingItem.quantity += quantity;
@@ -45,12 +52,12 @@ exports.addToCart = async (req, res) => {
             cart.items.push({
                 product: productId,
                 quantity,
-                price: product.newPrice || product.price
+                price: priceToUse,
+                variant: variant || undefined
             });
         }
 
         await cart.save();
-
         await cart.populate('items.product');
 
         res.json({

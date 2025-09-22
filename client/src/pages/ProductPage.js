@@ -50,7 +50,8 @@ const ProductPage = () => {
 
                 if (categoryParam) categoryParam = categoryParam.trim();
 
-                let url = "https://arogya-production.up.railway.app/api/products";
+                // let url = "https://arogya-production.up.railway.app/api/products";
+                let url = "http://localhost:4000/api/products"
                 const queryParts = [];
                 if (categoryParam)
                     queryParts.push(`category=${encodeURIComponent(categoryParam)}`);

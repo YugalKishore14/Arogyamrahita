@@ -3,7 +3,6 @@ import PaymentModal from '../components/PaymentModal';
 import CheckoutStepper from '../components/CheckoutStepper';
 import { useNavigate } from 'react-router-dom';
 import { ordersAPI } from '../services/Api';
-// import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -123,7 +122,6 @@ const Cart = () => {
     onSuccess && onSuccess();
   };
 
-  // Stepper logic: 0 = Cart, 1 = Address, 2 = Payment Success
   let currentStep = 0;
   if (showPayment && !orderSuccess) currentStep = 1;
   if (orderSuccess) currentStep = 2;
@@ -169,81 +167,95 @@ const Cart = () => {
         <div className={styles.cartContent}>
           <div className={styles.cartItems}>
             <AnimatePresence>
-              {cartItems.map((item) => (
-                <motion.div
-                  key={item._id}
-                  className={styles.cartItem}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 30 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className={styles.itemImage}>
-                    <img src={item.image} alt={item.name} />
-                  </div>
-
-                  <div className={styles.itemDetails}>
-                    <h3>
-                      {item.name}
-                      {item.weight ? (
-                        <span className={styles.itemWeight}>
-                          {item.weight} {item.weightUnit || ''}
-                        </span>
-                      ) : null}
-                    </h3>
-                    <p className={styles.itemCategory}>{item.category}</p>
-                    <div className={styles.itemPrice}>
-                      <span className={styles.currentPrice}>
-                        ₹{item.newPrice}
-                      </span>
-                      {item.oldPrice && item.oldPrice > item.newPrice && (
-                        <span className={styles.oldPrice}>₹{item.oldPrice}</span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Quantity Controls */}
-                  <div className={styles.itemQuantity}>
-                    <motion.button
-                      onClick={() =>
-                        handleQuantityChange(item._id, item.quantity - 1)
-                      }
-                      disabled={updating[item._id]}
-                      className={styles.quantityBtn}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <FaMinus />
-                    </motion.button>
-                    <span className={styles.quantity}>{item.quantity}</span>
-                    <motion.button
-                      onClick={() =>
-                        handleQuantityChange(item._id, item.quantity + 1)
-                      }
-                      disabled={updating[item._id]}
-                      className={styles.quantityBtn}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <FaPlus />
-                    </motion.button>
-                  </div>
-
-                  {/* Total Price */}
-                  <div className={styles.itemTotal}>
-                    <span>₹{item.newPrice * item.quantity}</span>
-                  </div>
-
-                  {/* Remove Item */}
-                  <motion.button
-                    onClick={() => handleRemoveItem(item._id)}
-                    className={styles.removeButton}
-                    title="Remove item"
-                    whileHover={{ rotate: 15, scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
+              {cartItems.map((item, idx) => {
+                let itemKey = item._id;
+                if (item.variant) {
+                  if (item.variant.sku) {
+                    itemKey += `_${item.variant.sku}`;
+                  } else if (item.variant.name) {
+                    itemKey += `_${item.variant.name}`;
+                  } else {
+                    itemKey += `_${idx}`;
+                  }
+                }
+                const weight = item.variant && item.variant.weight ? item.variant.weight : item.weight;
+                const weightUnit = item.variant && item.variant.weightUnit ? item.variant.weightUnit : item.weightUnit;
+                return (
+                  <motion.div
+                    key={itemKey}
+                    className={styles.cartItem}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 30 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <FaTrash />
-                  </motion.button>
-                </motion.div>
-              ))}
+                    <div className={styles.itemImage}>
+                      <img src={item.image} alt={item.name} />
+                    </div>
+
+                    <div className={styles.itemDetails}>
+                      <h3>
+                        {item.name}
+                        {weight ? (
+                          <span className={styles.itemWeight}>
+                            {weight} {weightUnit || ''}
+                          </span>
+                        ) : null}
+                      </h3>
+                      <p className={styles.itemCategory}>{item.category}</p>
+                      <div className={styles.itemPrice}>
+                        <span className={styles.currentPrice}>
+                          ₹{item.newPrice}
+                        </span>
+                        {item.oldPrice && item.oldPrice > item.newPrice && (
+                          <span className={styles.oldPrice}>₹{item.oldPrice}</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Quantity Controls */}
+                    <div className={styles.itemQuantity}>
+                      <motion.button
+                        onClick={() =>
+                          handleQuantityChange(item._id, item.quantity - 1)
+                        }
+                        disabled={updating[item._id]}
+                        className={styles.quantityBtn}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <FaMinus />
+                      </motion.button>
+                      <span className={styles.quantity}>{item.quantity}</span>
+                      <motion.button
+                        onClick={() =>
+                          handleQuantityChange(item._id, item.quantity + 1)
+                        }
+                        disabled={updating[item._id]}
+                        className={styles.quantityBtn}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <FaPlus />
+                      </motion.button>
+                    </div>
+
+                    {/* Total Price */}
+                    <div className={styles.itemTotal}>
+                      <span>₹{item.newPrice * item.quantity}</span>
+                    </div>
+
+                    {/* Remove Item */}
+                    <motion.button
+                      onClick={() => handleRemoveItem(item._id)}
+                      className={styles.removeButton}
+                      title="Remove item"
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <FaTrash />
+                    </motion.button>
+                  </motion.div>
+                );
+              })}
             </AnimatePresence>
           </div>
 
