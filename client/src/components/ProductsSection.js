@@ -101,12 +101,7 @@ export default function FeaturedProductsSection() {
 
   return (
     <div className={styles.featuredProductsContainer}>
-      <motion.div
-        className={styles.headerNavigation}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
+      <div className={styles.headerNavigation}>
         <h2 className={styles.sectionTitle}>Featured Products</h2>
         <div className={styles.navigationButtons}>
           <button
@@ -122,7 +117,7 @@ export default function FeaturedProductsSection() {
             <FaAnglesRight />
           </button>
         </div>
-      </motion.div>
+      </div>
 
       <motion.div
         ref={scrollContainerRef}
@@ -135,10 +130,6 @@ export default function FeaturedProductsSection() {
           <motion.div
             key={product._id}
             className={styles.productCard}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            whileHover={{ scale: 1.05 }}
           >
             <div className={styles.productImageContainer}>
               <motion.img
@@ -170,11 +161,6 @@ export default function FeaturedProductsSection() {
                 )}
                 <span className={styles.currentPrice}>₹{product.newPrice}</span>
               </div>
-              {/* <div className={styles.productWeightInfo}>
-                <span>
-                  {product.weight} {product.weightUnit}
-                </span>
-              </div> */}
               <p>
                 {product.description
                   ? product.description.split(" ").slice(0, 20).join(" ") +

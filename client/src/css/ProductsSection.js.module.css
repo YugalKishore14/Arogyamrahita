@@ -1,6 +1,6 @@
 .featuredProductsContainer {
   width: 100%;
-  padding: 4rem 2rem;
+  padding: 4rem 10px;
   background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
 }
 
@@ -9,6 +9,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  padding: 0 15px;
 }
 
 .sectionTitle {
@@ -256,7 +257,7 @@ scrollButton:active {
 /* 📱 Responsive */
 @media (max-width: 768px) {
   .sectionTitle {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
   }
 
   .productCard {
@@ -267,11 +268,16 @@ scrollButton:active {
   .productImagese {
     height: 180px;
   }
+
+  .scrollButton {
+    padding: 0.1rem 1rem;
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 480px) {
   .sectionTitle {
-    font-size: 1.6rem;
+    font-size: 1.1rem;
   }
 
   .productCard {

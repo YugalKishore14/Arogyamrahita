@@ -1,6 +1,6 @@
 .mainContainer {
   background: linear-gradient(135deg, #f8fafc, #ecfdf5);
-  padding: 80px 20px;
+  padding: 80px 10px;
   font-family: "Poppins", sans-serif;
   width: 100%;
   position: relative;
@@ -47,6 +47,7 @@
 
 .categoryCard:hover {
   box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
+  transform: scale(1.05);
 }
 
 .cardImage {
@@ -117,6 +118,7 @@
 @media (max-width: 1024px) {
   .categoryCard {
     width: 220px;
+
   }
 
   .cardImage {

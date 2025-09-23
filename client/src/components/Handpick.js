@@ -18,9 +18,9 @@ const CategoryCard = ({ title, imageUrl, onClick }) => {
     <motion.div
       className={styles.categoryCard}
       onClick={onClick}
-      whileHover={{ scale: 1.1, rotate: 1 }}
-      whileTap={{ scale: 0.95 }}
-      transition={{ type: "spring", stiffness: 200 }}
+    // whileHover={{ scale: 1.1, rotate: 1 }}
+    // whileTap={{ scale: 0.95 }}
+    // transition={{ type: "spring", stiffness: 200 }}
     >
       <motion.img
         src={imageSrc}

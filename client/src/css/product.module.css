@@ -25,7 +25,7 @@
 }
 
 .productsSection {
-  padding: 80px 40px;
+  padding: 80px 10px;
   background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
   text-align: center;
   width: 100%;
@@ -259,6 +259,11 @@
 
   .productOldPrice {
     font-size: 14px;
+  }
+
+  .showAllBtn {
+    font-size: 1rem;
+    padding: 6px 19px;
   }
 }
 
