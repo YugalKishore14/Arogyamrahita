@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PaymentModal from '../components/PaymentModal';
 import CheckoutStepper from '../components/CheckoutStepper';
 import { useNavigate } from 'react-router-dom';
-import { ordersAPI } from '../services/Api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -12,7 +11,6 @@ import {
   FaShoppingCart,
   FaArrowLeft,
 } from 'react-icons/fa';
-import { toast } from 'react-toastify';
 import styles from '../css/Cart.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -26,20 +24,24 @@ const Cart = () => {
     getCartTotal,
     loading,
   } = useCart();
+
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
   const [updating, setUpdating] = useState({});
   const [showPayment, setShowPayment] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
 
-  const handleQuantityChange = async (productId, newQuantity) => {
+  // ek click pe sirf ek hi increment/decrement hoga
+  const handleQuantityChange = async (productId, currentQuantity, change) => {
+    const newQuantity = currentQuantity + change;
     if (newQuantity < 1) return;
 
     setUpdating((prev) => ({ ...prev, [productId]: true }));
     try {
       await updateQuantity(productId, newQuantity);
     } catch (error) {
-      toast.error('Failed to update quantity');
+      console.error('Failed to update quantity', error);
     } finally {
       setUpdating((prev) => ({ ...prev, [productId]: false }));
     }
@@ -48,25 +50,21 @@ const Cart = () => {
   const handleRemoveItem = async (productId) => {
     try {
       await removeFromCart(productId);
-      toast.success('Item removed from cart');
     } catch (error) {
-      toast.error('Failed to remove item');
+      console.error('Failed to remove item', error);
     }
   };
 
   const handleClearCart = async () => {
-    // window.confirm removed: Always clear cart without confirmation
     try {
       await clearCart();
-      toast.success('Cart cleared successfully');
     } catch (error) {
-      toast.error('Failed to clear cart');
+      console.error('Failed to clear cart', error);
     }
   };
 
   const handleCheckout = () => {
     if (!isAuthenticated()) {
-      toast.error('Please login to checkout');
       navigate('/login');
       return;
     }
@@ -178,11 +176,23 @@ const Cart = () => {
                   }
                 }
 
-                // Prefer variant price/weight if present
-                const price = item.variant && item.variant.newPrice !== undefined ? item.variant.newPrice : item.newPrice;
-                const oldPrice = item.variant && item.variant.oldPrice !== undefined ? item.variant.oldPrice : item.oldPrice;
-                const weight = item.variant && item.variant.weight ? item.variant.weight : item.weight;
-                const weightUnit = item.variant && item.variant.weightUnit ? item.variant.weightUnit : item.weightUnit;
+                const price =
+                  item.variant && item.variant.newPrice !== undefined
+                    ? item.variant.newPrice
+                    : item.newPrice;
+                const oldPrice =
+                  item.variant && item.variant.oldPrice !== undefined
+                    ? item.variant.oldPrice
+                    : item.oldPrice;
+                const weight =
+                  item.variant && item.variant.weight
+                    ? item.variant.weight
+                    : item.weight;
+                const weightUnit =
+                  item.variant && item.variant.weightUnit
+                    ? item.variant.weightUnit
+                    : item.weightUnit;
+
                 return (
                   <motion.div
                     key={itemKey}
@@ -220,7 +230,7 @@ const Cart = () => {
                     <div className={styles.itemQuantity}>
                       <motion.button
                         onClick={() =>
-                          handleQuantityChange(item._id, item.quantity - 1)
+                          handleQuantityChange(item._id, item.quantity, -1)
                         }
                         disabled={updating[item._id]}
                         className={styles.quantityBtn}
@@ -231,7 +241,7 @@ const Cart = () => {
                       <span className={styles.quantity}>{item.quantity}</span>
                       <motion.button
                         onClick={() =>
-                          handleQuantityChange(item._id, item.quantity + 1)
+                          handleQuantityChange(item._id, item.quantity, +1)
                         }
                         disabled={updating[item._id]}
                         className={styles.quantityBtn}
@@ -240,7 +250,6 @@ const Cart = () => {
                         <FaPlus />
                       </motion.button>
                     </div>
-
 
                     {/* Total Price */}
                     <div className={styles.itemTotal}>
@@ -279,13 +288,10 @@ const Cart = () => {
               <span>Shipping:</span>
               <span>Free</span>
             </div>
-            {/* Tax removed */}
             <hr />
             <div className={styles.summaryRow}>
               <strong>Total:</strong>
-              <strong>
-                ₹{getCartTotal()}
-              </strong>
+              <strong>₹{getCartTotal()}</strong>
             </div>
 
             <motion.button

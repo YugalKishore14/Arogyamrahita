@@ -81,7 +81,7 @@ const Login = () => {
             setTimer(300);
             // toast.success("New OTP sent!");
         } catch (err) {
-            toast.error(err.response?.data?.message || "Failed to resend OTP");
+            // toast.error(err.response?.data?.message || "Failed to resend OTP");
         }
     };
 

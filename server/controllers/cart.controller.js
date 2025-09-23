@@ -38,20 +38,33 @@ exports.addToCart = async (req, res) => {
             cart = new Cart({ user: userId, items: [] });
         }
 
-        // Find by product and variant (if any)
+        // Find if same product + same variant already exists
         const existingItem = cart.items.find(item => {
             if (item.product.toString() !== productId) return false;
-            if (variant && item.variant && item.variant.name === variant.name) return true;
+
+            // If variant exists, compare deeply (name & price at least)
+            if (variant && item.variant) {
+                return (
+                    item.variant.name === variant.name &&
+                    (item.variant.newPrice === variant.newPrice || !variant.newPrice)
+                );
+            }
+
+            // If both don't have variant → same product
             if (!variant && !item.variant) return true;
+
             return false;
         });
 
+        // Decide price
         let priceToUse = product.newPrice;
         if (variant && variant.newPrice) priceToUse = variant.newPrice;
 
         if (existingItem) {
+            // Increase quantity instead of pushing duplicate
             existingItem.quantity += quantity;
         } else {
+            // New product entry
             cart.items.push({
                 product: productId,
                 quantity,
@@ -69,11 +82,15 @@ exports.addToCart = async (req, res) => {
         });
     } catch (error) {
         console.error("Add to Cart Error:", error);
-        // Add more detailed error output
         console.error("[addToCart] Error stack:", error.stack);
-        res.status(500).json({ message: "Server error while adding to cart", error: error.message, stack: error.stack });
+        res.status(500).json({
+            message: "Server error while adding to cart",
+            error: error.message,
+            stack: error.stack
+        });
     }
 };
+
 
 // Update cart item quantity
 exports.updateCartItem = async (req, res) => {

@@ -145,17 +145,17 @@ const ProductPage = () => {
 
     const handleAddToCart = (product) => {
         if (!isAuthenticated()) {
-            toast.info("Please sign up to add items to cart!");
+            // toast.info("Please sign up to add items to cart!");
             navigate("/signup");
             return;
         }
         addToCart(product, 1);
-        toast.success("Added to cart!");
+        // toast.success("Added to cart!");
     };
 
     const handleBuyNow = (product) => {
         if (!isAuthenticated()) {
-            toast.info("Please sign up to purchase products!");
+            // toast.info("Please sign up to purchase products!");
             navigate("/signup");
             return;
         }

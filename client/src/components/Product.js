@@ -11,7 +11,6 @@ import { GrCart } from "react-icons/gr";
 function ProductCard({ product, onAddToCart, onBuyNow }) {
   const navigate = useNavigate();
 
-  // Show last variant if exists
   const lastVariant = product.variants && product.variants.length > 0
     ? product.variants[product.variants.length - 1]
     : null;
@@ -20,7 +19,6 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
     navigate(`/product/${product._id}`);
   }
 
-  // Helper to get price/stock for last variant or base product
   const getDisplayPrice = () => {
     if (lastVariant) {
       return lastVariant.newPrice;
@@ -57,13 +55,7 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
           <h3 className={styles.productName}>
             {product.name}
           </h3>
-          {/* {lastVariant && (
-            <span className={styles.productWeightInfo}>
-              {lastVariant.weight} {lastVariant.weightUnit}
-            </span>
-          )} */}
         </div>
-        {/* Show last variant's weight/unit if exists */}
         <div className={styles.productPrices}>
           <span className={styles.productPrice}>₹{getDisplayPrice()}</span>
           {lastVariant && lastVariant.oldPrice && lastVariant.oldPrice > lastVariant.newPrice ? (
@@ -80,11 +72,6 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
             (product.description.split(" ").length > 12 ? "..." : "")
             : ""}
         </p>
-        {/* {product.variants && product.variants.length > 0 && (
-          <div className={styles.variantStock}>
-            Stock: {getDisplayStock()}
-          </div>
-        )} */}
       </div>
 
       <div className={styles.buttonGroup} onClick={e => e.stopPropagation()}>
@@ -144,7 +131,7 @@ function Products() {
 
   const handleAddToCart = (product) => {
     if (!isAuthenticated()) {
-      toast.info("Please sign up to add items to cart!");
+      // toast.info("Please sign up to add items to cart!");
       navigate("/signup");
       return;
     }
@@ -161,12 +148,12 @@ function Products() {
       1
     );
 
-    toast.success("Added to cart!");
+    // toast.success("Added to cart!");
   };
 
   const handleBuyNow = (product) => {
     if (!isAuthenticated()) {
-      toast.info("Please sign up to purchase products!");
+      // toast.info("Please sign up to purchase products!");
       navigate("/signup");
       return;
     }
