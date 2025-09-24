@@ -290,8 +290,9 @@ const ProductDetail = () => {
                     value={selectedVariant}
                     onChange={(e) => {
                       setSelectedVariant(Number(e.target.value));
-                      setQuantity(1); // Reset quantity on variant change
+                      setQuantity(1);
                     }}
+                    className={styles.variantDropdown}
                   >
                     {product.variants.map((variant, idx) => (
                       <option key={idx} value={idx}>

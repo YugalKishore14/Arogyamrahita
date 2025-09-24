@@ -381,4 +381,9 @@
   .signupBtn {
     display: none;
   }
+
+  .cartCount {
+    font-size: 7px;
+    min-width: 15px;
+  }
 }
