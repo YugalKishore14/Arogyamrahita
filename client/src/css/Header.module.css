@@ -385,5 +385,8 @@
   .cartCount {
     font-size: 7px;
     min-width: 15px;
+    top: -5px;
+    right: -8px;
+    padding: 2px 5px;
   }
 }
