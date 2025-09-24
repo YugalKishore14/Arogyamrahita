@@ -84,14 +84,14 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
           Buy Now
         </motion.button>
 
-        <motion.button
+        {/* <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => onAddToCart({ ...product, selectedVariant: lastVariant || null })}
           className={styles.cartBtn}
         >
           <GrCart className={styles.cartIcon} />
-        </motion.button>
+        </motion.button> */}
       </div>
     </motion.div>
   );
@@ -153,7 +153,6 @@ function Products() {
 
   const handleBuyNow = (product) => {
     if (!isAuthenticated()) {
-      // toast.info("Please sign up to purchase products!");
       navigate("/signup");
       return;
     }

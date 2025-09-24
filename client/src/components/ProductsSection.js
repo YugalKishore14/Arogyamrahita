@@ -175,7 +175,7 @@ export default function FeaturedProductsSection() {
                 >
                   Buy Now
                 </motion.button>
-                <motion.button
+                {/* <motion.button
                   className={styles.cartButton}
                   whileTap={{ scale: 0.9 }}
                   onClick={() =>
@@ -190,7 +190,7 @@ export default function FeaturedProductsSection() {
                   }
                 >
                   <GrCart />
-                </motion.button>
+                </motion.button> */}
               </div>
             </div>
           </motion.div>
