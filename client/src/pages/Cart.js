@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import PaymentModal from '../components/PaymentModal';
-import CheckoutStepper from '../components/CheckoutStepper';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
+import React, { useState } from "react";
+import PaymentModal from "../components/PaymentModal";
+import CheckoutStepper from "../components/CheckoutStepper";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import {
   FaTrash,
   FaMinus,
   FaPlus,
   FaShoppingCart,
   FaArrowLeft,
-} from 'react-icons/fa';
-import styles from '../css/Cart.module.css';
-import { motion, AnimatePresence } from 'framer-motion';
+} from "react-icons/fa";
+import styles from "../css/Cart.module.css";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Cart = () => {
   const {
@@ -41,7 +41,7 @@ const Cart = () => {
     try {
       await updateQuantity(productId, newQuantity);
     } catch (error) {
-      console.error('Failed to update quantity', error);
+      console.error("Failed to update quantity", error);
     } finally {
       setUpdating((prev) => ({ ...prev, [productId]: false }));
     }
@@ -51,7 +51,7 @@ const Cart = () => {
     try {
       await removeFromCart(productId);
     } catch (error) {
-      console.error('Failed to remove item', error);
+      console.error("Failed to remove item", error);
     }
   };
 
@@ -59,13 +59,13 @@ const Cart = () => {
     try {
       await clearCart();
     } catch (error) {
-      console.error('Failed to clear cart', error);
+      console.error("Failed to clear cart", error);
     }
   };
 
   const handleCheckout = () => {
     if (!isAuthenticated()) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
     setShowPayment(true);
@@ -97,7 +97,7 @@ const Cart = () => {
         <p>Add some products to get started!</p>
         <motion.button
           className={styles.continueShopping}
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -109,7 +109,7 @@ const Cart = () => {
 
   const handleAddressSubmit = (address, onSuccess, onError) => {
     setShowPayment(false);
-    navigate('/payment', {
+    navigate("/payment", {
       state: {
         address,
         cartItems,
@@ -211,61 +211,60 @@ const Cart = () => {
                         {item.name}
                         {weight ? (
                           <span className={styles.itemWeight}>
-                            {weight} {weightUnit || ''}
+                            {weight} {weightUnit || ""}
                           </span>
                         ) : null}
                       </h3>
                       <p className={styles.itemCategory}>{item.category}</p>
                       <div className={styles.itemPrice}>
-                        <span className={styles.currentPrice}>
-                          ₹{price}
-                        </span>
+                        <span className={styles.currentPrice}>₹{price}</span>
                         {oldPrice && oldPrice > price && (
                           <span className={styles.oldPrice}>₹{oldPrice}</span>
                         )}
                       </div>
                     </div>
+                    <div className={styles.quantityControls}>
+                      {/* Quantity Controls */}
+                      <div className={styles.itemQuantity}>
+                        <motion.button
+                          onClick={() =>
+                            handleQuantityChange(item._id, item.quantity, -1)
+                          }
+                          disabled={updating[item._id]}
+                          className={styles.quantityBtn}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <FaMinus />
+                        </motion.button>
+                        <span className={styles.quantity}>{item.quantity}</span>
+                        <motion.button
+                          onClick={() =>
+                            handleQuantityChange(item._id, item.quantity, +1)
+                          }
+                          disabled={updating[item._id]}
+                          className={styles.quantityBtn}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <FaPlus />
+                        </motion.button>
+                      </div>
 
-                    {/* Quantity Controls */}
-                    <div className={styles.itemQuantity}>
+                      {/* Total Price */}
+                      <div className={styles.itemTotal}>
+                        <span>₹{price * item.quantity}</span>
+                      </div>
+
+                      {/* Remove Item */}
                       <motion.button
-                        onClick={() =>
-                          handleQuantityChange(item._id, item.quantity, -1)
-                        }
-                        disabled={updating[item._id]}
-                        className={styles.quantityBtn}
+                        onClick={() => handleRemoveItem(item._id)}
+                        className={styles.removeButton}
+                        title="Remove item"
+                        whileHover={{ rotate: 15, scale: 1.2 }}
                         whileTap={{ scale: 0.9 }}
                       >
-                        <FaMinus />
-                      </motion.button>
-                      <span className={styles.quantity}>{item.quantity}</span>
-                      <motion.button
-                        onClick={() =>
-                          handleQuantityChange(item._id, item.quantity, +1)
-                        }
-                        disabled={updating[item._id]}
-                        className={styles.quantityBtn}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <FaPlus />
+                        <FaTrash />
                       </motion.button>
                     </div>
-
-                    {/* Total Price */}
-                    <div className={styles.itemTotal}>
-                      <span>₹{price * item.quantity}</span>
-                    </div>
-
-                    {/* Remove Item */}
-                    <motion.button
-                      onClick={() => handleRemoveItem(item._id)}
-                      className={styles.removeButton}
-                      title="Remove item"
-                      whileHover={{ rotate: 15, scale: 1.2 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <FaTrash />
-                    </motion.button>
                   </motion.div>
                 );
               })}
@@ -305,7 +304,7 @@ const Cart = () => {
 
             <motion.button
               className={styles.continueShopping}
-              onClick={() => navigate('/')}
+              onClick={() => navigate("/")}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

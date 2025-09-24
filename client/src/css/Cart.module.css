@@ -25,6 +25,11 @@
     border-radius: 4px;
 }
 
+.quantityControls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
 
 
 .cartHeader h1 {
@@ -332,8 +337,8 @@
     }
 
     .cartHeader {
-        flex-direction: column;
-        gap: 1rem;
+        /* flex-direction: column;
+        gap: 1rem; */
         text-align: center;
     }
 
@@ -344,8 +349,8 @@
     }
 
     .itemImage img {
-        width: 120px;
-        height: 120px;
+        width: 300px;
+        height: 180px;
         margin: 0 auto;
     }
 
@@ -354,11 +359,79 @@
     }
 
     .itemTotal {
-        text-align: center;
+        font-size: 13px;
     }
 
     .removeButton {
         margin: 0 auto;
+    }
+
+    .backButton {
+        gap: 0.2rem;
+        padding: 0.25rem 1rem;
+        font-size: 12px;
+    }
+
+    .clearCartButton {
+        padding: 0.25rem 1rem;
+        font-size: 12px;
+    }
+
+    .itemDetails h3 {
+        margin-top: 5px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .itemWeight {
+        font-weight: 400;
+        font-size: 12px;
+    }
+
+    .itemDetails {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .itemCategory {
+        display: none;
+    }
+
+    .currentPrice {
+        font-size: 1rem;
+    }
+
+    .quantityControls {
+        display: flex;
+        align-items: center;
+        gap: 200px;
+    }
+
+    .itemQuantity {
+        gap: 0;
+        font-size: 9px;
+    }
+
+    .quantityBtn {
+        width: 25px;
+        height: 25px;
+    }
+
+    .removeButton {
+        width: 25px;
+        height: 25px;
+    }
+
+    .cartSummary h3 {
+        font-size: 15px;
+    }
+
+    .checkoutButton {
+        padding: 0.5rem;
+    }
+
+    .continueShopping {
+        padding: 0.5rem;
     }
 }
 
@@ -368,10 +441,16 @@
     }
 
     .cartHeader h1 {
-        font-size: 1.5rem;
+        font-size: 12px;
     }
 
     .cartItem {
         padding: 1rem;
+    }
+
+    .quantityControls {
+        display: flex;
+        align-items: center;
+        gap: 50px;
     }
 }
