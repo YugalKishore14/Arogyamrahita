@@ -14,8 +14,8 @@ import ImagePlaceholder from "../components/ImagePlaceholder";
 import styles from "../css/ProductPage.module.css";
 
 const ProductPage = () => {
-    // Start with the sidebar closed on all screens
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    // Start with sidebar open on large screens, closed on small screens
+    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 900);
     const [openFilters, setOpenFilters] = useState({
         category: true,
         price: true,
@@ -32,7 +32,14 @@ const ProductPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // The rest of the useEffects for fetching products and handling URL params remain the same.
+    // Use effect to handle window resize for responsiveness
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSidebarOpen(window.innerWidth > 900);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -78,12 +85,10 @@ const ProductPage = () => {
         fetchProducts();
     }, [location.search, selectedCategory]);
 
-    // Collect all categories from products
     const categories = useMemo(() => {
         return [...new Set(products.map((product) => product.category))];
     }, [products]);
 
-    // Helper to flatten products by variants for filtering/sorting
     const flattenProductsByVariants = (products) => {
         let result = [];
         for (const product of products) {
@@ -180,17 +185,17 @@ const ProductPage = () => {
 
     return (
         <div className={styles.container}>
-            {/* Sidebar Overlay (now shown on all screens when sidebar is open) */}
-            {isSidebarOpen && (
+            {/* Sidebar Overlay for mobile */}
+            {window.innerWidth <= 900 && isSidebarOpen && (
                 <div
-                    className={`${styles.sidebarOverlay} ${isSidebarOpen ? styles.showOverlay : ''}`}
+                    className={styles.sidebarOverlay}
                     onClick={() => setIsSidebarOpen(false)}
                 />
             )}
 
             {/* Sidebar */}
             <aside
-                className={`${styles.sidebar} ${isSidebarOpen ? styles.showSidebar : ""}`}
+                className={`${styles.sidebar} ${isSidebarOpen ? '' : styles.closed}`}
             >
                 <div className={styles.sidebarHeader}>
                     <h2 className={styles.sidebarTitle}>Filters</h2>
@@ -215,7 +220,7 @@ const ProductPage = () => {
                                 navigate(
                                     `/products${params.toString() ? `?${params.toString()}` : ""}`
                                 );
-                                setIsSidebarOpen(false); // Close sidebar on selection
+                                setIsSidebarOpen(false);
                             }}
                             style={{
                                 cursor: "pointer",
@@ -234,7 +239,7 @@ const ProductPage = () => {
                                     const params = new URLSearchParams(location.search);
                                     params.set("category", item);
                                     navigate(`/products?${params.toString()}`);
-                                    setIsSidebarOpen(false); // Close sidebar on selection
+                                    setIsSidebarOpen(false);
                                 }}
                                 style={{
                                     cursor: "pointer",
@@ -271,15 +276,17 @@ const ProductPage = () => {
             </aside>
 
             {/* Main */}
-            <main className={`${styles.main} ${isSidebarOpen ? styles.sidebarVisible : ""}`}>
+            <main className={`${styles.main} ${window.innerWidth <= 900 && isSidebarOpen ? styles.sidebarVisible : ""}`}>
                 <div className={styles.topBar}>
-                    {/* Hamburger button now visible on all screens */}
-                    <button
-                        className={styles.hamburgerBtn}
-                        onClick={() => setIsSidebarOpen(true)}
-                    >
-                        <Menu size={18} />
-                    </button>
+                    {/* Hamburger button now visible when sidebar is not open */}
+                    {!isSidebarOpen && (
+                        <button
+                            className={styles.hamburgerBtn}
+                            onClick={() => setIsSidebarOpen(true)}
+                        >
+                            <Menu size={18} />
+                        </button>
+                    )}
                     <h1 className={styles.pageTitle}>Organic Products</h1>
                     <div className={styles.sortSection}>
                         <span className={styles.productCount}>
