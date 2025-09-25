@@ -45,6 +45,27 @@ export default function FeaturedProductsSection() {
     }
   };
 
+  const getDisplayPrice = (product) => {
+    const lastVariant = product.variants && product.variants.length > 0
+      ? product.variants[product.variants.length - 1]
+      : null;
+    return lastVariant ? lastVariant.newPrice : product.newPrice;
+  };
+
+  const getDisplayOldPrice = (product) => {
+    const lastVariant = product.variants && product.variants.length > 0
+      ? product.variants[product.variants.length - 1]
+      : null;
+    if (lastVariant) {
+      return lastVariant.oldPrice && lastVariant.oldPrice > lastVariant.newPrice
+        ? lastVariant.oldPrice
+        : null;
+    }
+    return product.oldPrice && product.oldPrice > product.newPrice
+      ? product.oldPrice
+      : null;
+  };
+
   if (loading) {
     return (
       <div className={styles.featuredProductsContainer}>
@@ -126,15 +147,15 @@ export default function FeaturedProductsSection() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7 }}
       >
-        {products.map((product, index) => (
+        {products.map((product) => (
           <motion.div
             key={product._id}
             className={styles.productCard}
           >
             <div className={styles.productImageContainer}>
               <motion.img
-                src={product.image}
-                alt={product.name}
+                src={product.image || "/placeholder.png"}
+                alt={product.name || "Product"}
                 className={styles.productImagese}
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.3 }}
@@ -142,7 +163,7 @@ export default function FeaturedProductsSection() {
                 style={{ cursor: "pointer" }}
               />
 
-              {product.oldPrice && product.oldPrice > product.newPrice && (
+              {getDisplayOldPrice(product) && (
                 <span className={`${styles.productBadge} ${styles.sale}`}>
                   Sale
                 </span>
@@ -152,20 +173,20 @@ export default function FeaturedProductsSection() {
               <h3 className={styles.productName}>
                 {product.name}{" "}
                 <span style={{ fontSize: "1rem", color: "#1f1f1fff" }}>
-                  {product.weight} {product.weightUnit}
+                  {product.weight ?? ""} {product.weightUnit ?? ""}
                 </span>
               </h3>
               <div className={styles.productPriceInfo}>
-                {product.oldPrice && product.oldPrice > product.newPrice && (
-                  <span className={styles.oldPrice}>₹{product.oldPrice}</span>
+                {getDisplayOldPrice(product) && (
+                  <span className={styles.oldPrice}>₹{getDisplayOldPrice(product)}</span>
                 )}
-                <span className={styles.currentPrice}>₹{product.newPrice}</span>
+                <span className={styles.currentPrice}>₹{getDisplayPrice(product)}</span>
               </div>
               <p>
                 {product.description
                   ? product.description.split(" ").slice(0, 20).join(" ") +
                   (product.description.split(" ").length > 20 ? "..." : "")
-                  : ""}
+                  : "No description available."}
               </p>
               <div className={styles.productActions}>
                 <motion.button
@@ -182,10 +203,11 @@ export default function FeaturedProductsSection() {
                     addToCart({
                       _id: product._id,
                       name: product.name,
-                      newPrice: product.newPrice,
-                      oldPrice: product.oldPrice,
+                      newPrice: getDisplayPrice(product),
+                      oldPrice: getDisplayOldPrice(product),
                       image: product.image,
                       category: product.category,
+                      selectedVariant: product.variants?.[product.variants.length - 1] || null,
                     })
                   }
                 >

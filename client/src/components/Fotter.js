@@ -68,6 +68,9 @@ const Fotter = () => {
               <Link to="/account">My Account</Link>
             </li>
             <li>
+              <Link to="/orders-history">Order History</Link>
+            </li>
+            <li>
               <Link to="/storeLocator">Store Locator</Link>
             </li>
             <li>

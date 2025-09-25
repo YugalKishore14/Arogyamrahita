@@ -31,6 +31,7 @@ import ReturnRefund from "./pages/ReturnRefund";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import UserProfilePage from "./pages/UserProfilePage";
+import OrdersHistoryPage from "./pages/OrdersHistoryPage";
 import { ordersAPI } from "./services/Api";
 import "./App.css";
 
@@ -74,6 +75,17 @@ function PaymentPageWrapper() {
           price: item.newPrice,
           quantity: item.quantity,
           image: item.image || "",
+          variant: item.selectedVariant
+            ? {
+                name: item.selectedVariant.name,
+                weight: item.selectedVariant.weight,
+                weightUnit: item.selectedVariant.weightUnit,
+              }
+            : (item.variant ? {
+                name: item.variant.name,
+                weight: item.variant.weight,
+                weightUnit: item.variant.weightUnit,
+              } : undefined),
         })),
         totalAmount: total,
         shippingAddress: {
@@ -138,11 +150,20 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
 
+
               <Route
                 path="/profile"
                 element={
                   <PrivateRoute>
                     <UserProfilePage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/orders-history"
+                element={
+                  <PrivateRoute>
+                    <OrdersHistoryPage />
                   </PrivateRoute>
                 }
               />

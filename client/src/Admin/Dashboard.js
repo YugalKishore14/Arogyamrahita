@@ -120,6 +120,16 @@ const Dashboard = () => {
             return;
         setFormData((prev) => {
             const safeVariants = Array.isArray(prev.variants) ? prev.variants : [];
+            // Duplicate check: name, weight, weightUnit
+            const isDuplicate = safeVariants.some(v =>
+                v.name === variantInput.name &&
+                Number(v.weight) === Number(variantInput.weight) &&
+                v.weightUnit === variantInput.weightUnit
+            );
+            if (isDuplicate) {
+                // Optionally show error/toast here
+                return prev;
+            }
             return {
                 ...prev,
                 variants: [
@@ -186,7 +196,7 @@ const Dashboard = () => {
         }
     };
 
-
+    // let invoiceCounter = 1;
     const generateInvoicePDF = (order) => {
         const doc = new jsPDF();
 
@@ -197,7 +207,8 @@ const Dashboard = () => {
         doc.text("Phone: (000) 000-0000", 20, 34);
 
         doc.setFontSize(11);
-        doc.text(`Invoice #: ${order._id || "_____"}`, 150, 40);
+        doc.text(`Invoice: INV-${order.invoiceNumber}`, 150, 40);
+
         doc.text(
             `Date: ${order.createdAt ? order.createdAt.slice(0, 10) : "_____"}`,
             150,
@@ -223,7 +234,9 @@ const Dashboard = () => {
         doc.text(order.user?.address || "_________", 100, 78);
 
         const items = (order.items || []).map((it) => [
-            it.name,
+            it.variant && it.variant.weight && it.variant.weightUnit
+                ? `${it.name} (${it.variant.weight} ${it.variant.weightUnit})`
+                : it.name,
             it.quantity,
             "" + String(it.price),
             "" + String(it.price * it.quantity),
@@ -456,11 +469,19 @@ const Dashboard = () => {
                                     <div>
                                         <strong>User:</strong> {o.user?.name} ({o.user?.email})
                                     </div>
+                                    <div style={{ marginTop: 4, color: '#6b7280', fontSize: 13 }}>
+                                        <strong>Date/Time:</strong> {o.createdAt ? new Date(o.createdAt).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, year: 'numeric', month: 'short', day: 'numeric' }) : '-'}
+                                    </div>
                                 </div>
                                 <div className={styles.orderItems}>
                                     {(o.items || []).map((it, idx) => (
                                         <div key={idx} className={styles.orderItem}>
-                                            x{it.quantity} {it.name} — ₹{it.price}
+                                            x{it.quantity} {it.name}
+                                            {it.variant && it.variant.weight && it.variant.weightUnit && (
+                                                <span style={{ color: '#888', fontSize: 13, marginLeft: 6 }}>
+                                                    ({it.variant.weight} {it.variant.weightUnit})
+                                                </span>
+                                            )} — ₹{it.price}
                                         </div>
                                     ))}
                                 </div>

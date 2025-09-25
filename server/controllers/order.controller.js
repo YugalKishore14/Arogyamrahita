@@ -3,6 +3,7 @@ const User = require("../models/User");
 const { sendEmail } = require("../services/email.service");
 const { sendSMS } = require("../services/sms.service");
 const Product = require("../models/Product");
+const { getNextInvoiceNumber } = require("../utils/getNextInvoiceNumber");
 
 // Create new order
 exports.createOrder = async (req, res) => {
@@ -13,17 +14,39 @@ exports.createOrder = async (req, res) => {
             return res.status(400).json({ message: "Items are required" });
         }
 
-        // Fetch product names for each item
-        const itemsWithNames = await Promise.all(items.map(async (item) => {
-            const product = await Product.findById(item.product);
-            if (!product) throw new Error(`Product not found: ${item.product}`);
-            return {
-                ...item,
-                name: product.name,
-                price: item.price || product.newPrice,
-                image: item.image || product.image,
-            };
-        }));
+        // Fetch product names and variant info for each item
+        const itemsWithNames = await Promise.all(
+            items.map(async (item) => {
+                const product = await Product.findById(item.product);
+                if (!product) throw new Error(`Product not found: ${item.product}`);
+                let variant = null;
+                if (item.variant && Array.isArray(product.variants)) {
+                    // Try to find the matching variant by name, weight, and weightUnit
+                    variant = product.variants.find(
+                        (v) =>
+                            v.name === item.variant.name &&
+                            Number(v.weight) === Number(item.variant.weight) &&
+                            v.weightUnit === item.variant.weightUnit
+                    );
+                }
+                return {
+                    ...item,
+                    name: product.name,
+                    price: item.price || product.newPrice,
+                    image: item.image || product.image,
+                    variant: variant
+                        ? {
+                            name: variant.name,
+                            weight: variant.weight,
+                            weightUnit: variant.weightUnit,
+                        }
+                        : undefined,
+                };
+            })
+        );
+
+        // 👇 Yahan se invoice number generate hoga
+        const invoiceNumber = await getNextInvoiceNumber();
 
         const order = await Order.create({
             user: userId,
@@ -31,6 +54,7 @@ exports.createOrder = async (req, res) => {
             totalAmount,
             shippingAddress,
             paymentInfo,
+            invoiceNumber, // 👈 add kiya
             status: "PLACED",
         });
 
@@ -38,7 +62,9 @@ exports.createOrder = async (req, res) => {
         try {
             const user = await User.findById(userId);
             if (user && user.email) {
-                const productList = itemsWithNames.map(item => `<li>${item.name} x ${item.quantity}</li>`).join("");
+                const productList = itemsWithNames
+                    .map((item) => `<li>${item.name} x ${item.quantity}</li>`)
+                    .join("");
                 const emailHtml = `
                     <p>Dear ${user.name || "Customer"},</p>
                     <p>Thank you for your order #${order._id}.</p>
@@ -118,7 +144,8 @@ exports.updateOrderStatus = async (req, res) => {
                         order.user.email,
                         "Your order is ready for delivery",
                         `<p>Dear ${order.user.name || "Customer"},</p>
-                         <p>Your order #${order._id} is ready for delivery. We will update you with tracking soon.</p>
+                         <p>Your order #${order._id
+                        } is ready for delivery. We will update you with tracking soon.</p>
                          <p>— Arogya Rahita</p>`
                     );
                 }
@@ -145,5 +172,3 @@ exports.updateOrderStatus = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
-
-

@@ -36,17 +36,19 @@ export const CartProvider = ({ children }) => {
             setLoading(true);
             const response = await cartAPI.getCart();
             if (response.cart && response.cart.items) {
-                const items = response.cart.items.map(item => ({
-                    _id: item.product._id,
-                    name: item.product.name,
-                    newPrice: item.price,
-                    oldPrice: item.product.oldPrice || item.price,
-                    image: item.product.image,
-                    category: item.product.category,
-                    quantity: item.quantity,
-                    weight: item.product.weight,
-                    weightUnit: item.product.weightUnit
-                }));
+                const items = response.cart.items
+                    .filter(item => item.product)
+                    .map(item => ({
+                        _id: item.product._id,
+                        name: item.product.name,
+                        newPrice: item.price,
+                        oldPrice: item.product.oldPrice || item.price,
+                        image: item.product.image,
+                        category: item.product.category,
+                        quantity: item.quantity,
+                        weight: item.product.weight,
+                        weightUnit: item.product.weightUnit
+                    }));
                 setCartItems(items);
                 setCartCount(items.reduce((total, item) => total + item.quantity, 0));
             }
@@ -75,8 +77,15 @@ export const CartProvider = ({ children }) => {
     }, [cartItems, isAuthenticated]);
 
     const addToCart = async (product, quantity = 1) => {
-        // Compose a unique key for product+variant
-        const variantKey = product.selectedVariant ? `${product._id}_${product.selectedVariant.name || product.selectedVariant.sku || ''}` : product._id;
+        // Compose a unique key for product+variant (use all relevant variant properties)
+        let variantKey = product._id;
+        if (product.selectedVariant) {
+            if (product.selectedVariant.sku) {
+                variantKey += `_${product.selectedVariant.sku}`;
+            } else {
+                variantKey += `_${product.selectedVariant.name || ''}_${product.selectedVariant.weight || ''}_${product.selectedVariant.weightUnit || ''}`;
+            }
+        }
         if (isAuthenticated()) {
             try {
                 // Send variant info to backend if present
@@ -139,36 +148,63 @@ export const CartProvider = ({ children }) => {
         });
     };
 
-    const removeFromCart = async (productId) => {
+    // Remove by productId and optionally variant (for unique variant delete)
+    const removeFromCart = async (productId, variant = null) => {
+        const matchFn = (item) => {
+            if (item._id !== productId) return true;
+            if (variant) {
+                // Match by variant name (or sku if available)
+                if (item.variant && variant.name && item.variant.name === variant.name) return false;
+                if (item.variant && variant.sku && item.variant.sku === variant.sku) return false;
+                // If both have no variant, treat as same
+                if (!item.variant && !variant) return false;
+                return true;
+            }
+            // If no variant provided, remove all with productId
+            return false;
+        };
         if (isAuthenticated()) {
             try {
-                await cartAPI.removeFromCart(productId);
-                setCartItems(prevItems => prevItems.filter(item => item._id !== productId));
+                // Backend API may need to support variant removal, else fallback to local
+                await cartAPI.removeFromCart(productId, variant);
+                setCartItems(prevItems => prevItems.filter(matchFn));
                 setCartCount(prevCount => {
-                    const item = cartItems.find(item => item._id === productId);
+                    const item = cartItems.find(item => item._id === productId && (!variant || (item.variant && item.variant.name === variant.name)));
                     return prevCount - (item ? item.quantity : 0);
                 });
             } catch (error) {
                 console.error('Error removing from cart in database:', error);
-                setCartItems(prevItems => prevItems.filter(item => item._id !== productId));
+                setCartItems(prevItems => prevItems.filter(matchFn));
             }
         } else {
-            setCartItems(prevItems => prevItems.filter(item => item._id !== productId));
+            setCartItems(prevItems => prevItems.filter(matchFn));
         }
     };
 
-    const updateQuantity = async (productId, quantity) => {
+    // Update quantity by productId and variant (for unique variant update)
+    const updateQuantity = async (productId, quantity, variant = null) => {
         if (quantity <= 0) {
-            removeFromCart(productId);
+            removeFromCart(productId, variant);
             return;
         }
 
+        const matchFn = (item) => {
+            if (item._id !== productId) return false;
+            if (variant) {
+                if (item.variant && variant.name && item.variant.name === variant.name) return true;
+                if (item.variant && variant.sku && item.variant.sku === variant.sku) return true;
+                if (!item.variant && !variant) return true;
+                return false;
+            }
+            return true;
+        };
+
         if (isAuthenticated()) {
             try {
-                await cartAPI.updateCartItem(productId, quantity);
+                await cartAPI.updateCartItem(productId, quantity, variant);
                 setCartItems(prevItems =>
                     prevItems.map(item =>
-                        item._id === productId ? { ...item, quantity } : item
+                        matchFn(item) ? { ...item, quantity } : item
                     )
                 );
                 setCartCount(cartItems.reduce((total, item) => total + item.quantity, 0));
@@ -176,14 +212,14 @@ export const CartProvider = ({ children }) => {
                 console.error('Error updating cart in database:', error);
                 setCartItems(prevItems =>
                     prevItems.map(item =>
-                        item._id === productId ? { ...item, quantity } : item
+                        matchFn(item) ? { ...item, quantity } : item
                     )
                 );
             }
         } else {
             setCartItems(prevItems =>
                 prevItems.map(item =>
-                    item._id === productId ? { ...item, quantity } : item
+                    matchFn(item) ? { ...item, quantity } : item
                 )
             );
         }

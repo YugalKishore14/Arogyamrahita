@@ -12,6 +12,10 @@ exports.getCart = async (req, res) => {
             await cart.save();
         }
 
+        // Remove items with missing product (populated as null)
+        if (cart && Array.isArray(cart.items)) {
+            cart.items = cart.items.filter(item => item.product);
+        }
         res.json({ cart });
     } catch (error) {
         console.error("Get Cart Error:", error);
@@ -25,8 +29,8 @@ exports.addToCart = async (req, res) => {
         const { productId, quantity = 1, variant } = req.body;
         const userId = req.user.id;
 
-        console.log("[addToCart] Request body:", req.body);
-        console.log("[addToCart] User:", req.user);
+        // console.log("[addToCart] Request body:", req.body);
+        // console.log("[addToCart] User:", req.user);
 
         const product = await Product.findById(productId);
         if (!product) {

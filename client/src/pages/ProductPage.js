@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import ImagePlaceholder from "../components/ImagePlaceholder";
 import styles from "../css/ProductPage.module.css";
 
@@ -141,15 +141,15 @@ const ProductPage = () => {
         return filtered;
     }, [products, priceValue, selectedCategory, sortBy, location.search]);
 
-    const handleAddToCart = (product) => {
-        if (!isAuthenticated()) {
-            // toast.info("Please sign up to add items to cart!");
-            navigate("/signup");
-            return;
-        }
-        addToCart(product, 1);
-        // toast.success("Added to cart!");
-    };
+    // const handleAddToCart = (product) => {
+    //     if (!isAuthenticated()) {
+    //         // toast.info("Please sign up to add items to cart!");
+    //         navigate("/signup");
+    //         return;
+    //     }
+    //     addToCart(product, 1);
+    //     // toast.success("Added to cart!");
+    // };
 
     const handleBuyNow = (product) => {
         if (!isAuthenticated()) {
@@ -188,15 +188,22 @@ const ProductPage = () => {
 
     return (
         <div className={styles.container}>
+            {/* Sidebar Overlay for mobile */}
+            {isSidebarOpen && (
+                <div
+                    className={styles.sidebarOverlay}
+                    onClick={() => setIsSidebarOpen(false)}
+                    style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.25)', zIndex: 1000, display: 'block' }}
+                />
+            )}
             {/* Sidebar */}
             <aside
-                className={`${styles.sidebar} ${isSidebarOpen ? styles.showSidebar : ""
-                    }`}
+                className={`${styles.sidebar} ${isSidebarOpen ? styles.showSidebar : ""}`}
+                style={isSidebarOpen ? { zIndex: 1000, position: 'fixed', top: 0, left: 0, height: '100vh', maxHeight: '100vh', boxShadow: '2px 0 16px rgba(0,0,0,0.13)' } : {}}
             >
                 <div className={styles.sidebarHeader}>
                     <h2 className={styles.sidebarTitle}>Filters</h2>
                     <div className={styles.sidebarIcons}>
-                        {/* <ListFilter size={20} /> */}
                         <Menu
                             size={18}
                             className={styles.closeBtn}
@@ -215,9 +222,9 @@ const ProductPage = () => {
                                 const params = new URLSearchParams(location.search);
                                 params.delete("category");
                                 navigate(
-                                    `/products${params.toString() ? `?${params.toString()}` : ""
-                                    }`
+                                    `/products${params.toString() ? `?${params.toString()}` : ""}`
                                 );
+                                setIsSidebarOpen(false);
                             }}
                             style={{
                                 cursor: "pointer",
@@ -236,6 +243,7 @@ const ProductPage = () => {
                                     const params = new URLSearchParams(location.search);
                                     params.set("category", item);
                                     navigate(`/products?${params.toString()}`);
+                                    setIsSidebarOpen(false);
                                 }}
                                 style={{
                                     cursor: "pointer",
@@ -339,7 +347,7 @@ const ProductPage = () => {
                                 <div className={styles.cardBody}>
                                     <h3 className={styles.productName}>
                                         {product.name} {product.weight} {product.weightUnit}
-                                        {product.variantName ? ` (${product.variantName})` : ''}
+                                        {/* {product.variantName ? ` (${product.variantName})` : ''} */}
                                     </h3>
                                     <div className={styles.priceWrapper}>
                                         <span className={styles.newPrice}>
@@ -358,12 +366,12 @@ const ProductPage = () => {
                                             : product.description}
                                     </p>
                                     <div className={styles.cardActions}>
-                                        <button
+                                        {/* <button
                                             className={styles.cartButton}
                                             onClick={() => handleAddToCart(product)}
                                         >
                                             <ShoppingCart size={20} />
-                                        </button>
+                                        </button> */}
                                         <button
                                             className={styles.buyButton}
                                             onClick={() => handleBuyNow(product)}

@@ -32,24 +32,26 @@ const Cart = () => {
   const [showPayment, setShowPayment] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
 
-  // ek click pe sirf ek hi increment/decrement hoga
-  const handleQuantityChange = async (productId, currentQuantity, change) => {
+  // ek click pe sirf ek hi increment/decrement hoga, ab variant bhi pass hoga
+  const handleQuantityChange = async (productId, currentQuantity, change, variant = null) => {
     const newQuantity = currentQuantity + change;
     if (newQuantity < 1) return;
 
-    setUpdating((prev) => ({ ...prev, [productId]: true }));
+    const updateKey = variant && variant.name ? `${productId}_${variant.name}` : productId;
+    setUpdating((prev) => ({ ...prev, [updateKey]: true }));
     try {
-      await updateQuantity(productId, newQuantity);
+      await updateQuantity(productId, newQuantity, variant);
     } catch (error) {
       console.error("Failed to update quantity", error);
     } finally {
-      setUpdating((prev) => ({ ...prev, [productId]: false }));
+      setUpdating((prev) => ({ ...prev, [updateKey]: false }));
     }
   };
 
-  const handleRemoveItem = async (productId) => {
+  // Remove item by productId and variant (for unique variant delete)
+  const handleRemoveItem = async (productId, variant = null) => {
     try {
-      await removeFromCart(productId);
+      await removeFromCart(productId, variant);
     } catch (error) {
       console.error("Failed to remove item", error);
     }
@@ -165,14 +167,14 @@ const Cart = () => {
           <div className={styles.cartItems}>
             <AnimatePresence>
               {cartItems.map((item, idx) => {
+                // Always generate a unique key for each cart item, including variant info if present
                 let itemKey = item._id;
                 if (item.variant) {
                   if (item.variant.sku) {
                     itemKey += `_${item.variant.sku}`;
-                  } else if (item.variant.name) {
-                    itemKey += `_${item.variant.name}`;
                   } else {
-                    itemKey += `_${idx}`;
+                    // Use all variant properties for uniqueness
+                    itemKey += `_${item.variant.name || ''}_${item.variant.weight || ''}_${item.variant.weightUnit || ''}`;
                   }
                 }
 
@@ -228,9 +230,9 @@ const Cart = () => {
                       <div className={styles.itemQuantity}>
                         <motion.button
                           onClick={() =>
-                            handleQuantityChange(item._id, item.quantity, -1)
+                            handleQuantityChange(item._id, item.quantity, -1, item.variant)
                           }
-                          disabled={updating[item._id]}
+                          disabled={updating[item.variant && item.variant.name ? `${item._id}_${item.variant.name}` : item._id]}
                           className={styles.quantityBtn}
                           whileTap={{ scale: 0.9 }}
                         >
@@ -239,9 +241,9 @@ const Cart = () => {
                         <span className={styles.quantity}>{item.quantity}</span>
                         <motion.button
                           onClick={() =>
-                            handleQuantityChange(item._id, item.quantity, +1)
+                            handleQuantityChange(item._id, item.quantity, +1, item.variant)
                           }
-                          disabled={updating[item._id]}
+                          disabled={updating[item.variant && item.variant.name ? `${item._id}_${item.variant.name}` : item._id]}
                           className={styles.quantityBtn}
                           whileTap={{ scale: 0.9 }}
                         >
@@ -256,7 +258,7 @@ const Cart = () => {
 
                       {/* Remove Item */}
                       <motion.button
-                        onClick={() => handleRemoveItem(item._id)}
+                        onClick={() => handleRemoveItem(item._id, item.variant)}
                         className={styles.removeButton}
                         title="Remove item"
                         whileHover={{ rotate: 15, scale: 1.2 }}

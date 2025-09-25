@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { userAPI } from '../services/Api';
-import styles from '../css/UserProfile.module.css';
+import styles from '../css/ProfileOrderHistory.module.css';
 
 const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
@@ -21,37 +21,38 @@ const OrderHistory = () => {
         fetchOrders();
     }, []);
 
-    if (loading) return <div>Loading order history...</div>;
-    if (error) return <div className={styles.error}>{error}</div>;
-    if (!orders.length) return <div>No orders found.</div>;
+    if (loading) return <div style={{ textAlign: 'center', marginTop: 40 }}>Loading order history...</div>;
+    if (error) return <div style={{ color: '#b91c1c', textAlign: 'center', marginTop: 40 }}>{error}</div>;
+    if (!orders.length) return <div style={{ textAlign: 'center', marginTop: 40 }}>No orders found.</div>;
 
     return (
-        <div className={styles.orderHistorySection}>
-            {/* <h3>Order History</h3> */}
+        <div className={styles.profileOrderHistoryGrid}>
             {orders.map(order => (
-                <div key={order._id} className={styles.orderCard}>
-                    {/* <div><b>Order ID:</b> {order._id}</div> */}
-                    <div><b>Status:</b> {order.status}</div>
-                    <div><b>Total:</b> ₹{order.totalAmount}</div>
-                    <div><b>Date:</b> {new Date(order.createdAt).toLocaleString()}</div>
-                    <div><b>Items:</b>
-                        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                            {(order.items || []).map((item, idx) => (
-                                <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                                    {item.image && (
-                                        <img
-                                            src={item.image}
-                                            alt={item.name}
-                                            style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, border: '1px solid #eee', background: '#fafafa' }}
-                                        />
-                                    )}
-                                    <span style={{ fontWeight: 500 }}>{item.name}</span>
-                                    <span style={{ color: '#6b7280', fontSize: 14 }}>x {item.quantity}</span>
-                                    <span style={{ marginLeft: 'auto', fontWeight: 500 }}>₹{item.price}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                <div key={order._id} className={styles.profileOrderCard}>
+                    <div className={styles.orderStatus}>{order.status}</div>
+                    <div className={styles.orderDate}>{new Date(order.createdAt).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, year: 'numeric', month: 'short', day: 'numeric' })}</div>
+                    <div className={styles.orderTotal}>Total: ₹{order.totalAmount}</div>
+                    <ul className={styles.orderItemsList}>
+                        {(order.items || []).map((item, idx) => (
+                            <li key={idx} className={styles.orderItemRow}>
+                                {item.image && (
+                                    <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        className={styles.orderItemImg}
+                                    />
+                                )}
+                                <span className={styles.orderItemName}>{item.name}</span>
+                                {item.variant && item.variant.weight && item.variant.weightUnit && (
+                                    <span className={styles.orderItemVariant}>
+                                        ({item.variant.weight} {item.variant.weightUnit})
+                                    </span>
+                                )}
+                                <span className={styles.orderItemQty}>x {item.quantity}</span>
+                                <span className={styles.orderItemPrice}>₹{item.price}</span>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             ))}
         </div>

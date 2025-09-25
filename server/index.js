@@ -5,12 +5,7 @@ const cors = require("cors");
 
 dotenv.config();
 const app = express();
-// app.use(cors());
 
-// app.use(cors({
-//     origin: ["https://arogyamrahita.vercel.app"],
-//     credentials: true,
-// }));
 app.use(cors({
     origin: ["http://localhost:3000", "https://arogyamrahita.vercel.app"],
     credentials: true,
