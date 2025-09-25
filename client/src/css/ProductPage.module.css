@@ -1,3 +1,11 @@
+/* All of your existing CSS remains the same. The changes are in the @media blocks. */
+
+/* Sidebar overlay for mobile */
+.sidebarOverlay {
+    display: none;
+}
+
+/* Base styling for all screen sizes */
 .container {
     width: 100%;
     display: flex;
@@ -23,6 +31,7 @@
 
 .main {
     flex-grow: 1;
+    /* Key to auto-resize */
     padding: 1.5rem;
     min-height: calc(100vh - 70px);
     transition: all 0.3s cubic-bezier(.4, 0, .2, 1);
@@ -42,6 +51,68 @@
     cursor: pointer;
     z-index: 1100;
 }
+
+/* --- Media Query for desktops and larger screens (push-style sidebar) --- */
+@media (min-width: 901px) {
+    .sidebar.closed {
+        width: 0;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        box-shadow: none;
+    }
+}
+
+/* --- Media Query for tablets and mobiles (overlay-style sidebar) --- */
+@media (max-width: 900px) {
+    .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        z-index: 1100 !important;
+        transform: translateX(-100%);
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.13);
+        border-radius: 0 10px 10px 0;
+        width: 280px;
+        /* fixed width for mobile overlay */
+    }
+
+    .main {
+        padding: 1rem;
+        /* Adjust padding for smaller screens */
+    }
+
+    .sidebarOverlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.25);
+        z-index: 1000;
+    }
+
+    .showSidebar {
+        transform: translateX(0) !important;
+    }
+
+    .main.sidebarVisible {
+        filter: blur(1.5px) grayscale(0.1);
+        pointer-events: none;
+        user-select: none;
+    }
+
+    /* Keep the hamburger button visible on mobile */
+    .hamburgerBtn {
+        display: block;
+    }
+}
+
+/* Remaining CSS is unchanged */
+/* (The rest of your original CSS code for .sidebarHeader, .closeBtn, .sidebarTitle, etc.) */
 
 .sidebarHeader {
     display: flex;
@@ -331,60 +402,6 @@
     color: #999;
 }
 
-@media (min-width: 901px) {
-    .sidebar.closed {
-        width: 0;
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-        box-shadow: none;
-    }
-}
-
-@media (max-width: 900px) {
-    .sidebar {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
-        z-index: 1100 !important;
-        transform: translateX(-100%);
-        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.13);
-        border-radius: 0 10px 10px 0;
-        width: 280px;
-    }
-
-    .main {
-        padding: 1rem;
-    }
-
-    .sidebarOverlay {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.25);
-        z-index: 1000;
-    }
-
-    .showSidebar {
-        transform: translateX(0) !important;
-    }
-
-    .main.sidebarVisible {
-        filter: blur(1.5px) grayscale(0.1);
-        pointer-events: none;
-        user-select: none;
-    }
-
-    .hamburgerBtn {
-        display: block;
-    }
-}
-
 @media (max-width: 768px) {
     .hamburgerBtn {
         font-size: 1rem;
@@ -397,6 +414,32 @@
 
     .main {
         padding: 0;
+    }
+
+    .container {
+        flex-direction: column;
+        padding: 0.5rem;
+    }
+
+    .pageTitle {
+        font-size: 15px;
+        margin-left: 45px;
+        text-align: left;
+        margin-top: 8px;
+    }
+
+    .productCount {
+        display: none;
+    }
+
+    .sortLabel {
+        display: none;
+    }
+
+    .sortSelect {
+        font-size: 12px;
+        padding: 0.3rem 0.6rem;
+        width: 100%;
     }
 }
 

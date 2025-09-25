@@ -195,7 +195,7 @@ const ProductPage = () => {
 
             {/* Sidebar */}
             <aside
-                className={`${styles.sidebar} ${isSidebarOpen ? '' : styles.closed}`}
+                className={`${styles.sidebar} ${window.innerWidth <= 900 ? (isSidebarOpen ? styles.showSidebar : '') : (isSidebarOpen ? '' : styles.closed)}`}
             >
                 <div className={styles.sidebarHeader}>
                     <h2 className={styles.sidebarTitle}>Filters</h2>
@@ -220,7 +220,7 @@ const ProductPage = () => {
                                 navigate(
                                     `/products${params.toString() ? `?${params.toString()}` : ""}`
                                 );
-                                setIsSidebarOpen(false);
+                                if (window.innerWidth <= 900) setIsSidebarOpen(false);
                             }}
                             style={{
                                 cursor: "pointer",
@@ -239,7 +239,7 @@ const ProductPage = () => {
                                     const params = new URLSearchParams(location.search);
                                     params.set("category", item);
                                     navigate(`/products?${params.toString()}`);
-                                    setIsSidebarOpen(false);
+                                    if (window.innerWidth <= 900) setIsSidebarOpen(false);
                                 }}
                                 style={{
                                     cursor: "pointer",
@@ -278,7 +278,7 @@ const ProductPage = () => {
             {/* Main */}
             <main className={`${styles.main} ${window.innerWidth <= 900 && isSidebarOpen ? styles.sidebarVisible : ""}`}>
                 <div className={styles.topBar}>
-                    {/* Hamburger button now visible when sidebar is not open */}
+                    {/* Hamburger button is now conditionally rendered */}
                     {!isSidebarOpen && (
                         <button
                             className={styles.hamburgerBtn}
