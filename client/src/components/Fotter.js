@@ -96,8 +96,11 @@ const Fotter = () => {
             </li>
             <li>
               <a href="https://www.instagram.com/#LorealParis" target="_blank" rel="noreferrer">
-                #LorealParis
+                LorealParis
               </a>
+            </li>
+            <li>
+              <Link to="/video">Videos</Link>
             </li>
           </ul>
         </motion.div>

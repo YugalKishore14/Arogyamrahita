@@ -32,6 +32,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import UserProfilePage from "./pages/UserProfilePage";
 import OrdersHistoryPage from "./pages/OrdersHistoryPage";
+import Videos from "./pages/Videos";
 import { ordersAPI } from "./services/Api";
 import "./App.css";
 
@@ -77,15 +78,15 @@ function PaymentPageWrapper() {
           image: item.image || "",
           variant: item.selectedVariant
             ? {
-                name: item.selectedVariant.name,
-                weight: item.selectedVariant.weight,
-                weightUnit: item.selectedVariant.weightUnit,
-              }
+              name: item.selectedVariant.name,
+              weight: item.selectedVariant.weight,
+              weightUnit: item.selectedVariant.weightUnit,
+            }
             : (item.variant ? {
-                name: item.variant.name,
-                weight: item.variant.weight,
-                weightUnit: item.variant.weightUnit,
-              } : undefined),
+              name: item.variant.name,
+              weight: item.variant.weight,
+              weightUnit: item.variant.weightUnit,
+            } : undefined),
         })),
         totalAmount: total,
         shippingAddress: {
@@ -172,6 +173,7 @@ function App() {
               <Route path="/termCondition" element={<TermCondition />} />
               <Route path="/faq" element={<Faq />} />
               <Route path="/returnRefund" element={<ReturnRefund />} />
+              <Route path="/video" element={<Videos />} />
 
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
