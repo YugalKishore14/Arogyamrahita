@@ -9,7 +9,12 @@ import { IoSearch } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 import { HiMenu, HiX } from "react-icons/hi";
 // import UserProfile from "./UserProfile";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useMotionValueEvent,
+} from "framer-motion";
 import { productAPI, categoryAPI } from "../services/Api";
 
 const Header = () => {
@@ -148,16 +153,24 @@ const Header = () => {
       >
         <div className={styles.container}>
           <motion.div whileHover={{ scale: 1.05 }}>
-            <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
+            <NavLink
+              to="/"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
               <img className={styles.logoImage} src={logoImage} alt="Logo" />
             </NavLink>
           </motion.div>
 
-          <form className={styles.searchBar} onSubmit={handleSearch} ref={searchRef}>
+          <form
+            className={styles.searchBar}
+            onSubmit={handleSearch}
+            ref={searchRef}
+          >
             <input
               type="text"
               placeholder="Search here..."
               value={searchQuery}
+              className={styles.searchInput}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 setShowSuggestions(true);
@@ -166,24 +179,16 @@ const Header = () => {
                 if (suggestions.length > 0) setShowSuggestions(true);
               }}
             />
-            <motion.button type="submit" className={styles.searchIcon} whileTap={{ scale: 0.9 }}>
+            <motion.button
+              type="submit"
+              className={styles.searchIcon}
+              whileTap={{ scale: 0.9 }}
+            >
               <IoSearch />
             </motion.button>
             {showSuggestions && suggestions.length > 0 && (
               <div
-                style={{
-                  position: "absolute",
-                  top: "110%",
-                  left: 0,
-                  right: 0,
-                  background: "#fff",
-                  borderRadius: 8,
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-                  zIndex: 20,
-                  padding: 8,
-                  maxHeight: 280,
-                  overflowY: "auto",
-                }}
+                className={styles.suggestionsBox}
               >
                 {suggestions.map((s) => (
                   <div
@@ -200,20 +205,15 @@ const Header = () => {
                     onMouseDown={(e) => e.preventDefault()}
                   >
                     <span
-                      style={{
-                        fontSize: 12,
-                        color: "#666",
-                        background: s.type === "category" ? "#e6f7f0" : "#f0f0f0",
-                        padding: "2px 6px",
-                        borderRadius: 4,
-                        textTransform: "capitalize",
-                        minWidth: 70,
-                        textAlign: "center",
-                      }}
+                      className={styles.suggestionType}
                     >
                       {s.type}
                     </span>
-                    <span style={{ fontSize: 14, color: "#111" }}>{s.label}</span>
+                    <span
+                      className={styles.suggestionLabel}
+                    >
+                      {s.label}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -246,7 +246,11 @@ const Header = () => {
               <>
                 {isAdmin() && location.pathname !== "/admin" && (
                   <motion.div whileHover={{ scale: 1.05 }}>
-                    <NavLink to="/admin" className={`${styles.adminBtn} ${({ isActive }) => isActive ? "active" : ""}`}>
+                    <NavLink
+                      to="/admin"
+                      className={`${styles.adminBtn} ${({ isActive }) =>
+                        isActive ? "active" : ""}`}
+                    >
                       Admin Panel
                     </NavLink>
                   </motion.div>
@@ -262,12 +266,22 @@ const Header = () => {
             ) : (
               <>
                 <motion.div whileHover={{ scale: 1.1 }}>
-                  <NavLink to="/signup" className={({ isActive }) => `${styles.signupBtn} ${isActive ? "active" : ""}`}>
+                  <NavLink
+                    to="/signup"
+                    className={({ isActive }) =>
+                      `${styles.signupBtn} ${isActive ? "active" : ""}`
+                    }
+                  >
                     Sign Up
                   </NavLink>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.1 }}>
-                  <NavLink to="/login" className={({ isActive }) => `${styles.loginBtn} ${isActive ? "active" : ""}`}>
+                  <NavLink
+                    to="/login"
+                    className={({ isActive }) =>
+                      `${styles.loginBtn} ${isActive ? "active" : ""}`
+                    }
+                  >
                     Login
                   </NavLink>
                 </motion.div>
@@ -275,7 +289,12 @@ const Header = () => {
             )}
 
             <motion.div whileHover={{ scale: 1.1 }}>
-              <NavLink to="/cart" className={({ isActive }) => `${styles.cartBtn} ${isActive ? "active" : ""}`}>
+              <NavLink
+                to="/cart"
+                className={({ isActive }) =>
+                  `${styles.cartBtn} ${isActive ? "active" : ""}`
+                }
+              >
                 <div className={styles.iconWrapper}>
                   <GiShoppingCart className={styles.cartIcon} />
                   {cartCount > 0 && (
@@ -302,10 +321,14 @@ const Header = () => {
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               onClick={() => setMobileOpen((prev) => !prev)}
-              style={{ background: 'none', border: 'none', padding: 0 }}
+              style={{ background: "none", border: "none", padding: 0 }}
               type="button"
             >
-              {mobileOpen ? <HiX className={styles.hixCros} /> : <HiMenu className={styles.hiMenu} />}
+              {mobileOpen ? (
+                <HiX className={styles.hixCros} />
+              ) : (
+                <HiMenu className={styles.hiMenu} />
+              )}
             </button>
           </div>
         </div>

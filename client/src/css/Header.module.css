@@ -20,6 +20,25 @@
   margin-top: 10px;
 }
 
+.suggestionType {
+  font-size: 12px;
+  color: #666;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: capitalize;
+  min-width: 70px;
+  text-align: center;
+  background: rgba(230, 230, 230, 0.6);
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.suggestionLabel {
+  font-size: 14px;
+  color: #111;
+}
+
 .scrolled {
   background: linear-gradient(135deg,
       rgba(255, 255, 255, 0.25),
@@ -156,6 +175,27 @@
   font-size: 14px;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
+
+.suggestionsBox {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 20;
+  padding: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.suggestionsBox::-webkit-scrollbar {
+  display: none;
+}
+
 
 .searchIcon {
   position: absolute;
@@ -325,9 +365,33 @@
     padding: 4px 8px;
     font-size: 12px;
   }
+
+  .suggestionType {
+    font-size: 9px;
+    padding: 2px 6px;
+    min-width: 40px;
+  }
+
+  .suggestionLabel {
+    font-size: 7px;
+  }
 }
 
 @media (max-width: 480px) {
+  .suggestionsBox {
+    padding: 0;
+  }
+
+  .suggestionType {
+    font-size: 8px;
+    padding: 2px 6px;
+    min-width: 40px;
+  }
+
+  .suggestionLabel {
+    font-size: 7px;
+  }
+
   .container {
     padding: 18px 15px;
     gap: 6px;
