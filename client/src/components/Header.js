@@ -203,11 +203,11 @@ const Header = () => {
                     }}
                     onMouseDown={(e) => e.preventDefault()}
                   >
-                    <span
+                    {/* <span
                       className={styles.suggestionType}
                     >
                       {s.type}
-                    </span>
+                    </span> */}
                     <span
                       className={styles.suggestionLabel}
                     >
