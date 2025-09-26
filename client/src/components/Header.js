@@ -182,7 +182,6 @@ const Header = () => {
             <motion.button
               type="submit"
               className={styles.searchIcon}
-              whileTap={{ scale: 0.9 }}
             >
               <IoSearch />
             </motion.button>
