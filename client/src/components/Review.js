@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import styles from "../css/review.module.css";
 import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
 
-const product1 = "https://placehold.co/400x400/D0D8CF/000000?text=Product+1";
-const product2 = "https://placehold.co/400x400/D0D8CF/000000?text=Product+2";
-const product3 = "https://placehold.co/400x400/D0D8CF/000000?text=Product+3";
+// const product1 = "https://placehold.co/400x400/D0D8CF/000000?text=Product+1";
+// const product2 = "https://placehold.co/400x400/D0D8CF/000000?text=Product+2";
+// const product3 = "https://placehold.co/400x400/D0D8CF/000000?text=Product+3";
 
 const ReviewProducts = () => {
   const productGridRef = useRef(null);
@@ -16,49 +16,49 @@ const ReviewProducts = () => {
       name: "Aarav Sharma",
       image: "https://randomuser.me/api/portraits/men/32.jpg",
       review:
-        "Amazing quality! The shampoo feels natural and my hair looks healthier than ever.",
+        "Arogiyamrahita provides excellent health tips, making wellness simple and accessible for everyone.",
     },
     {
       id: 2,
       name: "Priya Verma",
       image: "https://randomuser.me/api/portraits/women/44.jpg",
       review:
-        "Absolutely love the face wash. It’s gentle yet very effective. My skin feels so fresh!",
+        "The site’s natural remedies section offers reliable guidance for common lifestyle-related health issues.",
     },
     {
       id: 3,
       name: "Rohan Gupta",
       image: "https://randomuser.me/api/portraits/men/15.jpg",
       review:
-        "This cream is fantastic. Keeps my skin soft and hydrated all day.",
+        "I appreciate the clear writing style, which makes complex health topics easy to understand.",
     },
     {
       id: 4,
       name: "Neha Patel",
       image: "https://randomuser.me/api/portraits/women/65.jpg",
       review:
-        "The herbal oil works wonders! My scalp feels nourished and hair growth improved.",
+        "Arogiyamrahita encourages balanced living with proper diet, exercise, and natural healing techniques.",
     },
     {
       id: 5,
       name: "Karan Malhotra",
       image: "https://randomuser.me/api/portraits/men/28.jpg",
       review:
-        "The soap smells so refreshing. My skin feels soft and chemical-free.",
+        "The website design is clean, user-friendly, and easy to navigate for beginners.",
     },
     {
       id: 6,
       name: "Simran Kaur",
       image: "https://randomuser.me/api/portraits/women/52.jpg",
       review:
-        "I use aloe gel daily now. It’s soothing, cooling, and perfect for summers.",
+        "Daily health blogs and tips keep me motivated to follow a healthier lifestyle.",
     },
     {
       id: 7,
       name: "Aditya Mehta",
       image: "https://randomuser.me/api/portraits/men/40.jpg",
       review:
-        "This hair serum is a game changer. My hair looks shiny and frizz-free.",
+        "Overall, Arogiyamrahita is a trustworthy health resource, perfect for holistic wellness enthusiasts.",
     },
   ];
 
@@ -120,7 +120,7 @@ const ReviewProducts = () => {
               ))}
             </div>
             <h3>{product.name}</h3>
-            <p className={styles.reviewText}>"{product.review}"</p>
+            <p className={styles.reviewText}>{product.review}..</p>
           </motion.div>
         ))}
       </div>
