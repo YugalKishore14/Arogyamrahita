@@ -23,9 +23,9 @@ const OrdersHistoryPage = () => {
   }, []);
 
 
-  if (loading) return <div style={{textAlign:'center',marginTop:60}}>Loading order history...</div>;
-  if (error) return <div style={{color:'#b91c1c',textAlign:'center',marginTop:60}}>{error}</div>;
-  if (!orders.length) return <div style={{textAlign:'center',marginTop:60}}>No orders found.</div>;
+  if (loading) return <div style={{ textAlign: 'center', marginTop: 60 }}>Loading order history...</div>;
+  if (error) return <div style={{ color: '#b91c1c', textAlign: 'center', marginTop: 60 }}>{error}</div>;
+  if (!orders.length) return <div style={{ textAlign: 'center', marginTop: 60 }}>No orders found.</div>;
 
   return (
     <div className={styles.orderHistoryPage}>

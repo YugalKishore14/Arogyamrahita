@@ -23,7 +23,7 @@
 .orderCardPro {
   background: #fff;
   border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(34,34,59,0.08);
+  box-shadow: 0 4px 24px rgba(34, 34, 59, 0.08);
   padding: 32px 28px 24px 28px;
   min-width: 340px;
   max-width: 420px;
@@ -32,10 +32,12 @@
   border: 1.5px solid #e0e1e6;
   position: relative;
 }
+
 .orderCardPro:hover {
-  box-shadow: 0 8px 32px rgba(34,34,59,0.13);
+  box-shadow: 0 8px 32px rgba(34, 34, 59, 0.13);
   border-color: #b8b8d1;
 }
+
 .orderCardPro .orderStatus {
   position: absolute;
   top: 18px;
@@ -47,28 +49,33 @@
   padding: 4px 14px;
   border-radius: 12px;
 }
+
 .orderCardPro .orderDate {
   color: #6b7280;
   font-size: 0.98rem;
   margin-bottom: 12px;
 }
+
 .orderCardPro .orderTotal {
   font-size: 1.1rem;
   font-weight: 600;
   color: #22223b;
   margin-bottom: 18px;
 }
+
 .orderCardPro .orderItemsList {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 .orderCardPro .orderItemRow {
   display: flex;
   align-items: center;
   gap: 14px;
   margin-bottom: 12px;
 }
+
 .orderCardPro .orderItemImg {
   width: 44px;
   height: 44px;
@@ -77,19 +84,23 @@
   border: 1px solid #eee;
   background: #fafafa;
 }
+
 .orderCardPro .orderItemName {
   font-weight: 500;
   color: #22223b;
 }
+
 .orderCardPro .orderItemVariant {
   color: #888;
   font-size: 13px;
   margin-left: 4px;
 }
+
 .orderCardPro .orderItemQty {
   color: #6b7280;
   font-size: 14px;
 }
+
 .orderCardPro .orderItemPrice {
   margin-left: auto;
   font-weight: 500;

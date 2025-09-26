@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 const Fotter = () => {
   return (
     <footer className={styles.footer}>
-      {/* Top Section (Newsletter + Columns) */}
       <motion.div
         className={styles.footerContainer}
         initial={{ opacity: 0, y: 30 }}
@@ -14,7 +13,6 @@ const Fotter = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        {/* Newsletter */}
         <motion.div
           className={`${styles.footerSection} ${styles.newsletterSection}`}
           whileHover={{ scale: 1.02 }}
@@ -65,16 +63,10 @@ const Fotter = () => {
               <Link to="/contact">Contact Us</Link>
             </li>
             <li>
-              <Link to="/account">My Account</Link>
+              <Link to="/profile">My Account</Link>
             </li>
             <li>
               <Link to="/orders-history">Order History</Link>
-            </li>
-            <li>
-              <Link to="/storeLocator">Store Locator</Link>
-            </li>
-            <li>
-              <Link to="/rewards">Redeem Rewards</Link>
             </li>
           </ul>
         </motion.div>
@@ -86,17 +78,8 @@ const Fotter = () => {
           <h3>More to Explore</h3>
           <ul>
             <li>
-              <Link to="/magazine">Beauty Magazine</Link>
-            </li>
-            <li>
-              <Link to="/tools">Tools & Consultations</Link>
-            </li>
-            <li>
-              <Link to="/offers">Offers</Link>
-            </li>
-            <li>
               <a href="https://www.instagram.com/#LorealParis" target="_blank" rel="noreferrer">
-                LorealParis
+                Instagram
               </a>
             </li>
             <li>
@@ -106,7 +89,6 @@ const Fotter = () => {
         </motion.div>
       </motion.div>
 
-      {/* Bottom Bar */}
       <motion.div
         className={styles.footerBottom}
         initial={{ opacity: 0 }}
