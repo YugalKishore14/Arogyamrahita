@@ -286,7 +286,7 @@ const Cart = () => {
               <span>₹{getCartTotal()}</span>
             </div>
             <div className={styles.summaryRow}>
-              <span>Shipping:</span>
+              <span>Delhivery:</span>
               <span>Free</span>
             </div>
             <hr />
