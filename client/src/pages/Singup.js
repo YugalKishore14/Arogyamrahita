@@ -47,11 +47,13 @@ const Signup = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.name.trim()) newErrors.name = "Name is required";
-        else if (formData.name.trim().length < 2 || formData.name.trim().length > 15)
+        if (!formData.name.trim()) {
+            newErrors.name = "Name is required";
+        } else if (formData.name.trim().length < 2 || formData.name.trim().length > 15) {
             newErrors.name = "Name must be between 2–15 characters";
-        else if (!/^[A-Za-z\s]+$/.test(formData.name.trim()))
-            newErrors.name = "Name can only contain letters and spaces";
+        } else if (!/^[A-Za-z]+(?:\s{1,2}[A-Za-z]+)*$/.test(formData.name.trim())) {
+            newErrors.name = "Name can only contain letters and max 2 spaces between words";
+        }
 
         if (!formData.email.trim()) newErrors.email = "Email is required";
         else if (!emailRegex.test(formData.email.trim())) newErrors.email = "Only @gmail.com allowed";
@@ -69,9 +71,13 @@ const Signup = () => {
             newErrors.password = "Must include lowercase letter";
         else if (!/[A-Z]/.test(formData.password))
             newErrors.password = "Must include uppercase letter";
-        else if (!/\d/.test(formData.password)) newErrors.password = "Must include number";
+        else if (!/\d/.test(formData.password))
+            newErrors.password = "Must include number";
         else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(formData.password))
             newErrors.password = "Must include special character";
+        else if (!/^[A-Za-z\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/.test(formData.password))
+            newErrors.password = "Only English letters, numbers, and special characters allowed (no emoji)";
+
 
         if (!formData.confirmPassword) newErrors.confirmPassword = "Please confirm password";
         else if (formData.password !== formData.confirmPassword)
@@ -108,8 +114,8 @@ const Signup = () => {
             {notification && (
                 <motion.div
                     className={`${styles.customNotification} ${notification.type === "success"
-                            ? styles.customNotificationSuccess
-                            : styles.customNotificationError
+                        ? styles.customNotificationSuccess
+                        : styles.customNotificationError
                         }`}
                     initial={{ opacity: 0, y: -30 }}
                     animate={{ opacity: 1, y: 0 }}
