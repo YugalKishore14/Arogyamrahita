@@ -4,7 +4,7 @@ import styles from '../css/UserProfile.module.css';
 import orderBtnStyles from '../css/ProfileOrderHistory.module.css';
 import { IoPerson, IoMail, IoCall } from 'react-icons/io5';
 import { userAPI } from '../services/Api';
-import OrderHistory from '../components/OrderHistory';
+// import OrderHistory from '../components/OrderHistory';
 import { Link } from 'react-router-dom';
 
 const UserProfilePage = () => {
@@ -91,15 +91,15 @@ const UserProfilePage = () => {
                 <div style={{ flex: '2 1 400px', minWidth: 340 }}>
                     <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.07)', padding: 32, marginBottom: 32 }}>
                         <h3 style={{ fontWeight: 600, fontSize: 20, marginBottom: 20, color: '#111827' }}>Profile Details</h3>
-                                                <div style={{ marginBottom: 16 }}>
-                                                        <Link
-                                                            to="/orders-history"
-                                                            className={orderBtnStyles.viewOrdersBtn}
-                                                            style={{display:'inline-block'}}
-                                                        >
-                                                            View All Orders History
-                                                        </Link>
-                                                </div>
+                        <div style={{ marginBottom: 16 }}>
+                            <Link
+                                to="/orders-history"
+                                className={orderBtnStyles.viewOrdersBtn}
+                                style={{ display: 'inline-block' }}
+                            >
+                                View All Orders History
+                            </Link>
+                        </div>
                         {message && (
                             <div className={`${styles.message} ${message.includes('successfully') ? styles.success : styles.error}`}>
                                 {message}
@@ -133,10 +133,10 @@ const UserProfilePage = () => {
                             </div>
                         )}
                     </div>
-                    <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.07)', padding: 32 }}>
+                    {/* <div className={styles.orderHistorySection}>
                         <h3 style={{ fontWeight: 600, fontSize: 20, marginBottom: 20, color: '#111827' }}>Order History</h3>
                         <OrderHistory />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

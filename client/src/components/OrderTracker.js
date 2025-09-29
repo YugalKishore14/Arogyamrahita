@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../css/CheckoutStepper.module.css';
 import { FaToolbox } from "react-icons/fa";
-import { FaRegCreditCard } from "react-icons/fa";
+// import { FaRegCreditCard } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FcShipped } from "react-icons/fc";
 import { BsFillBagCheckFill } from "react-icons/bs";
@@ -9,7 +9,7 @@ import { BsFillBagCheckFill } from "react-icons/bs";
 
 const orderSteps = [
     { label: 'Placed', icon: <FaToolbox /> },
-    { label: 'Paid', icon: <FaRegCreditCard /> },
+    // { label: 'Paid', icon: <FaRegCreditCard /> },
     { label: 'Ready for Delivery', icon: <TbTruckDelivery /> },
     { label: 'Shipped', icon: <FcShipped /> },
     { label: 'Delivered', icon: <BsFillBagCheckFill /> },
@@ -17,7 +17,7 @@ const orderSteps = [
 
 const statusToStepIndex = {
     PLACED: 0,
-    PAID: 1,
+    // PAID: 1,
     READY_FOR_DELIVERY: 2,
     SHIPPED: 3,
     DELIVERED: 4,

@@ -498,8 +498,8 @@ const Dashboard = () => {
                                         >
                                             {[
                                                 "PLACED",
-                                                "PAID",
                                                 "READY_FOR_DELIVERY",
+                                                // "PAID",
                                                 "SHIPPED",
                                                 "DELIVERED",
                                                 "CANCELLED",
