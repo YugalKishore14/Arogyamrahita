@@ -51,6 +51,7 @@ const generateTokens = (user) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        number: user.number,
     };
 
     const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
@@ -65,6 +66,8 @@ const getUserData = (user) => ({
     id: user._id,
     name: user.name,
     email: user.email,
+    phone: user.phone || user.number || "",
+    number: user.number || "",
     role: user.role,
 });
 

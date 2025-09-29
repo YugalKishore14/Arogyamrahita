@@ -28,7 +28,8 @@ export const AuthProvider = ({ children }) => {
                         id: decodedToken.id,
                         email: decodedToken.email,
                         name: decodedToken.name,
-                        role: decodedToken.role
+                        role: decodedToken.role,
+                        phone: decodedToken.number || "",
                     });
                 }
             } catch (error) {

@@ -5,7 +5,6 @@ import styles from "./css/Contact.module.css";
 import { Link } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 
-
 export default function Contact() {
   const { user } = useAuth();
 
@@ -13,7 +12,7 @@ export default function Contact() {
     first_name: "",
     last_name: "",
     email: user?.email || "",
-    phone: "",
+    phone: user?.phone || user?.number || "",
     country: "",
     subject: "",
     message: "",
@@ -21,7 +20,11 @@ export default function Contact() {
   });
 
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, email: user?.email || "" }));
+    setFormData((prev) => ({
+      ...prev,
+      email: user?.email || "",
+      phone: user?.phone || user?.number || "",
+    }));
   }, [user]);
 
   const [errors, setErrors] = useState({});
@@ -29,6 +32,7 @@ export default function Contact() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === "email" || name === "phone") return;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -38,7 +42,8 @@ export default function Contact() {
   const validate = () => {
     let newErrors = {};
 
-    if (!formData.first_name.trim()) newErrors.first_name = "First name required";
+    if (!formData.first_name.trim())
+      newErrors.first_name = "First name required";
     if (!formData.last_name.trim()) newErrors.last_name = "Last name required";
     if (!formData.email.trim()) newErrors.email = "Email required";
     if (!formData.country.trim()) newErrors.country = "Country required";
@@ -69,12 +74,13 @@ export default function Contact() {
       message: formData.message,
     };
 
-    emailjs.send(
-      process.env.REACT_APP_EMAILJS_SERVICE_ID,
-      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
-      templateParams,
-      process.env.REACT_APP_EMAILJS_PUBLIC_KEY
-    )
+    emailjs
+      .send(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        process.env.REACT_APP_EMAILJS_PUBLIC_KEY
+      )
       .then(
         (res) => {
           // alert removed: Message sent successfully!
@@ -82,7 +88,8 @@ export default function Contact() {
             first_name: "",
             last_name: "",
             email: user?.email || "",
-            phone: "",
+            phone: user?.phone || user?.number || "",
+            number: user?.number || "",
             country: "",
             subject: "",
             message: "",
@@ -95,7 +102,9 @@ export default function Contact() {
         }
       )
       .finally(() => setLoading(false));
+
   };
+  console.log(formData.number, formData.email);
 
   return (
     <div className={styles.page}>
@@ -121,7 +130,9 @@ export default function Contact() {
                 value={formData.first_name}
                 onChange={handleChange}
               />
-              {errors.first_name && <span className={styles.error}>{errors.first_name}</span>}
+              {errors.first_name && (
+                <span className={styles.error}>{errors.first_name}</span>
+              )}
             </div>
 
             <div className={styles.field}>
@@ -133,7 +144,9 @@ export default function Contact() {
                 value={formData.last_name}
                 onChange={handleChange}
               />
-              {errors.last_name && <span className={styles.error}>{errors.last_name}</span>}
+              {errors.last_name && (
+                <span className={styles.error}>{errors.last_name}</span>
+              )}
             </div>
           </div>
 
@@ -147,17 +160,20 @@ export default function Contact() {
               onChange={handleChange}
               readOnly
             />
-            {errors.email && <span className={styles.error}>{errors.email}</span>}
+            {errors.email && (
+              <span className={styles.error}>{errors.email}</span>
+            )}
           </div>
 
           <div className={styles.field}>
-            <label>Phone Number (Optional)</label>
+            <label>Phone Number</label>
             <input
               type="text"
               name="phone"
               placeholder="Phone Number"
               value={formData.phone}
               onChange={handleChange}
+              readOnly
             />
           </div>
 
@@ -173,7 +189,9 @@ export default function Contact() {
               <option>India</option>
               <option>UK</option>
             </select>
-            {errors.country && <span className={styles.error}>{errors.country}</span>}
+            {errors.country && (
+              <span className={styles.error}>{errors.country}</span>
+            )}
           </div>
 
           <div className={styles.field}>
@@ -195,7 +213,9 @@ export default function Contact() {
               value={formData.message}
               onChange={handleChange}
             ></textarea>
-            {errors.message && <span className={styles.error}>{errors.message}</span>}
+            {errors.message && (
+              <span className={styles.error}>{errors.message}</span>
+            )}
           </div>
 
           <div className={styles.checkboxRow}>
@@ -207,7 +227,8 @@ export default function Contact() {
               onChange={handleChange}
             />
             <label htmlFor="updates">
-              I agree to the <Link to="/termCondition">Terms & Conditions</Link>.
+              I agree to the <Link to="/termCondition">Terms & Conditions</Link>
+              .
             </label>
           </div>
           {errors.agree && <span className={styles.error}>{errors.agree}</span>}

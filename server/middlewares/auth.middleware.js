@@ -34,6 +34,7 @@ const verifyToken = async (req, res, next) => {
             email: user.email,
             name: user.name,
             role: user.role,
+            number: user.number,
         };
 
         next();

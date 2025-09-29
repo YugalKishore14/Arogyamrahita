@@ -756,8 +756,7 @@ const Dashboard = () => {
                                         <option value="kg">kg</option>
                                         <option value="gm">gm</option>
                                         <option value="ltr">ltr</option>
-                                        <option value="mg">mg</option>
-                                        <option value="oz">oz</option>
+                                        <option value="ml">ml</option>
                                     </select>
                                     <input
                                         type="number"

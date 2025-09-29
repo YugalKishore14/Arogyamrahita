@@ -41,14 +41,14 @@ const productSchema = new mongoose.Schema(
         },
         weightUnit: {
             type: String,
-            enum: ["kg", "gm", "mg", "lb", "oz"],
+            enum: ["kg", "gm", "ltr", "ml"],
             required: false,
         },
         variants: [
             {
                 name: { type: String, required: true },
                 weight: { type: Number, required: true },
-                weightUnit: { type: String, enum: ["kg", "gm", "mg", "lb", "oz"], required: true },
+                weightUnit: { type: String, enum: ["kg", "gm", "ltr", "ml"], required: true },
                 oldPrice: { type: Number, required: true },
                 newPrice: { type: Number, required: true },
                 stock: { type: Number, default: 0 },
