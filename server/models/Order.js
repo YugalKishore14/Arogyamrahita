@@ -33,6 +33,8 @@ const orderSchema = new mongoose.Schema(
         },
         shippingAddress: {
             address: { type: String },
+            addressLine2: { type: String },
+            landmark: { type: String },
             city: { type: String },
             state: { type: String },
             pincode: { type: String },

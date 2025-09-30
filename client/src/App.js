@@ -91,6 +91,8 @@ function PaymentPageWrapper() {
         totalAmount: total,
         shippingAddress: {
           address: address.address,
+          addressLine2: address.addressLine2,
+          landmark: address.landmark,
           city: address.city,
           state: address.state || "",
           pincode: address.pincode,
