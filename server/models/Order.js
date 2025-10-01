@@ -32,6 +32,7 @@ const orderSchema = new mongoose.Schema(
             default: "PLACED",
         },
         shippingAddress: {
+            name: { type: String },
             address: { type: String },
             addressLine2: { type: String },
             landmark: { type: String },

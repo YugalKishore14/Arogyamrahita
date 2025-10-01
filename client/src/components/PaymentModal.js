@@ -1,4 +1,34 @@
 import React, { useState } from "react";
+const states = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+];
 
 const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
     const [method] = useState("cod");
@@ -12,6 +42,7 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
         addressLine2: "",
         landmark: "",
         city: "",
+        state: "",
         pincode: "",
     });
     const [error, setError] = useState("");
@@ -25,6 +56,7 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
             !address.email ||
             !address.address ||
             !address.city ||
+            !address.state ||
             !address.pincode
         ) {
             setError("Please fill all address fields.");
@@ -61,6 +93,7 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
             addressLine2: "",
             landmark: "",
             city: "",
+            state: "",
             pincode: "",
         });
         setError("");
@@ -80,6 +113,7 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                 alignItems: "center",
                 justifyContent: "center",
                 zIndex: 1000,
+                padding: 50,
             }}
         >
             <div
@@ -174,6 +208,22 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                                 style={{ padding: 8, width: "100%", marginBottom: 8 }}
                                 disabled={processing}
                             />
+
+                            <select
+                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                value={address.state}
+                                onChange={(e) =>
+                                    setAddress({ ...address, state: e.target.value })
+                                }
+                            >
+                                <option value="">-- Select State --</option>
+                                {states.map((state, index) => (
+                                    <option key={index} value={state}>
+                                        {state}
+                                    </option>
+                                ))}
+                            </select>
+
                             <input
                                 type="text"
                                 placeholder="City"

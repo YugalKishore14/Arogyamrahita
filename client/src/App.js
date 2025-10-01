@@ -90,6 +90,7 @@ function PaymentPageWrapper() {
         })),
         totalAmount: total,
         shippingAddress: {
+          name: address.name,
           address: address.address,
           addressLine2: address.addressLine2,
           landmark: address.landmark,

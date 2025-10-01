@@ -20,7 +20,7 @@ const PaymentPage = ({ onPayment }) => {
             setShowSuccess(true);
             setTimeout(() => {
                 setShowSuccess(false);
-                navigate('/');
+                navigate('/order-completed');
             }, 1800);
         }
     };
