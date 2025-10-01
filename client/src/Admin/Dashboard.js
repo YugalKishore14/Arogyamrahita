@@ -121,10 +121,11 @@ const Dashboard = () => {
         setFormData((prev) => {
             const safeVariants = Array.isArray(prev.variants) ? prev.variants : [];
             // Duplicate check: name, weight, weightUnit
-            const isDuplicate = safeVariants.some(v =>
-                v.name === variantInput.name &&
-                Number(v.weight) === Number(variantInput.weight) &&
-                v.weightUnit === variantInput.weightUnit
+            const isDuplicate = safeVariants.some(
+                (v) =>
+                    v.name === variantInput.name &&
+                    Number(v.weight) === Number(variantInput.weight) &&
+                    v.weightUnit === variantInput.weightUnit
             );
             if (isDuplicate) {
                 // Optionally show error/toast here
@@ -336,7 +337,6 @@ const Dashboard = () => {
     };
 
     const handleDelete = async (productId) => {
-
         try {
             setLoading(true);
             await productAPI.deleteProduct(productId);
@@ -464,24 +464,68 @@ const Dashboard = () => {
                             <div key={o._id} className={styles.orderCard}>
                                 <div className={styles.orderHeader}>
                                     <div>
-                                        <strong>Order:</strong> {o._id}
-                                    </div>
-                                    <div>
                                         <strong>User:</strong> {o.user?.name} ({o.user?.email})
                                     </div>
-                                    <div style={{ marginTop: 4, color: '#6b7280', fontSize: 13 }}>
-                                        <strong>Date/Time:</strong> {o.createdAt ? new Date(o.createdAt).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, year: 'numeric', month: 'short', day: 'numeric' }) : '-'}
+                                    <div style={{ marginTop: 4, color: "#6b7280", fontSize: 13 }}>
+                                        <strong>Date/Time:</strong>{" "}
+                                        {o.createdAt
+                                            ? new Date(o.createdAt).toLocaleString("en-US", {
+                                                hour: "numeric",
+                                                minute: "2-digit",
+                                                hour12: true,
+                                                year: "numeric",
+                                                month: "short",
+                                                day: "numeric",
+                                            })
+                                            : "-"}
                                     </div>
+                                </div>
+                                <div className={styles.shippingAddress}>
+                                    <strong>Shipping Address:</strong>
+                                    <p>
+                                        <strong>Name:</strong> {o.shippingAddress?.name}
+                                    </p>
+                                    <p>
+                                        <strong>Address Line 1:</strong> {o.shippingAddress?.address}
+                                    </p>
+                                    <p>
+                                        <strong>Address Line 2:</strong>{" "}
+                                        {o.shippingAddress?.addressLine2}
+                                    </p>
+                                    <p>
+                                        <strong>Landmark:</strong> {o.shippingAddress?.landmark}
+                                    </p>
+                                    <p>
+                                        <strong>City:</strong> {o.shippingAddress?.city}
+                                    </p>
+                                    <p>
+                                        <strong>State:</strong> {o.shippingAddress?.state}
+                                    </p>
+                                    <p>
+                                        <strong>Pincode:</strong> {o.shippingAddress?.pincode}
+                                    </p>
+                                    <p>
+                                        <strong>Phone:</strong> {o.shippingAddress?.phone}
+                                    </p>
                                 </div>
                                 <div className={styles.orderItems}>
                                     {(o.items || []).map((it, idx) => (
                                         <div key={idx} className={styles.orderItem}>
                                             x{it.quantity} {it.name}
-                                            {it.variant && it.variant.weight && it.variant.weightUnit && (
-                                                <span style={{ color: '#888', fontSize: 13, marginLeft: 6 }}>
-                                                    ({it.variant.weight} {it.variant.weightUnit})
-                                                </span>
-                                            )} — ₹{it.price}
+                                            {it.variant &&
+                                                it.variant.weight &&
+                                                it.variant.weightUnit && (
+                                                    <span
+                                                        style={{
+                                                            color: "#888",
+                                                            fontSize: 13,
+                                                            marginLeft: 6,
+                                                        }}
+                                                    >
+                                                        ({it.variant.weight} {it.variant.weightUnit})
+                                                    </span>
+                                                )}{" "}
+                                            — ₹{it.price}
                                         </div>
                                     ))}
                                 </div>
@@ -598,26 +642,126 @@ const Dashboard = () => {
                                             {product.variants && product.variants.length > 0 ? (
                                                 <div className={styles.variantList}>
                                                     <strong>Variants:</strong>
-                                                    <table style={{ width: '100%', marginTop: 8, borderCollapse: 'collapse', fontSize: '0.95em' }}>
+                                                    <table
+                                                        style={{
+                                                            width: "100%",
+                                                            marginTop: 8,
+                                                            borderCollapse: "collapse",
+                                                            fontSize: "0.95em",
+                                                        }}
+                                                    >
                                                         <thead>
-                                                            <tr style={{ background: '#f5f5f5' }}>
-                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Name</th>
-                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Weight</th>
-                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Unit</th>
-                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>New Price</th>
-                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Old Price</th>
-                                                                <th style={{ padding: '4px 8px', border: '1px solid #ddd' }}>Stock</th>
+                                                            <tr style={{ background: "#f5f5f5" }}>
+                                                                <th
+                                                                    style={{
+                                                                        padding: "4px 8px",
+                                                                        border: "1px solid #ddd",
+                                                                    }}
+                                                                >
+                                                                    Name
+                                                                </th>
+                                                                <th
+                                                                    style={{
+                                                                        padding: "4px 8px",
+                                                                        border: "1px solid #ddd",
+                                                                    }}
+                                                                >
+                                                                    Weight
+                                                                </th>
+                                                                <th
+                                                                    style={{
+                                                                        padding: "4px 8px",
+                                                                        border: "1px solid #ddd",
+                                                                    }}
+                                                                >
+                                                                    Unit
+                                                                </th>
+                                                                <th
+                                                                    style={{
+                                                                        padding: "4px 8px",
+                                                                        border: "1px solid #ddd",
+                                                                    }}
+                                                                >
+                                                                    New Price
+                                                                </th>
+                                                                <th
+                                                                    style={{
+                                                                        padding: "4px 8px",
+                                                                        border: "1px solid #ddd",
+                                                                    }}
+                                                                >
+                                                                    Old Price
+                                                                </th>
+                                                                <th
+                                                                    style={{
+                                                                        padding: "4px 8px",
+                                                                        border: "1px solid #ddd",
+                                                                    }}
+                                                                >
+                                                                    Stock
+                                                                </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {product.variants.map((v, idx) => (
                                                                 <tr key={idx}>
-                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd' }}>{v.name || '-'}</td>
-                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd' }}>{v.weight}</td>
-                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd' }}>{v.weightUnit}</td>
-                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd', color: '#388e3c', fontWeight: 600 }}>₹{v.newPrice}</td>
-                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd', color: '#b71c1c', textDecoration: v.oldPrice && v.oldPrice > v.newPrice ? 'line-through' : 'none' }}>{v.oldPrice && v.oldPrice > v.newPrice ? `₹${v.oldPrice}` : '-'}</td>
-                                                                    <td style={{ padding: '4px 8px', border: '1px solid #ddd' }}>{v.stock}</td>
+                                                                    <td
+                                                                        style={{
+                                                                            padding: "4px 8px",
+                                                                            border: "1px solid #ddd",
+                                                                        }}
+                                                                    >
+                                                                        {v.name || "-"}
+                                                                    </td>
+                                                                    <td
+                                                                        style={{
+                                                                            padding: "4px 8px",
+                                                                            border: "1px solid #ddd",
+                                                                        }}
+                                                                    >
+                                                                        {v.weight}
+                                                                    </td>
+                                                                    <td
+                                                                        style={{
+                                                                            padding: "4px 8px",
+                                                                            border: "1px solid #ddd",
+                                                                        }}
+                                                                    >
+                                                                        {v.weightUnit}
+                                                                    </td>
+                                                                    <td
+                                                                        style={{
+                                                                            padding: "4px 8px",
+                                                                            border: "1px solid #ddd",
+                                                                            color: "#388e3c",
+                                                                            fontWeight: 600,
+                                                                        }}
+                                                                    >
+                                                                        ₹{v.newPrice}
+                                                                    </td>
+                                                                    <td
+                                                                        style={{
+                                                                            padding: "4px 8px",
+                                                                            border: "1px solid #ddd",
+                                                                            color: "#b71c1c",
+                                                                            textDecoration:
+                                                                                v.oldPrice && v.oldPrice > v.newPrice
+                                                                                    ? "line-through"
+                                                                                    : "none",
+                                                                        }}
+                                                                    >
+                                                                        {v.oldPrice && v.oldPrice > v.newPrice
+                                                                            ? `₹${v.oldPrice}`
+                                                                            : "-"}
+                                                                    </td>
+                                                                    <td
+                                                                        style={{
+                                                                            padding: "4px 8px",
+                                                                            border: "1px solid #ddd",
+                                                                        }}
+                                                                    >
+                                                                        {v.stock}
+                                                                    </td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>
