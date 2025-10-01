@@ -3,10 +3,13 @@ const User = require("../models/User");
 const { sendEmail } = require("../services/email.service");
 const { sendSMS } = require("../services/sms.service");
 const Product = require("../models/Product");
+const mongoose = require("mongoose");
 const { getNextInvoiceNumber } = require("../utils/getNextInvoiceNumber");
 
 // Create new order
 exports.createOrder = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         const userId = req.user.id;
         const { items, totalAmount, shippingAddress, paymentInfo } = req.body;
@@ -14,10 +17,35 @@ exports.createOrder = async (req, res) => {
             return res.status(400).json({ message: "Items are required" });
         }
 
+        // Step 1: Check stock and prepare updates
+        for (const item of items) {
+            const product = await Product.findById(item.product).session(session);
+            if (!product) {
+                throw new Error(`Product with ID ${item.product} not found.`);
+            }
+
+            if (item.variant && item.variant.variantId) {
+                const variant = product.variants.id(item.variant.variantId);
+                if (!variant) {
+                    throw new Error(`Variant not found for product ${product.name}.`);
+                }
+                if (variant.stock < item.quantity) {
+                    throw new Error(`Not enough stock for ${product.name} (${variant.name}). Only ${variant.stock} left.`);
+                }
+                variant.stock -= item.quantity;
+            } else {
+                if (product.stock < item.quantity) {
+                    throw new Error(`Not enough stock for ${product.name}. Only ${product.stock} left.`);
+                }
+                product.stock -= item.quantity;
+            }
+            await product.save({ session });
+        }
+
         // Fetch product names and variant info for each item
         const itemsWithNames = await Promise.all(
             items.map(async (item) => {
-                const product = await Product.findById(item.product);
+                const product = await Product.findById(item.product).session(session);
                 if (!product) throw new Error(`Product not found: ${item.product}`);
                 let variant = null;
                 if (item.variant && Array.isArray(product.variants)) {
@@ -34,6 +62,7 @@ exports.createOrder = async (req, res) => {
                     name: product.name,
                     price: item.price || product.newPrice,
                     image: item.image || product.image,
+                    // Ensure variant details are correctly captured
                     variant: variant
                         ? {
                             name: variant.name,
@@ -48,7 +77,7 @@ exports.createOrder = async (req, res) => {
         // 👇 Yahan se invoice number generate hoga
         const invoiceNumber = await getNextInvoiceNumber();
 
-        const order = await Order.create({
+        const createdOrders = await Order.create([{
             user: userId,
             items: itemsWithNames,
             totalAmount,
@@ -56,7 +85,9 @@ exports.createOrder = async (req, res) => {
             paymentInfo,
             invoiceNumber, // 👈 add kiya
             status: "PLACED",
-        });
+        }], { session });
+
+        const order = createdOrders[0];
 
         // Send order confirmation email to user
         try {
@@ -79,10 +110,16 @@ exports.createOrder = async (req, res) => {
         } catch (e) {
             console.warn("Order confirmation email failed:", e.message || e);
         }
+
+        await session.commitTransaction();
+        session.endSession();
+
         res.status(201).json({ message: "Order placed", order });
     } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
         console.error("Create Order Error:", error);
-        res.status(500).json({ message: "Server error" });
+        res.status(400).json({ message: error.message || "Server error" });
     }
 };
 

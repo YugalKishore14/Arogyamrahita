@@ -76,12 +76,17 @@ function ProductCard({ product, onAddToCart, onBuyNow }) {
 
       <div className={styles.buttonGroup} onClick={e => e.stopPropagation()}>
         <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onBuyNow({ ...product, selectedVariant: lastVariant || null })}
-          className={styles.buyBtn}
+          whileHover={{
+            scale: getDisplayStock() > 0 ? 1.05 : 1
+          }}
+          whileTap={{
+            scale: getDisplayStock() > 0 ? 0.95 : 1
+          }}
+          onClick={() => getDisplayStock() > 0 && onBuyNow({ ...product, selectedVariant: lastVariant || null })}
+          className={`${styles.buyBtn} ${getDisplayStock() <= 0 ? styles.disabledBtn : ''}`}
+          disabled={getDisplayStock() <= 0}
         >
-          Buy Now
+          {getDisplayStock() > 0 ? "Buy Now" : "Out of Stock"}
         </motion.button>
 
         {/* <motion.button
