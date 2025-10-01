@@ -511,7 +511,7 @@ const Dashboard = () => {
                                 <div className={styles.orderItems}>
                                     {(o.items || []).map((it, idx) => (
                                         <div key={idx} className={styles.orderItem}>
-                                            x{it.quantity} {it.name}
+                                            {it.quantity} {it.name}
                                             {it.variant &&
                                                 it.variant.weight &&
                                                 it.variant.weightUnit && (
