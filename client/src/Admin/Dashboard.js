@@ -230,9 +230,21 @@ const Dashboard = () => {
         doc.setFontSize(12);
         doc.text("Ship To:", 100, 60);
         doc.setFontSize(11);
-        doc.text(order.user?.name || "_________", 100, 66);
-        doc.text(order.user?.email || "_________", 100, 72);
-        doc.text(order.user?.address || "_________", 100, 78);
+        const sa = order.shippingAddress || {};
+        const fullAddress = [
+            sa.address,
+            sa.addressLine2,
+            sa.landmark,
+            sa.city,
+            sa.state,
+            sa.pincode,
+        ]
+            .filter(Boolean)
+            .join(", ");
+        doc.text(`Name: ${sa.name || order.user?.name || "N/A"}`, 100, 66);
+        doc.text(`Email: ${order.user?.email || "N/A"}`, 100, 72);
+        doc.text(`Phone: ${sa.phone || "N/A"}`, 100, 78);
+        doc.text(`Address: ${fullAddress || "N/A"}`, 100, 84, { maxWidth: 100 });
 
         const items = (order.items || []).map((it) => [
             it.variant && it.variant.weight && it.variant.weightUnit
@@ -244,7 +256,7 @@ const Dashboard = () => {
         ]);
 
         autoTable(doc, {
-            startY: 90,
+            startY: doc.getTextDimensions(fullAddress, { maxWidth: 100 }).h + 90,
             head: [["Description", "Qty", "Unit Price", "Amount"]],
             body: items,
             styles: { fontSize: 11 },
@@ -267,7 +279,7 @@ const Dashboard = () => {
             finalY + 34
         );
 
-        doc.save(`invoice_${order._id || "draft"}.pdf`);
+        doc.output('dataurlnewwindow');
     };
 
     const handleInputChange = (e) => {
@@ -562,7 +574,7 @@ const Dashboard = () => {
                                         className={styles.invoiceSubmitBtn}
                                         onClick={() => generateInvoicePDF(o)}
                                     >
-                                        🧾 Download/Print Invoice
+                                        🧾 View/Print Invoice
                                     </button>
                                 </div>
 
