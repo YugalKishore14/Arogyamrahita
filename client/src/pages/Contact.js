@@ -83,7 +83,6 @@ export default function Contact() {
       )
       .then(
         (res) => {
-          // alert removed: Message sent successfully!
           setFormData({
             first_name: "",
             last_name: "",
@@ -97,14 +96,12 @@ export default function Contact() {
           });
         },
         (err) => {
-          // alert removed: Failed to send. Please try again.
           console.error(err);
         }
       )
       .finally(() => setLoading(false));
 
   };
-  console.log(formData.number, formData.email);
 
   return (
     <div className={styles.page}>

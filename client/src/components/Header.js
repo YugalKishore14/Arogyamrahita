@@ -8,7 +8,6 @@ import { GiShoppingCart } from "react-icons/gi";
 import { IoSearch } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 import { HiMenu, HiX } from "react-icons/hi";
-// import UserProfile from "./UserProfile";
 import {
   motion,
   AnimatePresence,
@@ -34,14 +33,6 @@ const Header = () => {
   const handleLogout = () => {
     logout();
     window.location.href = "/";
-  };
-
-  const handleAccountClick = () => {
-    if (user) {
-      navigate("/profile");
-    } else {
-      window.location.href = "/login";
-    }
   };
 
   const handleSearch = (e) => {
@@ -179,16 +170,11 @@ const Header = () => {
                 if (suggestions.length > 0) setShowSuggestions(true);
               }}
             />
-            <motion.button
-              type="submit"
-              className={styles.searchIcon}
-            >
+            <motion.button type="submit" className={styles.searchIcon}>
               <IoSearch />
             </motion.button>
             {showSuggestions && suggestions.length > 0 && (
-              <div
-                className={styles.suggestionsBox}
-              >
+              <div className={styles.suggestionsBox}>
                 {suggestions.map((s) => (
                   <div
                     key={`${s.type}-${s.id}`}
@@ -203,23 +189,13 @@ const Header = () => {
                     }}
                     onMouseDown={(e) => e.preventDefault()}
                   >
-                    {/* <span
-                      className={styles.suggestionType}
-                    >
-                      {s.type}
-                    </span> */}
-                    <span
-                      className={styles.suggestionLabel}
-                    >
-                      {s.label}
-                    </span>
+                    <span className={styles.suggestionLabel}>{s.label}</span>
                   </div>
                 ))}
               </div>
             )}
           </form>
 
-          {/* Desktop Nav: Only show on desktop */}
           <nav className={`${styles.nav} ${styles.desktopNav}`}>
             <ul className={styles.navList}>
               {["Home", "Products", "About", "Contact"].map((item, idx) => (
@@ -303,17 +279,14 @@ const Header = () => {
               </NavLink>
             </motion.div>
 
-            <motion.div
+            <NavLink
+              to={user ? "/profile" : "/login"}
               className={styles.iconBox}
-              onClick={handleAccountClick}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ rotate: 15 }}
               style={{ cursor: "pointer" }}
             >
               <MdAccountCircle />
-            </motion.div>
+            </NavLink>
 
-            {/* Hamburger - Mobile only */}
             <button
               className={styles.hamburger}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -332,7 +305,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Nav */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.nav
@@ -360,8 +332,6 @@ const Header = () => {
           )}
         </AnimatePresence>
       </motion.header>
-
-      {/* UserProfile popup removed. Now navigates to /profile */}
     </div>
   );
 };
