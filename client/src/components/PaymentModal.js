@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import PhoneInput from "react-phone-input-2";
+import styles from "../css/PaymentModal.module.css";
+import "react-phone-input-2/lib/style.css";
 const states = [
     "Andhra Pradesh",
     "Arunachal Pradesh",
@@ -50,18 +53,48 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
     if (!isOpen) return null;
 
     const handlePay = async () => {
+        const newErrors = {};
+
+        // Validation logic
+        if (!/^[a-zA-Z\s]+$/.test(address.name)) {
+            newErrors.name = "Name can only contain letters and spaces.";
+        }
+        if (!address.phone || address.phone.length < 10) {
+            newErrors.phone = "Please enter a valid phone number with country code.";
+        }
+        if (!/^\S+@\S+\.\S+$/.test(address.email)) {
+            newErrors.email = "Please enter a valid email address.";
+        }
+        if (!address.address.trim()) {
+            newErrors.address = "Delivery address is required.";
+        }
+        if (!/^[a-zA-Z\s]+$/.test(address.city)) {
+            newErrors.city = "City can only contain letters and spaces.";
+        }
+        if (!address.state) {
+            newErrors.state = "Please select a state.";
+        }
+        if (!/^[0-9]{6}$/.test(address.pincode)) {
+            newErrors.pincode = "Please enter a valid 6-digit pincode.";
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            setError(Object.values(newErrors).join(" \n"));
+            return;
+        }
+
         if (
             !address.name ||
             !address.phone ||
             !address.email ||
             !address.address ||
             !address.city ||
-            !address.state ||
             !address.pincode
         ) {
             setError("Please fill all address fields.");
             return;
         }
+
         setError("");
         setProcessing(true);
         try {
@@ -101,55 +134,24 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
     };
 
     return (
-        <div
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100vh",
-                background: "rgba(0,0,0,0.5)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 1000,
-                padding: 50,
-            }}
-        >
-            <div
-                style={{
-                    background: "#fff",
-                    padding: 32,
-                    borderRadius: 12,
-                    minWidth: 320,
-                    textAlign: "center",
-                    boxShadow: "0 2px 16px rgba(0,0,0,0.2)",
-                }}
-            >
+        <div className={styles.overlay}>
+            <div className={styles.modal}>
                 <h2>Delivery Address</h2>
                 {success ? (
                     <>
-                        <p style={{ color: "green", fontWeight: "bold" }}>
+                        <p className={styles.successMessage}>
                             Order Placed Successfully!
                         </p>
                         <button
                             onClick={handleClose}
-                            style={{
-                                marginTop: 16,
-                                padding: "8px 24px",
-                                borderRadius: 6,
-                                background: "#1976d2",
-                                color: "#fff",
-                                border: "none",
-                                cursor: "pointer",
-                            }}
+                            className={`${styles.btn} ${styles.primaryBtn}`}
                         >
                             Close
                         </button>
                     </>
                 ) : (
                     <>
-                        <div style={{ marginBottom: 12, textAlign: "left" }}>
+                        <div className={styles.formContainer}>
                             <input
                                 type="text"
                                 placeholder="Full Name"
@@ -157,37 +159,33 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                                 onChange={(e) =>
                                     setAddress({ ...address, name: e.target.value })
                                 }
-                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                className={styles.input}
                                 disabled={processing}
                             />
-                            <input
-                                type="text"
-                                placeholder="Phone Number"
+                            <PhoneInput
+                                country={"in"}
                                 value={address.phone}
-                                onChange={(e) =>
-                                    setAddress({ ...address, phone: e.target.value })
-                                }
-                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                onChange={(phone) => setAddress({ ...address, phone })}
+                                inputClass={styles.phoneInput}
                                 disabled={processing}
+                                style={{ marginBottom: "15px" }}
                             />
                             <input
                                 type="email"
                                 placeholder="Email"
                                 value={address.email}
-                                onChange={(e) =>
-                                    setAddress({ ...address, email: e.target.value })
-                                }
-                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                onChange={(e) => setAddress({ ...address, email: e.target.value })}
+                                className={styles.input}
+                                style={{ marginTop: 0 }}
                                 disabled={processing}
                             />
                             <textarea
                                 placeholder="Delivery Address"
                                 value={address.address}
-                                onChange={(e) =>
-                                    setAddress({ ...address, address: e.target.value })
-                                }
-                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                onChange={(e) => setAddress({ ...address, address: e.target.value })}
+                                className={styles.textareaa}
                                 disabled={processing}
+
                             />
                             <textarea
                                 placeholder="Address Line 2"
@@ -195,7 +193,7 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                                 onChange={(e) =>
                                     setAddress({ ...address, addressLine2: e.target.value })
                                 }
-                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                className={styles.textareaa}
                                 disabled={processing}
                             />
                             <input
@@ -205,16 +203,14 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                                 onChange={(e) =>
                                     setAddress({ ...address, landmark: e.target.value })
                                 }
-                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                className={styles.input}
                                 disabled={processing}
                             />
 
                             <select
-                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                className={`${styles.select} form-control`}
                                 value={address.state}
-                                onChange={(e) =>
-                                    setAddress({ ...address, state: e.target.value })
-                                }
+                                onChange={(e) => setAddress({ ...address, state: e.target.value })}
                             >
                                 <option value="">-- Select State --</option>
                                 {states.map((state, index) => (
@@ -228,38 +224,26 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                                 type="text"
                                 placeholder="City"
                                 value={address.city}
-                                onChange={(e) =>
-                                    setAddress({ ...address, city: e.target.value })
-                                }
-                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                onChange={(e) => setAddress({ ...address, city: e.target.value })}
+                                className={styles.input}
                                 disabled={processing}
                             />
                             <input
                                 type="text"
                                 placeholder="Pincode"
                                 value={address.pincode}
-                                onChange={(e) =>
-                                    setAddress({ ...address, pincode: e.target.value })
-                                }
-                                style={{ padding: 8, width: "100%", marginBottom: 8 }}
+                                onChange={(e) => setAddress({ ...address, pincode: e.target.value })}
+                                className={styles.input}
                                 disabled={processing}
                             />
                         </div>
                         {error && (
-                            <div style={{ color: "red", marginBottom: 8 }}>{error}</div>
+                            <div className={styles.error}>{error}</div>
                         )}
                         <button
                             onClick={handlePay}
                             disabled={processing}
-                            style={{
-                                marginTop: 8,
-                                padding: "8px 24px",
-                                borderRadius: 6,
-                                background: "#1976d2",
-                                color: "#fff",
-                                border: "none",
-                                cursor: processing ? "not-allowed" : "pointer",
-                            }}
+                            className={`${styles.btn} ${styles.primaryBtn}`}
                         >
                             {processing ? "Placing Order..." : "Place Order"}
                         </button>
@@ -267,15 +251,7 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
                         <button
                             onClick={handleClose}
                             disabled={processing}
-                            style={{
-                                marginTop: 16,
-                                padding: "8px 24px",
-                                borderRadius: 6,
-                                background: "#aaa",
-                                color: "#fff",
-                                border: "none",
-                                cursor: processing ? "not-allowed" : "pointer",
-                            }}
+                            className={`${styles.btn} ${styles.secondaryBtn}`}
                         >
                             Cancel
                         </button>

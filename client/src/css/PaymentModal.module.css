@@ -1,0 +1,188 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 0.3s ease-out;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.modal::-webkit-scrollbar {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal h2 {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.formContainer {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.input,
+.textareaa,
+.select {
+    padding: 12px;
+    width: 100%;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus,
+.textareaa:focus,
+.select:focus {
+    outline: none;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+}
+
+.phoneInput {
+    border-radius: 8px;
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+    font-size: 1rem !important;
+}
+
+.phoneInput:focus-within {
+    border-color: #1976d2 !important;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2) !important;
+}
+
+.successMessage {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.error {
+    color: red;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+    text-align: center;
+}
+
+.btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.primaryBtn {
+    background: #1976d2;
+    color: #fff;
+    width: 100%;
+}
+
+.primaryBtn:hover:not(:disabled) {
+    background: #155a9e;
+}
+
+.secondaryBtn {
+    background: #aaa;
+    color: #fff;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.secondaryBtn:hover:not(:disabled) {
+    background: #888;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .modal {
+        padding: 1rem;
+        width: 95%;
+        max-height: 85vh;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .modal {
+        padding: 0.8rem;
+        border-radius: 8px;
+    }
+
+    .modal h2 {
+        font-size: 1.25rem;
+    }
+
+    .input,
+    .select {
+        font-size: 0.9rem;
+        padding: 5px;
+    }
+
+    .phoneInput {
+        font-size: 0.9rem;
+        padding: 5px;
+    }
+
+    .textareaa {
+        font-size: 0.9rem;
+        padding: 8px;
+        min-height: 60px;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+
+    .formContainer {
+        margin-bottom: 0;
+    }
+
+}
