@@ -55,9 +55,8 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
     const handlePay = async () => {
         const newErrors = {};
 
-        // Validation logic
-        if (!/^[a-zA-Z\s]+$/.test(address.name)) {
-            newErrors.name = "Name can only contain letters and spaces.";
+        if (!/^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(address.name.trim())) {
+            newErrors.name = "Name can only contain letters and single spaces between words.";
         }
         if (!address.phone || address.phone.length < 10) {
             newErrors.phone = "Please enter a valid phone number with country code.";

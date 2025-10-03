@@ -48,10 +48,10 @@ const UserProfile = ({ isOpen, onClose }) => {
         e.preventDefault();
         setMessage('');
 
-        const nameValid = /^[A-Za-z0-9 ]+$/.test(formData.name);
+        const nameValid = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(formData.name.trim());
         const numberValid = /^[0-9]+$/.test(formData.number);
         if (!nameValid) {
-            setMessage('Name can only contain letters, numbers, and spaces. No emoji or symbols allowed.');
+            setMessage('Name can only contain letters and single spaces. No extra spaces or symbols allowed.');
             return;
         }
         if (!numberValid) {
