@@ -61,14 +61,20 @@ const PaymentModal = ({ isOpen, onClose, onPlaceOrder }) => {
         if (!address.phone || address.phone.length < 10) {
             newErrors.phone = "Please enter a valid phone number with country code.";
         }
-        if (!/^\S+@\S+\.\S+$/.test(address.email)) {
-            newErrors.email = "Please enter a valid email address.";
+        if (!/^[a-zA-Z0-9.]+@gmail\.com$/.test(address.email)) {
+            newErrors.email = "Please enter a valid Gmail address (e.g., example@gmail.com). No spaces or special characters allowed.";
         }
-        if (!address.address.trim()) {
-            newErrors.address = "Delivery address is required.";
+        if (!/^[a-zA-Z0-9\s,.-/]+$/.test(address.address.trim())) {
+            newErrors.address = "Address can only contain letters, numbers, and basic symbols (, . - /).";
         }
-        if (!/^[a-zA-Z\s]+$/.test(address.city)) {
-            newErrors.city = "City can only contain letters and spaces.";
+        if (address.addressLine2.trim() && !/^[a-zA-Z0-9\s,.-/]+$/.test(address.addressLine2.trim())) {
+            newErrors.addressLine2 = "Address Line 2 can only contain letters, numbers, and basic symbols (, . - /).";
+        }
+        if (address.landmark.trim() && !/^[a-zA-Z0-9\s,.-/]+$/.test(address.landmark.trim())) {
+            newErrors.landmark = "Landmark can only contain letters, numbers, and basic symbols (, . - /).";
+        }
+        if (!/^[a-zA-Z0-9\s]+$/.test(address.city)) {
+            newErrors.city = "City can only contain letters, numbers and spaces.";
         }
         if (!address.state) {
             newErrors.state = "Please select a state.";
