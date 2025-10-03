@@ -279,7 +279,13 @@ const Dashboard = () => {
             finalY + 34
         );
 
-        doc.output('dataurlnewwindow');
+        // Set properties for the PDF
+        const userName = (order.user?.name || "user").replace(/[^a-zA-Z0-9]/g, '_');
+        const fileName = `Invoice-${userName}-${order.invoiceNumber || order._id}.pdf`;
+        doc.setProperties({
+            title: fileName
+        });
+        doc.output("dataurlnewwindow", { filename: fileName });
     };
 
     const handleInputChange = (e) => {
