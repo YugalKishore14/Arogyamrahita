@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../css/PaymentPage.module.css';
 import CheckoutStepper from '../components/CheckoutStepper';
-
+import confetti from 'canvas-confetti';
 
 const PaymentPage = ({ onPayment }) => {
     const [selectedMethod, setSelectedMethod] = useState('cash');
@@ -18,12 +18,37 @@ const PaymentPage = ({ onPayment }) => {
         if (selectedMethod === 'cash') {
             onPayment && onPayment('cash');
             setShowSuccess(true);
+
+
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    startVelocity: 30,
+                    spread: 360,
+                    ticks: 200,
+                    origin: {
+                        x: Math.random(),
+                        y: 0
+                    }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+
             setTimeout(() => {
                 setShowSuccess(false);
                 navigate('/order-completed');
-            }, 1800);
+            }, duration + 500);
         }
     };
+
+
+
 
     return (
         <div className={styles.paymentPageContainer}>
@@ -42,38 +67,24 @@ const PaymentPage = ({ onPayment }) => {
                     <label htmlFor="cash">Cash on Delivery</label>
                 </div>
                 <div className={styles.paymentOption}>
-                    <input
-                        type="radio"
-                        id="card"
-                        name="payment"
-                        value="card"
-                        disabled
-                    />
-                    <label htmlFor="card" className={styles.disabledLabel}>
-                        Card (Coming Soon)
-                    </label>
+                    <input type="radio" id="card" name="payment" value="card" disabled />
+                    <label htmlFor="card" className={styles.disabledLabel}>Card (Coming Soon)</label>
                 </div>
                 <div className={styles.paymentOption}>
-                    <input
-                        type="radio"
-                        id="upi"
-                        name="payment"
-                        value="upi"
-                        disabled
-                    />
-                    <label htmlFor="upi" className={styles.disabledLabel}>
-                        UPI (Coming Soon)
-                    </label>
+                    <input type="radio" id="upi" name="payment" value="upi" disabled />
+                    <label htmlFor="upi" className={styles.disabledLabel}>UPI (Coming Soon)</label>
                 </div>
                 <button type="submit" className={styles.payButton}>
                     Pay with Cash
                 </button>
             </form>
+
             {showSuccess && (
-                <div className={styles.successPopup}>
+                <div className={styles.overlay}>
                     <div className={styles.successBox}>
-                        <span role="img" aria-label="success" style={{ fontSize: 32 }}>✅</span>
-                        <div>Your order is successful!</div>
+                        <span role="img" aria-label="success" style={{ fontSize: "40px" }}>✅</span>
+                        <h2>Your Order is Successful!</h2>
+                        <p>Thank you for shopping with us 🎉</p>
                     </div>
                 </div>
             )}
