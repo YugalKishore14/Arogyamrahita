@@ -201,6 +201,13 @@ const Dashboard = () => {
     const generateInvoicePDF = (order) => {
         const doc = new jsPDF();
 
+        const formatPhoneNumber = (phone) => {
+            if (phone && /^\d{10}$/.test(phone)) {
+                return `+91-${phone}`;
+            }
+            return phone || 'N/A';
+        };
+
         doc.setFontSize(16);
         doc.text("Arogyam Rahita", 20, 20);
         doc.setFontSize(11);
@@ -243,7 +250,7 @@ const Dashboard = () => {
             .join(", ");
         doc.text(`Name: ${sa.name || order.user?.name || "N/A"}`, 100, 66);
         doc.text(`Email: ${order.user?.email || "N/A"}`, 100, 72);
-        doc.text(`Phone: ${sa.phone || "N/A"}`, 100, 78);
+        doc.text(`Phone: ${formatPhoneNumber(sa.phone)}`, 100, 78);
         doc.text(`Address: ${fullAddress || "N/A"}`, 100, 84, { maxWidth: 100 });
 
         const items = (order.items || []).map((it) => [
