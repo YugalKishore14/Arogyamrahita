@@ -6,62 +6,49 @@ import { userAPI } from '../services/Api';
 import OrderHistory from './OrderHistory';
 
 const UserProfile = ({ isOpen, onClose }) => {
-    const { user, logout } = useAuth();
+    const { user, logout, login } = useAuth();
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState({
+    const [editData, setEditData] = useState({
         name: user?.name || '',
         number: user?.number || '',
     });
 
     useEffect(() => {
-        const loadProfile = async () => {
-            try {
-                const res = await userAPI.getProfile();
-                const u = res.user || {};
-                setFormData({
-                    name: u.name || '',
-                    number: u.number || '',
-                });
-            } catch (e) {
-                if (user) {
-                    setFormData({
-                        name: user.name || '',
-                        number: user.number || '',
-                    });
-                }
-            }
-        };
-        if (isOpen) loadProfile();
-    }, [isOpen, user]);
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState('');
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
+        setEditData({ name: user?.name || '', number: user?.number || '' });
+    }, [user, isOpen]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
 
-        const nameValid = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(formData.name.trim());
-        const numberValid = /^[0-9]+$/.test(formData.number);
-        if (!nameValid) {
-            setMessage('Name can only contain letters and single spaces. No extra spaces or symbols allowed.');
+        const trimmedName = editData.name.trim();
+        const trimmedNumber = editData.number.trim();
+
+        const emojiRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/;
+
+        if (!trimmedName) {
+            setMessage('Name is required.');
             return;
         }
-        if (!numberValid) {
-            setMessage('Number can only contain digits. No emoji or symbols allowed.');
+        if (!/^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(trimmedName)) {
+            setMessage('Name can only contain letters and single spaces.');
+            return;
+        }
+        if (emojiRegex.test(trimmedName)) {
+            setMessage('Name cannot contain emojis or special symbols.');
+            return;
+        }
+        if (!/^[6-9]\d{9}$/.test(trimmedNumber)) {
+            setMessage('Please enter a valid 10-digit Indian mobile number without any symbols.');
             return;
         }
 
         setLoading(true);
         try {
-            const response = await userAPI.updateProfile(formData);
+            const response = await userAPI.updateProfile({ name: trimmedName, number: trimmedNumber });
+            login(response.token, response.user);
             setMessage('Profile updated successfully!');
             setIsEditing(false);
         } catch (error) {
@@ -69,6 +56,14 @@ const UserProfile = ({ isOpen, onClose }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEditData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
     const handleLogout = () => {
@@ -100,8 +95,9 @@ const UserProfile = ({ isOpen, onClose }) => {
                             <IoPerson size={40} />
                         </div>
                         <div className={styles.userDetails}>
-                            <h3>{formData.name || user?.name || 'User'}</h3>
+                            <h3>{user?.name || 'User'}</h3>
                             <p className={styles.email}>{user?.email}</p>
+                            <p className={styles.email}>{user?.number || 'No number provided'}</p>
                         </div>
                     </div>
 
@@ -112,7 +108,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                                 <input
                                     type="text"
                                     name="name"
-                                    value={formData.name}
+                                    value={editData.name}
                                     onChange={handleChange}
                                     required
                                 />
@@ -123,9 +119,10 @@ const UserProfile = ({ isOpen, onClose }) => {
                                 <input
                                     type="text"
                                     name="number"
-                                    value={formData.number}
+                                    value={editData.number}
                                     onChange={handleChange}
                                     required
+                                    maxLength="10"
                                 />
                             </div>
 
@@ -163,7 +160,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                                 <IoPerson className={styles.icon} />
                                 <div>
                                     <label>Full Name</label>
-                                    <p>{formData.name || 'Not provided'}</p>
+                                    <p>{user?.name || 'Not provided'}</p>
                                 </div>
                             </div>
 
@@ -171,7 +168,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                                 <IoCall className={styles.icon} />
                                 <div>
                                     <label>Number</label>
-                                    <p>{formData.number || 'Not provided'}</p>
+                                    <p>{user?.number || 'Not provided'}</p>
                                 </div>
                             </div>
 

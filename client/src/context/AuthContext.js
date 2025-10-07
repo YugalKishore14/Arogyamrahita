@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
                         email: decodedToken.email,
                         name: decodedToken.name,
                         role: decodedToken.role,
-                        phone: decodedToken.number || "",
+                        number: decodedToken.number || "",
                     });
                 }
             } catch (error) {
@@ -40,10 +40,16 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, [token]);
 
-    const login = (token, userData) => {
+    const login = (token, userData = null) => {
         localStorage.setItem('token', token);
         setToken(token);
-        setUser(userData);
+        if (userData) {
+            setUser(userData);
+        } else {
+            // If no user data is passed, decode from new token
+            const decoded = jwtDecode(token);
+            setUser({ id: decoded.id, email: decoded.email, name: decoded.name, role: decoded.role, number: decoded.number || "" });
+        }
     };
 
     const logout = () => {
