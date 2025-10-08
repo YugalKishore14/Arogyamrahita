@@ -5,8 +5,6 @@ const ImageUpload = ({
     onImageUpload,
     currentImageUrl = "",
     label = "Image",
-    // uploadPath = "http://localhost:4000/api/products/upload-image"
-    // uploadPath = "https://arogya-production.up.railway.app/api/products/upload-image",
     uploadPath = process.env.REACT_APP_PRODUCT_IMAGE_UPLOAD_URL,
 }) => {
     const [uploading, setUploading] = useState(false);
@@ -89,7 +87,7 @@ const ImageUpload = ({
                     <small style={{ color: "#e74c3c" }}>{uploadError}</small>
                 )}
                 <small style={{ color: "#666" }}>
-                    Supported formats: JPG, PNG, GIF. Max size: 5MB
+                    Supported formats: JPG, PNG. Max size: 5MB
                 </small>
             </div>
         </div>
