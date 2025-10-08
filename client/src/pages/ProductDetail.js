@@ -73,13 +73,11 @@ const ProductDetail = () => {
       },
       quantity
     );
-
-    // toast.success("Added to cart!");
+    navigate("/products");
   };
 
   const handleBuyNow = () => {
     if (!isAuthenticated()) {
-      // toast.info("Please sign up to purchase products!");
       navigate("/signup");
       return;
     }
@@ -106,7 +104,6 @@ const ProductDetail = () => {
       quantity
     );
 
-    navigate("/cart");
   };
 
   if (loading) {
